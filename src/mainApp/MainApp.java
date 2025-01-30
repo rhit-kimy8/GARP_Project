@@ -22,7 +22,8 @@ public class MainApp {
 		MainApp mainApp = new MainApp();
 		mainApp.runApp();		
 		System.out.println("123");
-		System.out.println("Test");
+		System.out.println("helen was here.");
+		System.out.println("Daniel was here");
 	} // main
 
 }
