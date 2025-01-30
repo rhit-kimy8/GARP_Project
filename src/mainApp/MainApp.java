@@ -22,7 +22,8 @@ public class MainApp {
 		MainApp mainApp = new MainApp();
 		mainApp.runApp();		
 		System.out.println("123");
-		System.out.println("Eden is Here");
+		System.out.println("helen was here.");
+		System.out.println("Im ede");
 	} // main
 
 }
