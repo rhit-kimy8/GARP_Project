@@ -25,6 +25,9 @@ public class MainApp {
 		System.out.println("helen was here.");
 		System.out.println("Daniel was here");
 		System.out.println("Im ede");
+		System.out.println("Gitdesktop Testing");
+		System.out.println("Change Name");
+		System.out.println("hiiiiiiiiiiiii");
 	} // main
 
 }
