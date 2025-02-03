@@ -10,10 +10,7 @@ package mainApp;
 public class MainApp {
 	
 	
-	private void runApp() {
-
-		System.out.println("Write your cool arcade game here!1231323");		
-
+	private void runApp() {	
 		System.out.println("Write your cool arcade game here!\nDaniel");		
 	} // runApp
 
@@ -29,6 +26,7 @@ public class MainApp {
 		System.out.println("Daniel was here");
 		System.out.println("Im ede");
 		System.out.println("Testing");
+		System.out.println("12hiudshfiushfds");
 	} // main
 
 }
