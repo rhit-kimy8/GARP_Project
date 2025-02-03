@@ -11,7 +11,10 @@ public class MainApp {
 	
 	
 	private void runApp() {
+
 		System.out.println("Write your cool arcade game here!1231323");		
+
+		System.out.println("Write your cool arcade game here!\nDaniel");		
 	} // runApp
 
 	/**
@@ -23,7 +26,9 @@ public class MainApp {
 		mainApp.runApp();		
 		System.out.println("123");
 		System.out.println("helen was here.");
+		System.out.println("Daniel was here");
 		System.out.println("Im ede");
+		System.out.println("Testing");
 	} // main
 
 }
