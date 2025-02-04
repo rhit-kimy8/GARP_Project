@@ -12,12 +12,16 @@ public class Chromosome {
 	Chromosome() {
 		Random randomness = new Random();
 		statusIndex = randomness.nextInt(0, 3);
-		colors.add(Color.black);
+		colors.add(Color.red);
 		colors.add(Color.green);
 		colors.add(Color.gray);
 	}
 	public Color getColor() {
 		return colors.get(statusIndex);
+	}
+	public Color setColorAndGet(int colorNumber) {
+		statusIndex = colorNumber;
+		return colors.get(colorNumber);
 	}
 	public Color clickChangeColor() {
 		statusIndex = (statusIndex + 1) % 2;
