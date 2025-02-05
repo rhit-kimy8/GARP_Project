@@ -116,8 +116,8 @@ public class ChromosomeEditor {
 					jButton.setBackground(eachChromosome.setColorAndGet(bit));
 					viewerButton.setBackground(eachChromosome.setColorAndGet(bit)); //jButton.getBackground()
 					jButton.setForeground(Color.blue);
+					viewerButton.setForeground(Color.blue);
 					jButton.addActionListener(new ActionListener() {
-						@Override
 						public void actionPerformed(ActionEvent e) {
 							// TODO Auto-generated method stub	
 							jButton.clearColor();
@@ -131,7 +131,6 @@ public class ChromosomeEditor {
 					chromosomes.add(eachChromosome);
 					panel.add(jButton);
 					viewerPanel.add(viewerButton);
-//					viewerPanel.add(saveButton);
 					panel.revalidate();
 					viewerPanel.revalidate();
 					panel.repaint();
@@ -150,7 +149,9 @@ public class ChromosomeEditor {
 					if (chromosomes.get(i).getStatusIndex()== 0 || chromosomes.get(i).getStatusIndex()== 1) {
 						chromosomes.get(i).mutate(check);
 					}
-//					jButtons.get(i).clearColor();
+					if (chromosomes.get(i).getStatusIndex() == 2) {
+						continue;
+					}
 					jButtons.get(i).setBackground(chromosomes.get(i).getColor());
 					viewerButtons.get(i).setBackground(jButtons.get(i).getBackground());
 			}
