@@ -28,24 +28,30 @@ public class ChromosomeEditor {
 	
 	private ArrayList<Chromosome> chromosomes = new ArrayList<>();
 	private ArrayList<ChromosomeButton> jButtons = new ArrayList<>();
+	private ArrayList<Color> colors = new ArrayList<>();
 	private String loadString;
 	private int chromosomeNumber;
 	private String saveString="";
 	private double mutationRate;
+	private String changingBits;
 	
 	ChromosomeEditor(){
 		JFrame frame = new JFrame("ChromosomeEditor");
 		frame.setSize(1200,600);
+		// main Panel 
 		JPanel mainPanel = new JPanel(new GridLayout(1,2));
-		
-		JPanel editorPanel = new JPanel(new GridLayout(2,1));
+		// the panel for the geno and pheno
+		JPanel editorPanel = new JPanel(new GridLayout(1,2));
+		// the panel for the buttons
 		JPanel bottomPanel = new JPanel(new GridLayout(2,1));
 		bottomPanel.setSize(600,100);
+		//the panel for mutation
 		JPanel upperBottom = new JPanel();
+		//the panel for the save and load
 		JPanel lowerBottom = new JPanel();
-		
+		//the panel for geno
 		JPanel panel = new JPanel(new GridLayout(10,10));
-		
+		//the panel for pheno
 		JPanel viewerPanel = new JPanel(new GridLayout(10,10));
 		panel.setSize(600,500);
 		viewerPanel.setSize(600,500);
@@ -183,8 +189,8 @@ public class ChromosomeEditor {
 		bottomPanel.add(lowerBottom);
 		editorPanel.add(bottomPanel);
 		editorPanel.add(panel);
+		editorPanel.add(viewerPanel);
 		mainPanel.add(editorPanel);
-		mainPanel.add(viewerPanel);
 		frame.add(bottomPanel,BorderLayout.SOUTH);
 		frame.add(mainPanel,BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -215,6 +221,10 @@ public class ChromosomeEditor {
 
 		Random r = new Random();// eg: 3% all the doubles > 0.03 will make true, so we shouldn't do any changes
 		return (r.nextDouble() > 1-possibility);
+	}
+	
+	private void genotypePaint() {
+		
 	}
 	
 }
