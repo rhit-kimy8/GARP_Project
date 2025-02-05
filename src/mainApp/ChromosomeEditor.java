@@ -25,7 +25,7 @@ public class ChromosomeEditor {
 	
 	
 	private ArrayList<Chromosome> chromosomes = new ArrayList<>();
-	private ArrayList<JButton> jButtons = new ArrayList<>();
+	private ArrayList<ChromosomeButton> jButtons = new ArrayList<>();
 	private String loadString;
 	private int chromosomeNumber;
 	private String saveString="";
@@ -40,6 +40,7 @@ public class ChromosomeEditor {
 		JButton saveButton = new JButton("Save File");
 		JButton loadButton = new JButton("Load File");
 		JButton evaluateFitness = new JButton("EvaluateFitness (Flip coin)");
+		JButton mutate = new JButton("Mutate");
 		
 		
 		
@@ -85,7 +86,7 @@ public class ChromosomeEditor {
 				panel.setLayout(new GridLayout((int)Math.ceil(Math.sqrt(chromosomeNumber))/1,(int)Math.ceil(Math.sqrt(chromosomeNumber))/1));
 				for (int i = 0; i < chromosomeNumber; i++) {
 					int bit = Integer.parseInt(loadString.substring(i, i+1));
-					JButton jButton = new JButton(Integer.toString(i));
+					ChromosomeButton jButton = new ChromosomeButton(Integer.toString(i));
 					Chromosome eachChromosome = new Chromosome();
 					jButton.setBackground(eachChromosome.setColorAndGet(bit));
 					jButton.setForeground(Color.blue);
@@ -93,6 +94,7 @@ public class ChromosomeEditor {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							// TODO Auto-generated method stub	
+							jButton.clearColor();
 							jButton.setBackground(eachChromosome.clickChangeColor());
 						}
 						
@@ -106,6 +108,28 @@ public class ChromosomeEditor {
 			}
 		});
 		
+		
+		
+		mutate.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				for (int i = 0; i < chromosomeNumber; i++) {
+					boolean check = randomProcess(0.3);
+					if (chromosomes.get(i).getStatusIndex()== 0 || chromosomes.get(i).getStatusIndex()== 1) {
+						chromosomes.get(i).mutate(check);
+					}
+					jButtons.get(i).clearColor();
+					jButtons.get(i).setBackground(chromosomes.get(i).clickChangeColor());
+				
+			}
+			}
+			
+		});
+		
+		
+		
 		evaluateFitness.addActionListener(new ActionListener() {
 
 			@Override
@@ -114,10 +138,15 @@ public class ChromosomeEditor {
 				for (int i = 0; i < chromosomeNumber; i++) {
 					if (chromosomes.get(i).getStatusIndex() == 2) {
 						if(randomProcess(0.5)) {
-							jButtons.get(i).setBackground(chromosomes.get(i).setColorAndGet(1));
+							jButtons.get(i).paintSquareColor(chromosomes.get(i).getIndexColor(1));
+							frame.revalidate();
+							frame.repaint();
+							
 						}
 						else {
-							jButtons.get(i).setBackground(chromosomes.get(i).setColorAndGet(0));
+							jButtons.get(i).paintSquareColor(chromosomes.get(i).getIndexColor(0));
+							frame.revalidate();
+							frame.repaint();
 						}
 					}
 					panel.revalidate();
@@ -129,6 +158,7 @@ public class ChromosomeEditor {
 		bottomPanel.add(saveButton);
 		bottomPanel.add(loadButton);
 		bottomPanel.add(evaluateFitness);
+		bottomPanel.add(mutate);
 		frame.add(bottomPanel,BorderLayout.SOUTH);
 		frame.add(panel,BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -178,8 +208,6 @@ public class ChromosomeEditor {
 		return r.nextDouble() > possibility;
 	}
 	
-	private void flipCoinPaint (JButton jButton, Graphics g) {
-	}
 	
 
 	

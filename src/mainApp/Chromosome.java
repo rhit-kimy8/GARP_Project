@@ -19,6 +19,9 @@ public class Chromosome {
 	public Color getColor() {
 		return colors.get(statusIndex);
 	}
+	public Color getIndexColor(int index) {
+		return colors.get(index);
+	}
 	public Color setColorAndGet(int colorNumber) {
 		statusIndex = colorNumber;
 		return colors.get(colorNumber);
@@ -30,6 +33,16 @@ public class Chromosome {
 		}
 		return getColor();
 		
+	}
+	public void mutate(boolean check) {
+		if (check) {
+			if(statusIndex == 0) {
+				statusIndex = 1;
+			}
+			else if(statusIndex == 1){
+				statusIndex = 0;
+			}
+		}
 	}
 	public Color mutateChangeColor(int numberColor) {
 		statusIndex = numberColor;
