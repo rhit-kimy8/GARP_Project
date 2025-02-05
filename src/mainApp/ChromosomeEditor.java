@@ -34,14 +34,22 @@ public class ChromosomeEditor {
 	private double mutationRate;
 	
 	ChromosomeEditor(){
-		JFrame frame = new JFrame();
-		frame.setSize(600,600);
+		JFrame frame = new JFrame("ChromosomeEditor");
+		frame.setSize(1200,600);
+		JPanel mainPanel = new JPanel(new GridLayout(1,2));
+		
+		JPanel editorPanel = new JPanel(new GridLayout(2,1));
 		JPanel bottomPanel = new JPanel(new GridLayout(2,1));
 		bottomPanel.setSize(600,100);
 		JPanel upperBottom = new JPanel();
 		JPanel lowerBottom = new JPanel();
+		
 		JPanel panel = new JPanel(new GridLayout(10,10));
+		
+		JPanel viewerPanel = new JPanel(new GridLayout(10,10));
 		panel.setSize(600,500);
+		viewerPanel.setSize(600,500);
+	
 
 		JButton saveButton = new JButton("Save File");
 		saveButton.setPreferredSize(new Dimension(170,30));
@@ -80,6 +88,8 @@ public class ChromosomeEditor {
 			}
 		});
 		
+		
+		
 		loadButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser jf = new JFileChooser();
@@ -98,6 +108,7 @@ public class ChromosomeEditor {
 					
 				}
 				chromosomeNumber = loadString.length();
+				viewerPanel.setLayout(new GridLayout((int)Math.ceil(Math.sqrt(chromosomeNumber))/1,(int)Math.ceil(Math.sqrt(chromosomeNumber))/1));
 				panel.setLayout(new GridLayout((int)Math.ceil(Math.sqrt(chromosomeNumber))/1,(int)Math.ceil(Math.sqrt(chromosomeNumber))/1));
 				for (int i = 0; i < chromosomeNumber; i++) {
 					int bit = Integer.parseInt(loadString.substring(i, i+1));
@@ -170,8 +181,12 @@ public class ChromosomeEditor {
 		lowerBottom.add(evaluateFitness);
 		bottomPanel.add(upperBottom);
 		bottomPanel.add(lowerBottom);
+		editorPanel.add(bottomPanel);
+		editorPanel.add(panel);
+		mainPanel.add(editorPanel);
+		mainPanel.add(viewerPanel);
 		frame.add(bottomPanel,BorderLayout.SOUTH);
-		frame.add(panel,BorderLayout.CENTER);
+		frame.add(mainPanel,BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 }
