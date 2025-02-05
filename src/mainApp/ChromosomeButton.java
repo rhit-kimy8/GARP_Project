@@ -29,7 +29,6 @@ public class ChromosomeButton extends JButton{
             Color transparentColor = new Color(color.getRed(),color.getGreen(), color.getBlue(),99);
             g.setColor(transparentColor);
             g.fillRect(x, y, 50, 50);
-//            this.setText(this.getText());
         }
         
          

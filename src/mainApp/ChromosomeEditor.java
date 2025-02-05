@@ -15,7 +15,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -205,7 +204,7 @@ public class ChromosomeEditor {
 	
 	private boolean randomProcess(double possibility) {
 		Random r = new Random();
-		return r.nextDouble() > possibility;
+		return r.nextDouble() > 1-possibility;
 	}
 	
 	
