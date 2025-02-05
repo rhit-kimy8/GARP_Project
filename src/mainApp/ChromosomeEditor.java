@@ -22,41 +22,50 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
+/**
+ * Class: ChromosomeEditor
+ * @author Haocheng Tang,Eden
+ * <br>Purpose: create a window for the simulation. It contains a few functional buttons and editor and viewer
+ * <br>Restrictions: Maybe not so functional for future purposes
+ */
 public class ChromosomeEditor {
 	
 	
 	private ArrayList<Chromosome> chromosomes = new ArrayList<>();
+	//buttons for the edit part
 	private ArrayList<ChromosomeButton> jButtons = new ArrayList<>();
-	private ArrayList<Color> colors = new ArrayList<>();
+	private ArrayList<ChromosomeButton> viewerButtons = new ArrayList<>();
 	private String loadString;
 	private int chromosomeNumber;
 	private String saveString="";
 	private double mutationRate;
+	//right now not be used, probably will be used in the future
 	private String changingBits;
 	
+	/**
+	 * ensures: initializes the window
+	 */
 	ChromosomeEditor(){
+		//frame for the whole window
 		JFrame frame = new JFrame("ChromosomeEditor");
 		frame.setSize(1200,600);
-		// main Panel 
-		JPanel mainPanel = new JPanel(new GridLayout(1,2));
-		// the panel for the geno and pheno
-		JPanel editorPanel = new JPanel(new GridLayout(1,2));
-		// the panel for the buttons
+		//panel for the whole functional buttons
 		JPanel bottomPanel = new JPanel(new GridLayout(2,1));
 		bottomPanel.setSize(600,100);
 		//the panel for mutation
 		JPanel upperBottom = new JPanel();
 		//the panel for the save and load
 		JPanel lowerBottom = new JPanel();
-		//the panel for geno
+		// the panel for the two parts of chromosomes
+		JPanel mainPanel = new JPanel(new GridLayout(1,2));
+		// the panel for the left side editing chromosomes
 		JPanel panel = new JPanel(new GridLayout(10,10));
-		//the panel for pheno
-		JPanel viewerPanel = new JPanel(new GridLayout(10,10));
 		panel.setSize(600,500);
+		//the panel for the right side viewing chromosomes
+		JPanel viewerPanel = new JPanel(new GridLayout(10,10));
 		viewerPanel.setSize(600,500);
-	
-
+		
+		//buttons' settings
 		JButton saveButton = new JButton("Save File");
 		saveButton.setPreferredSize(new Dimension(170,30));
 		JButton loadButton = new JButton("Load File");
@@ -71,9 +80,10 @@ public class ChromosomeEditor {
 		mutateRateInput.setPreferredSize(new Dimension(220,30));
 		
 		
-		
+		// save button 
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// get the current status of the chromosomes and then save it to the file
 				for (Chromosome chromosome:chromosomes) {
 				saveString += Integer.toString(chromosome.getStatusIndex()); 
 			}
@@ -95,7 +105,7 @@ public class ChromosomeEditor {
 		});
 		
 		
-		
+		//load button
 		loadButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser jf = new JFileChooser();
@@ -104,57 +114,77 @@ public class ChromosomeEditor {
 				if (checkFile != JFileChooser.APPROVE_OPTION) {
 		            return;  
 		        }
-				
+				// whenever we load a file, we should clean the past datas, and load new datas
 				if (checkFile == JFileChooser.APPROVE_OPTION) {
 					String path = jf.getSelectedFile().getAbsolutePath();
 					loadString = readFile(path);
 					panel.removeAll();
+					viewerPanel.removeAll();
 					jButtons.clear();
 					chromosomes.clear();
-					
+					viewerButtons.clear();					
 				}
 				chromosomeNumber = loadString.length();
-				viewerPanel.setLayout(new GridLayout((int)Math.ceil(Math.sqrt(chromosomeNumber))/1,(int)Math.ceil(Math.sqrt(chromosomeNumber))/1));
+				//create the layout for the chromosomes according to the numbers. It depends on sqrt(n). eg: 45 will be 7*7, so it will be 7 chromosomes in each row, 6 rows in total and the last line contains 3 chromosomes.
 				panel.setLayout(new GridLayout((int)Math.ceil(Math.sqrt(chromosomeNumber))/1,(int)Math.ceil(Math.sqrt(chromosomeNumber))/1));
+				viewerPanel.setLayout(new GridLayout((int)Math.ceil(Math.sqrt(chromosomeNumber))/1,(int)Math.ceil(Math.sqrt(chromosomeNumber))/1));
 				for (int i = 0; i < chromosomeNumber; i++) {
+					// convert each String number to Integer
 					int bit = Integer.parseInt(loadString.substring(i, i+1));
 					ChromosomeButton jButton = new ChromosomeButton(Integer.toString(i));
+					ChromosomeButton viewerButton = new ChromosomeButton(Integer.toString(i));
 					Chromosome eachChromosome = new Chromosome();
 					jButton.setBackground(eachChromosome.setColorAndGet(bit));
+					viewerButton.setBackground(eachChromosome.setColorAndGet(bit)); 
 					jButton.setForeground(Color.blue);
+					//whenever the edit chromosome is clicked, it will clean the painted square color, and change the color according to 0-1-0-1..Same for the viewer
 					jButton.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							// TODO Auto-generated method stub	
 							jButton.clearColor();
 							jButton.setBackground(eachChromosome.clickChangeColor());
+							viewerButton.clearColor();
+							viewerButton.setBackground(jButton.getBackground());
 						}
 					});
 					jButtons.add(jButton);
+					viewerButtons.add(viewerButton);
 					chromosomes.add(eachChromosome);
 					panel.add(jButton);
+					viewerPanel.add(viewerButton);
 					panel.revalidate();
+					viewerPanel.revalidate();
 					panel.repaint();
+					viewerPanel.repaint();
 				}
 			}
 		});
-		
+		//mutate button
 		mutate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method 
+				// get the mutationrate and then convert it to double
 				mutationRate = Integer.parseInt(mutateRateInput.getText());
 				for (int i = 0; i < chromosomeNumber; i++) {
+					// check whether it is 0 or 1 and then mutate it.
 					boolean check = randomProcess((double)mutationRate/chromosomeNumber);
 					if (chromosomes.get(i).getStatusIndex()== 0 || chromosomes.get(i).getStatusIndex()== 1) {
 						chromosomes.get(i).mutate(check);
 					}
-//					jButtons.get(i).clearColor();
+					if (chromosomes.get(i).getStatusIndex() == 2) {
+						continue;
+					}
 					jButtons.get(i).setBackground(chromosomes.get(i).getColor());
+					viewerButtons.get(i).setBackground(jButtons.get(i).getBackground());
 			}
 			}
 			
 		});
+		
+		
+		
+		//flipcoin button
 		evaluateFitness.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -163,18 +193,22 @@ public class ChromosomeEditor {
 					if (chromosomes.get(i).getStatusIndex() == 2) {
 						if(randomProcess(0.5)) {
 							jButtons.get(i).paintSquareColor(chromosomes.get(i).getIndexColor(1),i);
+							viewerButtons.get(i).setBackground(jButtons.get(i).getSquareColor());
 							frame.revalidate();
 							frame.repaint();
 							
 						}
 						else {
 							jButtons.get(i).paintSquareColor(chromosomes.get(i).getIndexColor(0),i);
+							viewerButtons.get(i).setBackground(jButtons.get(i).getSquareColor());
 							frame.revalidate();
 							frame.repaint();
 						}
 					}
 					panel.revalidate();
 					panel.repaint();
+					viewerPanel.revalidate();
+					viewerPanel.repaint();
 				}
 			}	
 		});
@@ -187,10 +221,9 @@ public class ChromosomeEditor {
 		lowerBottom.add(evaluateFitness);
 		bottomPanel.add(upperBottom);
 		bottomPanel.add(lowerBottom);
-		editorPanel.add(bottomPanel);
-		editorPanel.add(panel);
-		editorPanel.add(viewerPanel);
-		mainPanel.add(editorPanel);
+
+		mainPanel.add(panel);
+		mainPanel.add(viewerPanel);
 		frame.add(bottomPanel,BorderLayout.SOUTH);
 		frame.add(mainPanel,BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -216,16 +249,15 @@ public class ChromosomeEditor {
 		scanner.close();
 		return next;
 	}
-	
+	/**
+	 * ensures: Simulate the random process according to the possibility
+	 */
 	private boolean randomProcess(double possibility) {
 
 		Random r = new Random();// eg: 3% all the doubles > 0.03 will make true, so we shouldn't do any changes
 		return (r.nextDouble() > 1-possibility);
 	}
 	
-	private void genotypePaint() {
-		
-	}
 	
 }
 
