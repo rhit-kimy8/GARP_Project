@@ -30,8 +30,7 @@ public class ChromosomeButton extends JButton{
             g.setColor(squareColor);
             g.fillRect(x, y, getWidth()/2, getHeight()/2);
             g.setColor(Color.BLUE);
-            g.drawString(Integer.toString(this.i),getWidth()/2, getHeight()/2);
-
+            g.drawString(Integer.toString(this.i),getWidth()/2-5, getHeight()/2+5);
         }
         
          

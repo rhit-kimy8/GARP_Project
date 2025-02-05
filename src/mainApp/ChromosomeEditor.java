@@ -125,7 +125,7 @@ public class ChromosomeEditor {
 		mutate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				// TODO Auto-generated method 
 				mutationRate = Integer.parseInt(mutateRateInput.getText());
 				for (int i = 0; i < chromosomeNumber; i++) {
 					boolean check = randomProcess((double)mutationRate/chromosomeNumber);
@@ -175,7 +175,7 @@ public class ChromosomeEditor {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 }
-	
+
 	private String readFile(String filename) {
 		File file;
 		Scanner scanner;
