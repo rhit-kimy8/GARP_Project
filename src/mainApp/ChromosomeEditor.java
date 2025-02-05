@@ -2,6 +2,7 @@ package mainApp;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Panel;
@@ -18,7 +19,9 @@ import java.util.Scanner;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class ChromosomeEditor {
 	
@@ -28,18 +31,30 @@ public class ChromosomeEditor {
 	private String loadString;
 	private int chromosomeNumber;
 	private String saveString="";
+	private double mutationRate;
 	
 	ChromosomeEditor(){
 		JFrame frame = new JFrame();
 		frame.setSize(600,600);
-		JPanel bottomPanel = new JPanel();
+		JPanel bottomPanel = new JPanel(new GridLayout(2,1));
+		bottomPanel.setSize(600,100);
+		JPanel upperBottom = new JPanel();
+		JPanel lowerBottom = new JPanel();
 		JPanel panel = new JPanel(new GridLayout(10,10));
 		panel.setSize(600,500);
 
 		JButton saveButton = new JButton("Save File");
+		saveButton.setPreferredSize(new Dimension(170,30));
 		JButton loadButton = new JButton("Load File");
+		loadButton.setPreferredSize(new Dimension(170,30));
 		JButton evaluateFitness = new JButton("EvaluateFitness (Flip coin)");
+		evaluateFitness.setPreferredSize(new Dimension(220,30));
 		JButton mutate = new JButton("Mutate");
+		mutate.setPreferredSize(new Dimension(170,30));
+		JLabel mutateRate = new JLabel("           M Rate : __ / N");
+		mutateRate.setPreferredSize(new Dimension(170,40));
+		JTextField mutateRateInput = new JTextField();
+		mutateRateInput.setPreferredSize(new Dimension(220,30));
 		
 		
 		
@@ -58,12 +73,10 @@ public class ChromosomeEditor {
 						fw.write(saveString);
 						fw.close();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
+						System.err.println("File named" + path + "was not found.");
 						e1.printStackTrace();
-					}
-					
-				}
-				
+					}	
+				}	
 			}
 		});
 		
@@ -80,6 +93,9 @@ public class ChromosomeEditor {
 					String path = jf.getSelectedFile().getAbsolutePath();
 					loadString = readFile(path);
 					panel.removeAll();
+					jButtons.clear();
+					chromosomes.clear();
+					
 				}
 				chromosomeNumber = loadString.length();
 				panel.setLayout(new GridLayout((int)Math.ceil(Math.sqrt(chromosomeNumber))/1,(int)Math.ceil(Math.sqrt(chromosomeNumber))/1));
@@ -96,7 +112,6 @@ public class ChromosomeEditor {
 							jButton.clearColor();
 							jButton.setBackground(eachChromosome.clickChangeColor());
 						}
-						
 					});
 					jButtons.add(jButton);
 					chromosomes.add(eachChromosome);
@@ -107,28 +122,22 @@ public class ChromosomeEditor {
 			}
 		});
 		
-		
-		
 		mutate.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				mutationRate = Integer.parseInt(mutateRateInput.getText());
 				for (int i = 0; i < chromosomeNumber; i++) {
-					boolean check = randomProcess(0.3);
+					boolean check = randomProcess((double)mutationRate/chromosomeNumber);
 					if (chromosomes.get(i).getStatusIndex()== 0 || chromosomes.get(i).getStatusIndex()== 1) {
 						chromosomes.get(i).mutate(check);
 					}
-					jButtons.get(i).clearColor();
-					jButtons.get(i).setBackground(chromosomes.get(i).clickChangeColor());
-				
+//					jButtons.get(i).clearColor();
+					jButtons.get(i).setBackground(chromosomes.get(i).getColor());
 			}
 			}
 			
 		});
-		
-		
-		
 		evaluateFitness.addActionListener(new ActionListener() {
 
 			@Override
@@ -137,13 +146,13 @@ public class ChromosomeEditor {
 				for (int i = 0; i < chromosomeNumber; i++) {
 					if (chromosomes.get(i).getStatusIndex() == 2) {
 						if(randomProcess(0.5)) {
-							jButtons.get(i).paintSquareColor(chromosomes.get(i).getIndexColor(1));
+							jButtons.get(i).paintSquareColor(chromosomes.get(i).getIndexColor(1),i);
 							frame.revalidate();
 							frame.repaint();
 							
 						}
 						else {
-							jButtons.get(i).paintSquareColor(chromosomes.get(i).getIndexColor(0));
+							jButtons.get(i).paintSquareColor(chromosomes.get(i).getIndexColor(0),i);
 							frame.revalidate();
 							frame.repaint();
 						}
@@ -154,32 +163,19 @@ public class ChromosomeEditor {
 			}
 			
 		});
-		bottomPanel.add(saveButton);
-		bottomPanel.add(loadButton);
-		bottomPanel.add(evaluateFitness);
-		bottomPanel.add(mutate);
+		
+		upperBottom.add(mutate);
+		upperBottom.add(mutateRate);
+		upperBottom.add(mutateRateInput);
+		lowerBottom.add(saveButton);
+		lowerBottom.add(loadButton);
+		lowerBottom.add(evaluateFitness);
+		bottomPanel.add(upperBottom);
+		bottomPanel.add(lowerBottom);
 		frame.add(bottomPanel,BorderLayout.SOUTH);
 		frame.add(panel,BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-}
-	
-	
-	private void writeFile(String path) {
-		File file;
-		file = new File(path);
-		PrintWriter pw;
-		try {
-			pw = new PrintWriter(file);
-			pw.println(loadString);
-		} catch (FileNotFoundException e) {
-			System.err.println("File named" + path + "could not found.");
-			e.printStackTrace();
-			return;
-		}
-		pw.close();
-	
-		
 }
 	
 	private String readFile(String filename) {
@@ -203,12 +199,10 @@ public class ChromosomeEditor {
 	}
 	
 	private boolean randomProcess(double possibility) {
-		Random r = new Random();
-		return r.nextDouble() > 1-possibility;
-	}
-	
-	
 
+		Random r = new Random();// eg: 3% all the doubles > 0.03 will make true, so we shouldn't do any changes
+		return (r.nextDouble() > 1-possibility);
+	}
 	
 }
 
