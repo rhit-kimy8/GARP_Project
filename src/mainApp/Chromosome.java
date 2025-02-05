@@ -3,7 +3,16 @@ package mainApp;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
-
+/**
+ * Class: Chromosome
+ * @author Haocheng Tang
+ * <br>Purpose: Used to generate chromosomes
+ * <br>Restrictions: no
+ * <br>For example: 
+ * <pre>
+ *    Chromosome chromosome = new Chromosome();
+ * </pre>
+ */
 public class Chromosome {
 	private int name;
 	private ArrayList<Color> colors = new ArrayList<>();
@@ -16,16 +25,33 @@ public class Chromosome {
 		colors.add(Color.green);
 		colors.add(Color.gray);
 	}
+	/**
+	 * ensures: return the current color
+	 */
 	public Color getColor() {
 		return colors.get(statusIndex);
 	}
+	/**
+	 * ensures: return the color according to the bit(1 return green)
+	 * @param the index of the color
+	 * <br>requires: [0,2]
+	 */
 	public Color getIndexColor(int index) {
 		return colors.get(index);
 	}
+	/**
+	 * ensures: change the current bit, and then return the related color to change the button's background color.
+	 * @param the index of the color
+	 * <br>requires: [0,2]
+	 */
 	public Color setColorAndGet(int colorNumber) {
 		statusIndex = colorNumber;
 		return colors.get(colorNumber);
 	}
+	/**
+	 * ensures: change the bit in order(0-1-0-1-0-1) then return the related color to change the background color.
+	 * 
+	 */
 	public Color clickChangeColor() {
 		statusIndex = (statusIndex + 1) % 2;
 		if (statusIndex == 2) {
@@ -34,6 +60,11 @@ public class Chromosome {
 		return getColor();
 		
 	}
+	/**
+	 * ensures: change the bit according to whether the event succeeds
+	 * @param true or false
+	 * <br>requires: boolean
+	 * 	 */
 	public void mutate(boolean check) {
 		if (check) {
 			if(statusIndex == 0) {
@@ -43,10 +74,6 @@ public class Chromosome {
 				statusIndex = 0;
 			}
 		}
-	}
-	public Color mutateChangeColor(int numberColor) {
-		statusIndex = numberColor;
-		return getColor();
 	}
 	public int getName() {
 		return name;
