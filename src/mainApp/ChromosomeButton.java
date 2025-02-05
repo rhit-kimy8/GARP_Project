@@ -6,30 +6,31 @@ import java.awt.Graphics;
 import javax.swing.JButton;
 
 public class ChromosomeButton extends JButton{
-	private Color color;
+	private int i;
+	private Color squareColor;
 	public ChromosomeButton(String name) {
         super(name);
     }
 
-    public void paintSquareColor(Color changecolor) {
-        color = changecolor;
+    public void paintSquareColor(Color changecolor, int i) {
+        squareColor = changecolor;
         repaint();
+        this.i = i;
     }
     public void clearColor() {
-    	color = null;
+    	squareColor = null;
     	repaint();
     }
 
-    @Override
     protected void paintComponent(Graphics g) {
     	super.paintComponent(g);
-        if (color != null) { 
-            int x = (getWidth() - 50) / 2;
-            int y = (getHeight() - 50) / 2;
-            Color transparentColor = new Color(color.getRed(),color.getGreen(), color.getBlue(),99);
-            g.setColor(transparentColor);
-            g.fillRect(x, y, 50, 50);
-//            this.setText(this.getText());
+        if (squareColor != null) { 
+            int x = getWidth() / 4;
+            int y = getHeight() / 4 ;
+            g.setColor(squareColor);
+            g.fillRect(x, y, getWidth()/2, getHeight()/2);
+            g.setColor(Color.BLUE);
+            g.drawString(Integer.toString(this.i),getWidth()/2, getHeight()/2);
         }
         
          

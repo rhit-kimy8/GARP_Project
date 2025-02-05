@@ -74,12 +74,10 @@ public class ChromosomeEditor {
 						fw.write(saveString);
 						fw.close();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
+						System.err.println("File named" + path + "was not found.");
 						e1.printStackTrace();
-					}
-					
-				}
-				
+					}	
+				}	
 			}
 		});
 		
@@ -112,7 +110,6 @@ public class ChromosomeEditor {
 							jButton.clearColor();
 							jButton.setBackground(eachChromosome.clickChangeColor());
 						}
-						
 					});
 					jButtons.add(jButton);
 					chromosomes.add(eachChromosome);
@@ -122,8 +119,6 @@ public class ChromosomeEditor {
 				}
 			}
 		});
-		
-		
 		
 		mutate.addActionListener(new ActionListener() {
 			@Override
@@ -136,14 +131,11 @@ public class ChromosomeEditor {
 						chromosomes.get(i).mutate(check);
 					}
 					jButtons.get(i).clearColor();
-					jButtons.get(i).setBackground(chromosomes.get(i).clickChangeColor());
+					jButtons.get(i).setBackground(chromosomes.get(i).getColor());
 			}
 			}
 			
 		});
-		
-		
-		
 		evaluateFitness.addActionListener(new ActionListener() {
 
 			@Override
@@ -152,13 +144,13 @@ public class ChromosomeEditor {
 				for (int i = 0; i < chromosomeNumber; i++) {
 					if (chromosomes.get(i).getStatusIndex() == 2) {
 						if(randomProcess(0.5)) {
-							jButtons.get(i).paintSquareColor(chromosomes.get(i).getIndexColor(1));
+							jButtons.get(i).paintSquareColor(chromosomes.get(i).getIndexColor(1),i);
 							frame.revalidate();
 							frame.repaint();
 							
 						}
 						else {
-							jButtons.get(i).paintSquareColor(chromosomes.get(i).getIndexColor(0));
+							jButtons.get(i).paintSquareColor(chromosomes.get(i).getIndexColor(0),i);
 							frame.revalidate();
 							frame.repaint();
 						}
@@ -205,8 +197,8 @@ public class ChromosomeEditor {
 	}
 	
 	private boolean randomProcess(double possibility) {
-		Random r = new Random();
-		return r.nextDouble() > possibility;
+		Random r = new Random();// eg: 3% all the doubles > 0.03 will make true, so we shouldn't do any changes
+		return (r.nextDouble() > 1-possibility);
 	}
 	
 }
