@@ -28,6 +28,7 @@ public class ChromosomeEditor {
 	
 	private ArrayList<Chromosome> chromosomes = new ArrayList<>();
 	private ArrayList<ChromosomeButton> jButtons = new ArrayList<>();
+	private ArrayList<ChromosomeButton> viewerButtons = new ArrayList<>();
 	private String loadString;
 	private int chromosomeNumber;
 	private String saveString="";
@@ -36,20 +37,16 @@ public class ChromosomeEditor {
 	ChromosomeEditor(){
 		JFrame frame = new JFrame("ChromosomeEditor");
 		frame.setSize(1200,600);
-		JPanel mainPanel = new JPanel(new GridLayout(1,2));
-		
-		JPanel editorPanel = new JPanel(new GridLayout(2,1));
 		JPanel bottomPanel = new JPanel(new GridLayout(2,1));
 		bottomPanel.setSize(600,100);
 		JPanel upperBottom = new JPanel();
 		JPanel lowerBottom = new JPanel();
-		
+		JPanel mainPanel = new JPanel(new GridLayout(1,2));
 		JPanel panel = new JPanel(new GridLayout(10,10));
-		
 		JPanel viewerPanel = new JPanel(new GridLayout(10,10));
 		panel.setSize(600,500);
 		viewerPanel.setSize(600,500);
-	
+		
 
 		JButton saveButton = new JButton("Save File");
 		saveButton.setPreferredSize(new Dimension(170,30));
@@ -103,18 +100,21 @@ public class ChromosomeEditor {
 					String path = jf.getSelectedFile().getAbsolutePath();
 					loadString = readFile(path);
 					panel.removeAll();
+					viewerPanel.removeAll();
 					jButtons.clear();
 					chromosomes.clear();
-					
+					viewerButtons.clear();					
 				}
 				chromosomeNumber = loadString.length();
-				viewerPanel.setLayout(new GridLayout((int)Math.ceil(Math.sqrt(chromosomeNumber))/1,(int)Math.ceil(Math.sqrt(chromosomeNumber))/1));
 				panel.setLayout(new GridLayout((int)Math.ceil(Math.sqrt(chromosomeNumber))/1,(int)Math.ceil(Math.sqrt(chromosomeNumber))/1));
+				viewerPanel.setLayout(new GridLayout((int)Math.ceil(Math.sqrt(chromosomeNumber))/1,(int)Math.ceil(Math.sqrt(chromosomeNumber))/1));
 				for (int i = 0; i < chromosomeNumber; i++) {
 					int bit = Integer.parseInt(loadString.substring(i, i+1));
 					ChromosomeButton jButton = new ChromosomeButton(Integer.toString(i));
+					ChromosomeButton viewerButton = new ChromosomeButton(Integer.toString(i));
 					Chromosome eachChromosome = new Chromosome();
 					jButton.setBackground(eachChromosome.setColorAndGet(bit));
+					viewerButton.setBackground(eachChromosome.setColorAndGet(bit)); //jButton.getBackground()
 					jButton.setForeground(Color.blue);
 					jButton.addActionListener(new ActionListener() {
 						@Override
@@ -122,13 +122,20 @@ public class ChromosomeEditor {
 							// TODO Auto-generated method stub	
 							jButton.clearColor();
 							jButton.setBackground(eachChromosome.clickChangeColor());
+							viewerButton.clearColor();
+							viewerButton.setBackground(jButton.getBackground());
 						}
 					});
 					jButtons.add(jButton);
+					viewerButtons.add(viewerButton);
 					chromosomes.add(eachChromosome);
 					panel.add(jButton);
+					viewerPanel.add(viewerButton);
+//					viewerPanel.add(saveButton);
 					panel.revalidate();
+					viewerPanel.revalidate();
 					panel.repaint();
+					viewerPanel.repaint();
 				}
 			}
 		});
@@ -145,6 +152,7 @@ public class ChromosomeEditor {
 					}
 //					jButtons.get(i).clearColor();
 					jButtons.get(i).setBackground(chromosomes.get(i).getColor());
+					viewerButtons.get(i).setBackground(jButtons.get(i).getBackground());
 			}
 			}
 			
@@ -157,18 +165,22 @@ public class ChromosomeEditor {
 					if (chromosomes.get(i).getStatusIndex() == 2) {
 						if(randomProcess(0.5)) {
 							jButtons.get(i).paintSquareColor(chromosomes.get(i).getIndexColor(1),i);
+							viewerButtons.get(i).setBackground(jButtons.get(i).getSquareColor());
 							frame.revalidate();
 							frame.repaint();
 							
 						}
 						else {
 							jButtons.get(i).paintSquareColor(chromosomes.get(i).getIndexColor(0),i);
+							viewerButtons.get(i).setBackground(jButtons.get(i).getSquareColor());
 							frame.revalidate();
 							frame.repaint();
 						}
 					}
 					panel.revalidate();
 					panel.repaint();
+					viewerPanel.revalidate();
+					viewerPanel.repaint();
 				}
 			}	
 		});
@@ -181,9 +193,7 @@ public class ChromosomeEditor {
 		lowerBottom.add(evaluateFitness);
 		bottomPanel.add(upperBottom);
 		bottomPanel.add(lowerBottom);
-		editorPanel.add(bottomPanel);
-		editorPanel.add(panel);
-		mainPanel.add(editorPanel);
+		mainPanel.add(panel);
 		mainPanel.add(viewerPanel);
 		frame.add(bottomPanel,BorderLayout.SOUTH);
 		frame.add(mainPanel,BorderLayout.CENTER);

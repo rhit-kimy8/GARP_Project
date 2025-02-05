@@ -35,4 +35,12 @@ public class ChromosomeButton extends JButton{
         
          
     }
+
+	public Color getSquareColor() {
+		return squareColor;
+	}
+
+	public void setSquareColor(Color squareColor) {
+		this.squareColor = squareColor;
+	}
 }
