@@ -137,7 +137,6 @@ public class ChromosomeEditor {
 			
 		});
 		evaluateFitness.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -158,8 +157,7 @@ public class ChromosomeEditor {
 					panel.revalidate();
 					panel.repaint();
 				}
-			}
-			
+			}	
 		});
 		
 		upperBottom.add(mutate);
