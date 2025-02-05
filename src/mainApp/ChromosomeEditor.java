@@ -16,7 +16,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -94,6 +93,9 @@ public class ChromosomeEditor {
 					String path = jf.getSelectedFile().getAbsolutePath();
 					loadString = readFile(path);
 					panel.removeAll();
+					jButtons.clear();
+					chromosomes.clear();
+					
 				}
 				chromosomeNumber = loadString.length();
 				panel.setLayout(new GridLayout((int)Math.ceil(Math.sqrt(chromosomeNumber))/1,(int)Math.ceil(Math.sqrt(chromosomeNumber))/1));
@@ -130,7 +132,7 @@ public class ChromosomeEditor {
 					if (chromosomes.get(i).getStatusIndex()== 0 || chromosomes.get(i).getStatusIndex()== 1) {
 						chromosomes.get(i).mutate(check);
 					}
-					jButtons.get(i).clearColor();
+//					jButtons.get(i).clearColor();
 					jButtons.get(i).setBackground(chromosomes.get(i).getColor());
 			}
 			}
@@ -195,6 +197,7 @@ public class ChromosomeEditor {
 	}
 	
 	private boolean randomProcess(double possibility) {
+
 		Random r = new Random();// eg: 3% all the doubles > 0.03 will make true, so we shouldn't do any changes
 		return (r.nextDouble() > 1-possibility);
 	}
