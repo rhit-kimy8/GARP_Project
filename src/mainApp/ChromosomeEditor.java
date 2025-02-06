@@ -256,6 +256,10 @@ public class ChromosomeEditor {
 			String next;
 			next = scanner.nextLine();
 			
+			if (next.isEmpty()) {
+				throw new FileNotFoundException ();
+			}
+			
 			for (int i = 0; i < next.length(); i++) {
 				Character num = next.charAt(i);
 				if (Character.getNumericValue(num) >2) {
@@ -276,15 +280,6 @@ public class ChromosomeEditor {
 			throw e;
 		}
 
-//		if (next.isEmpty() || next.isBlank()) throw new FileNotFoundException("The first line of given file directory " + filename + " is empty.");
-//		for (int i = 0; i < next.length(); i++) {
-//			Character num = next.charAt(i);
-//			if (Character.getNumericValue(num) >2) {
-//				throw new InvalidBitStringInformationException();
-//			}
-//		}
-//		scanner.close();
-//		return next;
 	}
 	/**
 	 * ensures: Simulate the random process according to the possibility
