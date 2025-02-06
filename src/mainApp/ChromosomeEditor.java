@@ -14,6 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Scanner;
 import javax.swing.JButton;
@@ -22,49 +23,68 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
+/**
+ * Class: ChromosomeEditor
+ * @author Haocheng Tang,Eden
+ * <br>Purpose: create a window for the simulation. It contains a few functional buttons and editor and viewer
+ * <br>Restrictions: Maybe not so functional for future purposes
+ */
 public class ChromosomeEditor {
 	
 	
 	private ArrayList<Chromosome> chromosomes = new ArrayList<>();
+	//buttons for the edit part
 	private ArrayList<ChromosomeButton> jButtons = new ArrayList<>();
 	private ArrayList<ChromosomeButton> viewerButtons = new ArrayList<>();
 	private String loadString;
 	private int chromosomeNumber;
 	private String saveString="";
 	private double mutationRate;
+	//right now not be used, probably will be used in the future
+	private String changingBits;
 	
+	/**
+	 * ensures: initializes the window
+	 */
 	ChromosomeEditor(){
+		//frame for the whole window
 		JFrame frame = new JFrame("ChromosomeEditor");
-		frame.setSize(1200,600);
+		frame.setSize(1000,600);
+		//panel for the whole functional buttons
 		JPanel bottomPanel = new JPanel(new GridLayout(2,1));
-		bottomPanel.setSize(600,100);
+		bottomPanel.setSize(1000,100);
+		//the panel for mutation
 		JPanel upperBottom = new JPanel();
+		//the panel for the save and load
 		JPanel lowerBottom = new JPanel();
+		// the panel for the two parts of chromosomes
 		JPanel mainPanel = new JPanel(new GridLayout(1,2));
+		// the panel for the left side editing chromosomes
 		JPanel panel = new JPanel(new GridLayout(10,10));
+		panel.setSize(500,500);
+		//the panel for the right side viewing chromosomes
 		JPanel viewerPanel = new JPanel(new GridLayout(10,10));
-		panel.setSize(600,500);
-		viewerPanel.setSize(600,500);
+		viewerPanel.setSize(500,500);
 		
-
+		//buttons' settings
 		JButton saveButton = new JButton("Save File");
-		saveButton.setPreferredSize(new Dimension(170,30));
+		saveButton.setPreferredSize(new Dimension(bottomPanel.getWidth()/4,30));
 		JButton loadButton = new JButton("Load File");
-		loadButton.setPreferredSize(new Dimension(170,30));
+		loadButton.setPreferredSize(new Dimension(bottomPanel.getWidth()/4,30));
 		JButton evaluateFitness = new JButton("EvaluateFitness (Flip coin)");
-		evaluateFitness.setPreferredSize(new Dimension(220,30));
+		evaluateFitness.setPreferredSize(new Dimension(bottomPanel.getWidth()/3,30));
 		JButton mutate = new JButton("Mutate");
-		mutate.setPreferredSize(new Dimension(170,30));
+		mutate.setPreferredSize(new Dimension(bottomPanel.getWidth()/4,30));
 		JLabel mutateRate = new JLabel("           M Rate : __ / N");
-		mutateRate.setPreferredSize(new Dimension(170,40));
+		mutateRate.setPreferredSize(new Dimension(bottomPanel.getWidth()/4,40));
 		JTextField mutateRateInput = new JTextField();
-		mutateRateInput.setPreferredSize(new Dimension(220,30));
+		mutateRateInput.setPreferredSize(new Dimension(bottomPanel.getWidth()/3,30));
 		
 		
-		
+		// save button 
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// get the current status of the chromosomes and then save it to the file
 				for (Chromosome chromosome:chromosomes) {
 				saveString += Integer.toString(chromosome.getStatusIndex()); 
 			}
@@ -86,7 +106,7 @@ public class ChromosomeEditor {
 		});
 		
 		
-		
+		//load button
 		loadButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser jf = new JFileChooser();
@@ -95,10 +115,14 @@ public class ChromosomeEditor {
 				if (checkFile != JFileChooser.APPROVE_OPTION) {
 		            return;  
 		        }
-				
+				// whenever we load a file, we should clean the past datas, and load new datas
 				if (checkFile == JFileChooser.APPROVE_OPTION) {
 					String path = jf.getSelectedFile().getAbsolutePath();
-					loadString = readFile(path);
+					try {
+						loadString = readFile(path);
+					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
+					}
 					panel.removeAll();
 					viewerPanel.removeAll();
 					jButtons.clear();
@@ -106,18 +130,22 @@ public class ChromosomeEditor {
 					viewerButtons.clear();					
 				}
 				chromosomeNumber = loadString.length();
+				//create the layout for the chromosomes according to the numbers. It depends on sqrt(n). eg: 45 will be 7*7, so it will be 7 chromosomes in each row, 6 rows in total and the last line contains 3 chromosomes.
 				panel.setLayout(new GridLayout((int)Math.ceil(Math.sqrt(chromosomeNumber))/1,(int)Math.ceil(Math.sqrt(chromosomeNumber))/1));
 				viewerPanel.setLayout(new GridLayout((int)Math.ceil(Math.sqrt(chromosomeNumber))/1,(int)Math.ceil(Math.sqrt(chromosomeNumber))/1));
 				for (int i = 0; i < chromosomeNumber; i++) {
+					// convert each String number to Integer
 					int bit = Integer.parseInt(loadString.substring(i, i+1));
 					ChromosomeButton jButton = new ChromosomeButton(Integer.toString(i));
 					ChromosomeButton viewerButton = new ChromosomeButton(Integer.toString(i));
 					Chromosome eachChromosome = new Chromosome();
 					jButton.setBackground(eachChromosome.setColorAndGet(bit));
-					viewerButton.setBackground(eachChromosome.setColorAndGet(bit)); //jButton.getBackground()
+					viewerButton.setBackground(eachChromosome.setColorAndGet(bit)); 
 					jButton.setForeground(Color.blue);
 					viewerButton.setForeground(Color.blue);
+					//whenever the edit chromosome is clicked, it will clean the painted square color, and change the color according to 0-1-0-1..Same for the viewer
 					jButton.addActionListener(new ActionListener() {
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							// TODO Auto-generated method stub	
 							jButton.clearColor();
@@ -138,13 +166,14 @@ public class ChromosomeEditor {
 				}
 			}
 		});
-		
+		//mutate button
 		mutate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method 
+				// get the mutationrate and then convert it to double
 				mutationRate = Integer.parseInt(mutateRateInput.getText());
 				for (int i = 0; i < chromosomeNumber; i++) {
+					// check whether it is 0 or 1 and then mutate it.
 					boolean check = randomProcess((double)mutationRate/chromosomeNumber);
 					if (chromosomes.get(i).getStatusIndex()== 0 || chromosomes.get(i).getStatusIndex()== 1) {
 						chromosomes.get(i).mutate(check);
@@ -158,6 +187,10 @@ public class ChromosomeEditor {
 			}
 			
 		});
+		
+		
+		
+		//flipcoin button
 		evaluateFitness.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -194,6 +227,7 @@ public class ChromosomeEditor {
 		lowerBottom.add(evaluateFitness);
 		bottomPanel.add(upperBottom);
 		bottomPanel.add(lowerBottom);
+
 		mainPanel.add(panel);
 		mainPanel.add(viewerPanel);
 		frame.add(bottomPanel,BorderLayout.SOUTH);
@@ -201,8 +235,13 @@ public class ChromosomeEditor {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 }
-
-	private String readFile(String filename) {
+	/**
+	 * ensures: Return file for bitString of chromosome from directory of file
+	 * @param directory of the file where user wants to get
+	 * <br>requires: String
+	 * @throws FileNotFoundException 
+	 */
+	private String readFile(String filename) throws FileNotFoundException{
 		File file;
 		Scanner scanner;
 		
@@ -212,21 +251,35 @@ public class ChromosomeEditor {
 		try {
 			scanner = new Scanner(file);
 		}catch(FileNotFoundException e) {
-			System.err.println("File named" + filename + "was not found.");
+			System.err.println("File named " + filename + " was not found.");
+			System.exit(1);
+		}catch(IOException e) {
 			e.printStackTrace();
+			System.exit(1);
+		}catch (NumberFormatException e) {
+		    System.err.println("Invalid stringBit format: " + e.getMessage());
+			System.exit(1);
 		}
-		
 		String next;
 		next = scanner.nextLine();
+		if (next.isEmpty() || next.isBlank()) throw new FileNotFoundException("The given file directory " + filename + " is empty.");
+		for (int i = 0; i < next.length(); i++) {
+			Character num = next.charAt(i);
+			if (Character.getNumericValue(num) >2) {
+				throw new IllegalArgumentException("The given file has invalid bitString information");
+			}
+		}
 		scanner.close();
 		return next;
 	}
-	
+	/**
+	 * ensures: Simulate the random process according to the possibility
+	 */
 	private boolean randomProcess(double possibility) {
 
 		Random r = new Random();// eg: 3% all the doubles > 0.03 will make true, so we shouldn't do any changes
 		return (r.nextDouble() > 1-possibility);
 	}
 	
+	
 }
-
