@@ -32,7 +32,6 @@ public class MainApp {
 	 * ensures: runs the application
 	 * @param args unused
 	 */
-	//test commit
 	public static void main(String[] args) {
 		MainApp mainApp = new MainApp();
 		mainApp.runApp();
