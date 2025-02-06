@@ -109,26 +109,30 @@ public class ChromosomeEditor {
 		//load button
 		loadButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser jf = new JFileChooser();
-				jf.setCurrentDirectory(new File("./src/mainApp/ExampleFiles"));
-				int checkFile = jf.showOpenDialog(null);
-				if (checkFile != JFileChooser.APPROVE_OPTION) {
-		            return;  
-		        }
-				// whenever we load a file, we should clean the past datas, and load new datas
-				if (checkFile == JFileChooser.APPROVE_OPTION) {
-					String path = jf.getSelectedFile().getAbsolutePath();
+				while(true) {
 					try {
-						loadString = readFile(path);
-					} catch (FileNotFoundException e1) {
-						e1.printStackTrace();
+						JFileChooser jf = new JFileChooser();
+						jf.setCurrentDirectory(new File("./src/mainApp/ExampleFiles"));
+						int checkFile = jf.showOpenDialog(null);
+						if (checkFile != JFileChooser.APPROVE_OPTION) {
+							return;  
+						}
+						// whenever we load a file, we should clean the past datas, and load new datas
+						if (checkFile == JFileChooser.APPROVE_OPTION) {
+							String path = jf.getSelectedFile().getAbsolutePath();
+							loadString = readFile(path);
+							panel.removeAll();
+							viewerPanel.removeAll();
+							jButtons.clear();
+							chromosomes.clear();
+							viewerButtons.clear();
+							break;
+							}
+					}catch (FileNotFoundException | InvalidBitStringInformationException | NoSuchElementException e1) {
+						continue;
 					}
-					panel.removeAll();
-					viewerPanel.removeAll();
-					jButtons.clear();
-					chromosomes.clear();
-					viewerButtons.clear();					
 				}
+				
 				chromosomeNumber = loadString.length();
 				//create the layout for the chromosomes according to the numbers. It depends on sqrt(n). eg: 45 will be 7*7, so it will be 7 chromosomes in each row, 6 rows in total and the last line contains 3 chromosomes.
 				panel.setLayout(new GridLayout((int)Math.ceil(Math.sqrt(chromosomeNumber))/1,(int)Math.ceil(Math.sqrt(chromosomeNumber))/1));
@@ -240,37 +244,47 @@ public class ChromosomeEditor {
 	 * @param directory of the file where user wants to get
 	 * <br>requires: String
 	 * @throws FileNotFoundException 
+	 * @throws InvalidBitStringInformationException 
 	 */
-	private String readFile(String filename) throws FileNotFoundException{
-		File file;
-		Scanner scanner;
-		
-		scanner = new Scanner(filename);
-		file = new File(filename);
-		
+	private String readFile(String filename) throws FileNotFoundException, InvalidBitStringInformationException, NoSuchElementException{
 		try {
+			File file;
+			Scanner scanner;
+			file = new File(filename);
 			scanner = new Scanner(file);
+			
+			String next;
+			next = scanner.nextLine();
+			
+			for (int i = 0; i < next.length(); i++) {
+				Character num = next.charAt(i);
+				if (Character.getNumericValue(num) >2) {
+					throw new InvalidBitStringInformationException();
+				}
+			}
+			scanner.close();
+			return next;
+			
 		}catch(FileNotFoundException e) {
 			System.err.println("File named " + filename + " was not found.");
-			System.exit(1);
-		}catch(IOException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}catch (NumberFormatException e) {
-		    System.err.println("Invalid stringBit format: " + e.getMessage());
-			System.exit(1);
+			throw e;
+		}catch(InvalidBitStringInformationException e) {
+			System.err.println("The given file " + filename +" has invalid bitString information");
+			throw e;
+		}catch(NoSuchElementException e) {
+			System.err.println("The given file " + filename + " is empty.");
+			throw e;
 		}
-		String next;
-		next = scanner.nextLine();
-		if (next.isEmpty() || next.isBlank()) throw new FileNotFoundException("The given file directory " + filename + " is empty.");
-		for (int i = 0; i < next.length(); i++) {
-			Character num = next.charAt(i);
-			if (Character.getNumericValue(num) >2) {
-				throw new IllegalArgumentException("The given file has invalid bitString information");
-			}
-		}
-		scanner.close();
-		return next;
+
+//		if (next.isEmpty() || next.isBlank()) throw new FileNotFoundException("The first line of given file directory " + filename + " is empty.");
+//		for (int i = 0; i < next.length(); i++) {
+//			Character num = next.charAt(i);
+//			if (Character.getNumericValue(num) >2) {
+//				throw new InvalidBitStringInformationException();
+//			}
+//		}
+//		scanner.close();
+//		return next;
 	}
 	/**
 	 * ensures: Simulate the random process according to the possibility
