@@ -175,6 +175,14 @@ public class ChromosomeEditor {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// get the mutationrate and then convert it to double
+				if (mutateRateInput.getText().isEmpty() || mutateRateInput.getText().isBlank()) {
+					System.err.println("The mutation rate is undetermined");
+					return;
+				}
+				if (panel.getComponentCount()==0) {
+					System.err.println("The chromosomes are undetermined");
+					return;
+				}
 				mutationRate = Integer.parseInt(mutateRateInput.getText());
 				for (int i = 0; i < chromosomeNumber; i++) {
 					// check whether it is 0 or 1 and then mutate it.
