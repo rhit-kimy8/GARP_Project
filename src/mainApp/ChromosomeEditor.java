@@ -245,6 +245,7 @@ public class ChromosomeEditor {
 	 * <br>requires: String
 	 * @throws FileNotFoundException 
 	 * @throws InvalidBitStringInformationException 
+	 * @throws NoSuchElementException
 	 */
 	private String readFile(String filename) throws FileNotFoundException, InvalidBitStringInformationException, NoSuchElementException{
 		try {
@@ -256,9 +257,8 @@ public class ChromosomeEditor {
 			String next;
 			next = scanner.nextLine();
 			
-			if (next.isEmpty()) {
-				throw new FileNotFoundException ();
-			}
+			if (next.isEmpty()) throw new FileNotFoundException ();
+			if (next.contains(" ")) throw new InvalidBitStringInformationException();
 			
 			for (int i = 0; i < next.length(); i++) {
 				Character num = next.charAt(i);
@@ -270,7 +270,7 @@ public class ChromosomeEditor {
 			return next;
 			
 		}catch(FileNotFoundException e) {
-			System.err.println("File named " + filename + " was not found.");
+			System.err.println("The given file " + filename + " cannot be read.");
 			throw e;
 		}catch(InvalidBitStringInformationException e) {
 			System.err.println("The given file " + filename +" has invalid bitString information");
