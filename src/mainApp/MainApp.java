@@ -25,7 +25,7 @@ public class MainApp {
 
 	private void runApp() {
 		ChromosomeEditor chromosomeEditor = new ChromosomeEditor();
-		System.out.println("Write your cool arcade game here!");			
+		System.out.println("GARP - MileStone 1");			
 	} // runApp
 
 	/**
