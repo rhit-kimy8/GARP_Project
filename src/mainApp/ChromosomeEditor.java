@@ -245,6 +245,7 @@ public class ChromosomeEditor {
 	 * <br>requires: String
 	 * @throws FileNotFoundException 
 	 * @throws InvalidBitStringInformationException 
+	 * @throws NoSuchElementException
 	 */
 	private String readFile(String filename) throws FileNotFoundException, InvalidBitStringInformationException, NoSuchElementException{
 		try {
@@ -256,6 +257,9 @@ public class ChromosomeEditor {
 			String next;
 			next = scanner.nextLine();
 			
+			if (next.isEmpty()) throw new FileNotFoundException ();
+			if (next.contains(" ")) throw new InvalidBitStringInformationException();
+			
 			for (int i = 0; i < next.length(); i++) {
 				Character num = next.charAt(i);
 				if (Character.getNumericValue(num) >2) {
@@ -266,7 +270,7 @@ public class ChromosomeEditor {
 			return next;
 			
 		}catch(FileNotFoundException e) {
-			System.err.println("File named " + filename + " was not found.");
+			System.err.println("The given file " + filename + " cannot be read.");
 			throw e;
 		}catch(InvalidBitStringInformationException e) {
 			System.err.println("The given file " + filename +" has invalid bitString information");
@@ -276,15 +280,6 @@ public class ChromosomeEditor {
 			throw e;
 		}
 
-//		if (next.isEmpty() || next.isBlank()) throw new FileNotFoundException("The first line of given file directory " + filename + " is empty.");
-//		for (int i = 0; i < next.length(); i++) {
-//			Character num = next.charAt(i);
-//			if (Character.getNumericValue(num) >2) {
-//				throw new InvalidBitStringInformationException();
-//			}
-//		}
-//		scanner.close();
-//		return next;
 	}
 	/**
 	 * ensures: Simulate the random process according to the possibility
