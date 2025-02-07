@@ -247,7 +247,7 @@ public class ChromosomeEditor {
 	 * @throws InvalidBitStringInformationException 
 	 * @throws NoSuchElementException
 	 */
-	private String readFile(String filename) throws FileNotFoundException, InvalidBitStringInformationException, NoSuchElementException{
+	public String readFile(String filename) throws FileNotFoundException, InvalidBitStringInformationException, NoSuchElementException{
 		try {
 			File file;
 			Scanner scanner;
@@ -284,7 +284,7 @@ public class ChromosomeEditor {
 	/**
 	 * ensures: Simulate the random process according to the possibility
 	 */
-	private boolean randomProcess(double possibility) {
+	public boolean randomProcess(double possibility) {
 
 		Random r = new Random();// eg: 3% all the doubles > 0.03 will make true, so we shouldn't do any changes
 		return (r.nextDouble() > 1-possibility);
