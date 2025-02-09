@@ -20,12 +20,13 @@ import javax.swing.JFrame;
  * <br>Restrictions: None
  */
 public class MainApp {
-	static String str;
-	// test
+	ChromosomeEditor chromosomeEditor = new ChromosomeEditor();
+	Population population = new Population();
 
 	private void runApp() {
-		ChromosomeEditor chromosomeEditor = new ChromosomeEditor();
-		System.out.println("GARP - MileStone 1");			
+//		chromosomeEditor.runChromosomeEditor();
+		population.testGeneration(10);
+		population.testMaxOnes(100);
 	} // runApp
 
 	/**
@@ -33,6 +34,8 @@ public class MainApp {
 	 * @param args unused
 	 */
 	public static void main(String[] args) {
+		System.out.println("GARP - MileStone 2");
+		System.out.println();
 		MainApp mainApp = new MainApp();
 		mainApp.runApp();
 }
