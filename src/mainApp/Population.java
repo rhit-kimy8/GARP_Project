@@ -11,10 +11,10 @@ public class Population {
 	Population(){
 	}
 	
-	public void generateRandomPopulation(int size) {
-		for (int i=0; i<size; i++) {
+	public void generateRandomPopulation(int populationSize, int chromosomeSize) {
+		for (int i=0; i<populationSize; i++) {
 			String chromosome = "";
-			for (int j=0; j<10; j++) {
+			for (int j=0; j<chromosomeSize; j++) {
 				if (random.nextDouble() > 0.5) {
 					chromosome = chromosome + "1";
 				}else {
@@ -25,22 +25,22 @@ public class Population {
 		}
 	}
 	
-	public void generateSpecialPopulation(int size) {
-		for (int i=0;i<size/4;i++) {
+	public void generateSpecialPopulation(int populationSize, int chromosomeSize) {
+		for (int i=0;i<populationSize/4;i++) {
 			String chromosome = "0000000000";
 			specialPopulation.add(chromosome);
 		}
-		for (int i=0;i<size/4;i++) {
+		for (int i=0;i<populationSize/4;i++) {
 			String chromosome = "";
 			int index = random.nextInt(9);
-			for (int j=0;j<10;j++) {
+			for (int j=0;j<chromosomeSize;j++) {
 				if(j == index) chromosome = chromosome + "1";
 				else chromosome = chromosome + "0";
 			}
 			specialPopulation.add(chromosome);
 		}
 		
-		for (int i=0;i<size/4;i++) {
+		for (int i=0;i<populationSize/4;i++) {
 			ArrayList<Integer> list = new ArrayList<>();
 			int num = 0;
 			while (true) {
@@ -51,14 +51,14 @@ public class Population {
 				if(num == 3) break;
 			}
 			String chromosome = "";
-			for (int j=0;j<10;j++) {
+			for (int j=0;j<chromosomeSize;j++) {
 				if(list.contains(j)) chromosome = chromosome + "1";
 				else chromosome = chromosome + "0";
 			}
 			specialPopulation.add(chromosome);
 		}
 		
-		for (int i=0;i<size/4;i++) {
+		for (int i=0;i<populationSize/4;i++) {
 			ArrayList<Integer> list = new ArrayList<>();
 			int num = 0;
 			while (true) {
@@ -69,7 +69,7 @@ public class Population {
 				if(num == 6) break;
 			}
 			String chromosome = "";
-			for (int j=0;j<10;j++) {
+			for (int j=0;j<chromosomeSize;j++) {
 				if(list.contains(j)) chromosome = chromosome + "1";
 				else chromosome = chromosome + "0";
 			}
@@ -77,8 +77,43 @@ public class Population {
 		}
 	}
 	
-	public void testMaxOnes(int size) {
-		generateSpecialPopulation(size);
+	public int maxOnesFitness(ArrayList<String> chromosomes) {
+		int totalMaxOnes = 0;
+		for (String i: chromosomes) {
+			for (int k = 0; k < i.length(); k++) {
+				if (Character.getNumericValue(i.charAt(k)) == 1) totalMaxOnes++;
+			}
+		}
+		return totalMaxOnes;
+	}
+	
+	public int matchTargetFitness(ArrayList<String> chromosomes, String chromosome) {
+		int matchingChromosomes = 0;
+		for (String i: chromosomes) {
+			if (i.contains(chromosome)) matchingChromosomes++;
+		}
+		return matchingChromosomes;
+	}
+	
+	public int maxConsecutiveOnesFitness(ArrayList<String> chromosomes) {
+		int maxConsecutiveCount = 0;
+		for (String i: chromosomes) {
+			int count = 0;
+			for(int j=0;j<i.length();j++) {
+				if(Character.getNumericValue(i.charAt(j)) == 1) count++;
+				else count = 0;
+				if(count > maxConsecutiveCount) {
+					maxConsecutiveCount = count;
+				}
+				
+			}
+		}
+		return maxConsecutiveCount;
+	}
+	
+	
+	public void testSpecialPopulation(int populationSize, int chromosomeLength) {
+		generateSpecialPopulation(populationSize, chromosomeLength);
 		int totalMaxOnes = 0;
 		int count = 1;
 		for (String i: specialPopulation) {
@@ -91,8 +126,8 @@ public class Population {
 		System.out.println("Total MaxOnes fitness is " + totalMaxOnes);
 	}
 	
-	public void testGeneration(int size) {
-		generateRandomPopulation(size);
+	public void testPopulation(int populationSize, int chromosomeLength) {
+		generateRandomPopulation(populationSize, chromosomeLength);
 		int n = 1;
 		for(String i:population) {
 			System.out.println(i);
@@ -100,8 +135,13 @@ public class Population {
 			n ++;
 		}
 	}
-	
-	
-	
+
+	public ArrayList<String> getPopulation() {
+		return population;
+	}
+
+	public ArrayList<String> getSpecialPopulation() {
+		return specialPopulation;
+	}	
 	
 }
