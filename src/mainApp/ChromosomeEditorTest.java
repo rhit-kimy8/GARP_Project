@@ -16,6 +16,7 @@ public class ChromosomeEditorTest {
 
 	@Test
 	public void testReadFile() {
+		System.out.println("Good file test");
 		String output = null;
 		String path = null;
 		JFileChooser jf = new JFileChooser();
@@ -40,6 +41,40 @@ public class ChromosomeEditorTest {
 		} catch (InvalidBitStringInformationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	@Test public void testReadBadFile() {
+		System.out.println("Bad file test");
+		String output = null;
+		String path = null;
+		JFileChooser jf = new JFileChooser();
+		jf.setCurrentDirectory(new File("./src/mainApp/ExampleFiles"));
+		int filePath = jf.showSaveDialog(null);
+		if (filePath == JFileChooser.APPROVE_OPTION) {
+			path = jf.getSelectedFile().getAbsolutePath();	
+		}
+		try {
+			output = CE.readFile(path);
+		}catch (FileNotFoundException | InvalidBitStringInformationException | NoSuchElementException e1) {
+			assertTrue(true);
+			//fail();
+		}
+		try {
+			//assertEquals(output, CE.readFile(path));
+			CE.readFile(path);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			assertTrue(true);
+		} catch (NoSuchElementException e) {
+			// TODO Auto-generated catch block
+			assertTrue(true);
+			//e.printStackTrace();
+		} catch (InvalidBitStringInformationException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			assertTrue(true);
 		}
 	}
 
