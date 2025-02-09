@@ -43,10 +43,14 @@ public class ChromosomeEditor {
 	//right now not be used, probably will be used in the future
 	private String changingBits;
 	
+	
+	ChromosomeEditor(){
+	}
+	
 	/**
 	 * ensures: initializes the window
 	 */
-	ChromosomeEditor(){
+	public void runChromosomeEditor() {
 		//frame for the whole window
 		JFrame frame = new JFrame("ChromosomeEditor");
 		frame.setSize(1000,600);
