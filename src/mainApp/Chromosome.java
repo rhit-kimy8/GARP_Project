@@ -36,9 +36,9 @@ public class Chromosome {
 			}
 		}
 		//Creates Rectangles to visualize bitString
-		for (int xCord = 0; xCord < 100; xCord += 10) {
-			for (int yCord = 0; yCord < 100; yCord += 10) {
-				rectangles.add(new Rectangle(xCord, yCord, 10, 10));
+		for (int yCord = 0; yCord < 200; yCord += 20) {
+			for (int xCord = 0; xCord < 200; xCord += 20) {
+				rectangles.add(new Rectangle(xCord, yCord, 20, 20));
 			}
 		}
 		
@@ -96,7 +96,7 @@ public class Chromosome {
 	}
 	
 	//Draw each Chromosome
-	public void drawOn(Graphics2D g2) {
+	public void drawOnFitness(Graphics2D g2) {
 		for (int x = 0; x < rectangles.size(); x++) {
 			Rectangle r = rectangles.get(x);
 			String s = "";
@@ -109,7 +109,7 @@ public class Chromosome {
 				g2.setColor(Color.black);
 			}
 			s += x;
-			g2.drawString(s, (int) r.getX() + 5, (int) r.getY() + 5);
+			g2.drawString(s, (int) r.getX(), (int) r.getY() + 10);
 		}
 	}
 	

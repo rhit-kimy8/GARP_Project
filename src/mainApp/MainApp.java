@@ -58,6 +58,7 @@ public class MainApp {
 		System.out.println("GARP - MileStone 2");
 		MainApp mainApp = new MainApp();
 		mainApp.runApp();
+		
 }
 }
 
