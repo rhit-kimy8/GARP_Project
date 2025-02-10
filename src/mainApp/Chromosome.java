@@ -1,6 +1,8 @@
 package mainApp;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 /**
@@ -14,23 +16,39 @@ import java.util.Random;
  * </pre>
  */
 public class Chromosome {
-	private int name;
 	private ArrayList<Color> colors = new ArrayList<>();
 	private int statusIndex;
+	private ArrayList<Integer> bitString;
+	private ArrayList<Rectangle> rectangles;
+	private int fitness;
 	
+	
+	//Could add bitString in constructor if using files to import chromosomes
 	Chromosome() {
-		Random randomness = new Random();
-		statusIndex = randomness.nextInt(0, 3);
-		colors.add(Color.red);
-		colors.add(Color.green);
-		colors.add(Color.gray);
+		this.bitString = new ArrayList<>();
+		this.rectangles = new ArrayList<>();
+		for (int x = 0; x < 100; x++) {
+			if (Math.random() > .5) {
+				bitString.add(1);
+			}
+			else {
+				bitString.add(0);
+			}
+		}
+		//Creates Rectangles to visualize bitString
+		for (int xCord = 0; xCord < 100; xCord += 10) {
+			for (int yCord = 0; yCord < 100; yCord += 10) {
+				rectangles.add(new Rectangle(xCord, yCord, 10, 10));
+			}
+		}
+		
 	}
 	/**
 	 * ensures: return the current color
 	 */
-	public Color getColor() {
-		return colors.get(statusIndex);
-	}
+	//public Color getColor() {
+		//return colors.get(statusIndex);
+	//}
 	/**
 	 * ensures: return the color according to the bit(1 return green)
 	 * @param the index of the color
@@ -57,7 +75,8 @@ public class Chromosome {
 		if (statusIndex == 2) {
 			statusIndex = 0;
 		}
-		return getColor();
+		return Color.black;
+		//return getColor();
 		
 	}
 	/**
@@ -75,15 +94,51 @@ public class Chromosome {
 			}
 		}
 	}
-	public int getName() {
-		return name;
+	
+	//Draw each Chromosome
+	public void drawOn(Graphics2D g2) {
+		for (int x = 0; x < rectangles.size(); x++) {
+			Rectangle r = rectangles.get(x);
+			String s = "";
+			g2.setColor(getColor(bitString.get(x)));
+			g2.fill(r);
+			if (getColor(bitString.get(x)) == Color.black) {
+				g2.setColor(Color.green);
+			}
+			else {
+				g2.setColor(Color.black);
+			}
+			s += x;
+			g2.drawString(s, (int) r.getX() + 5, (int) r.getY() + 5);
+		}
 	}
-	public void setName(int name) {
-		this.name = name;
+	
+	//Getters
+	public Color getColor(int bit) {
+		if (bit == 1) {
+			return Color.green;
+		}
+		else {
+			return Color.black;
+		}
 	}
+	public ArrayList<Integer> getBitString() {
+		return this.bitString;
+	}
+	
+	public int getFitness() {
+		return this.fitness;
+	}
+	
 	public int getStatusIndex() {
 		return statusIndex;
 	}
+	
+	//Setters
+	public void setFitness(int fit) {
+		this.fitness = fit;
+	}
+	
 	public void setStatusIndex(int statusIndex) {
 		this.statusIndex = statusIndex;
 	}
