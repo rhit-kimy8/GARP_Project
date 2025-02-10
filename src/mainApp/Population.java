@@ -130,7 +130,7 @@ public class Population {
 			System.out.println(j);
 		}
 		
-		// this is the test to check get each random parents and try to return child chromosome through crossover
+		// this is the test to check get each random parents and try to return child chromosome through crossover.
 		String parent1 = chromosomes.get(random.nextInt(chromosomes.size()/2));
 		System.out.println("Parent1");
 		System.out.println(parent1);
