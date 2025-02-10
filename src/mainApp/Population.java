@@ -114,11 +114,12 @@ public class Population {
 	}
 	
 	public void truncationSelect(ArrayList<String> chromosomes) {
-		for (String j :chromosomes) {
-			System.out.println(j);
-		}
+		for (int j = 0; j < 2; j++) {
 		Collections.sort(chromosomes,FC);
 		Collections.reverse(chromosomes);
+		for (String str :chromosomes) {
+			System.out.println(str);
+		}
 		
 		// this println and below print method are for checking sort is working or not.
 		System.out.println("Remove Half");
@@ -126,20 +127,14 @@ public class Population {
 		for (int i=0;i<selectionSize;i++) {
 			chromosomes.removeLast();
 		}
-		for (String j :chromosomes) {
-			System.out.println(j);
-		}
 		
-		// this is the test to check get each random parents and try to return child chromosome through crossover.
-		String parent1 = chromosomes.get(random.nextInt(chromosomes.size()/2));
-		System.out.println("Parent1");
-		System.out.println(parent1);
-		String parent2 = chromosomes.get(random.nextInt(chromosomes.size()/2,chromosomes.size()-1));
-		System.out.println("Parent2");
-		System.out.println(parent2);
-		String child = crossOverChromosome(parent1,parent2,parent1.length()/2);
-		System.out.println("Child");
-		System.out.println(child);
+		for (int i = 0; i < selectionSize;i++) {
+			String str = chromosomes.get(i);
+			chromosomes.add(str);
+		}	
+		System.out.println(maxOnesFitness(chromosomes));
+//		
+		}
 	}
 	
 	// this return crossover child chromosome from selected parents chromosome splited crossOverPoint
