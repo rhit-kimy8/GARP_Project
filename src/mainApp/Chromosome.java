@@ -19,23 +19,25 @@ public class Chromosome {
 	private ArrayList<Color> colors = new ArrayList<>();
 	private int chromosomeSize;
 	private int statusIndex;
-	private ArrayList<Integer> bitString;
+	//private ArrayList<Integer> bitString;
+	private String bitString;
 	private ArrayList<Rectangle> rectangles;
 	private int fitness;
 	
 	
 	//Could add bitString in constructor if using files to import chromosomes
 	Chromosome() {
-		this.bitString = new ArrayList<>();
+		//this.bitString = new ArrayList<>();
+		this.bitString = "";
 		randomGeneration();
 		fitnessMaxOnesCalculation();
 		this.rectangles = new ArrayList<>();
 		colors.add(Color.black);
 		colors.add(Color.green);
 		//Creates Rectangles to visualize bitString
-		for (int yCord = 0; yCord < 100; yCord += 10) {
-			for (int xCord = 0; xCord < 200; xCord += 10) {
-				rectangles.add(new Rectangle(xCord, yCord, 10, 10));
+		for (int yCord = 0; yCord < 200; yCord += 20) {
+			for (int xCord = 0; xCord < 200; xCord += 20) {
+				rectangles.add(new Rectangle(xCord, yCord, 20, 20));
 			}
 		}
 		
@@ -94,12 +96,14 @@ public class Chromosome {
 	
 	//Draw each Chromosome
 	public void drawOnFitness(Graphics2D g2) {
-		for (int x = 0; x < rectangles.size(); x++) {
+		System.out.println("bitString len: " + this.bitString.length());
+		//for (int x = 0; x < rectangles.size(); x++) {
+		for (int x = 0; x < this.bitString.length(); x++) {
 			Rectangle r = rectangles.get(x);
 			String s = "";
-			g2.setColor(getColor(bitString.get(x)));
+			g2.setColor(getColor(bitString.substring(x,x+1)));
 			g2.fill(r);
-			if (getColor(bitString.get(x)) == Color.black) {
+			if (getColor(bitString.substring(x,x+1)) == Color.black) {
 				g2.setColor(Color.green);
 			}
 			else {
@@ -166,8 +170,8 @@ public class Chromosome {
 		}
 	}
 	//Getters
-	public Color getColor(int bit) {
-		if (bit == 1) {
+	public Color getColor(String bit) {
+		if (bit.equals("1")) {
 			return Color.green;
 		}
 		else {

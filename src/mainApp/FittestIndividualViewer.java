@@ -15,13 +15,13 @@ public class FittestIndividualViewer {
 		FittestIndividualViewer v1 = new FittestIndividualViewer(c1);
 		FittestIndividualViewer v2 = new FittestIndividualViewer(c1);
 		for (int x = 0; x < 100000; x++) {
-			System.out.println(x);
+			//System.out.println(x);
 		}
-		v1.setChromosome(c2);
+		//v1.setChromosome(c2);
 		for (int x = 0; x < 100000; x++) {
 			
 		}
-		v1.setChromosome(c1);
+		//v1.setChromosome(c1);
 	}
 	
 	/***
