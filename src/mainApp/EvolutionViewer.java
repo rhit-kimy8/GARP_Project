@@ -37,18 +37,12 @@ import javax.swing.JPanel;
 public class EvolutionViewer extends JComponent {
 	private static final int FRAME_WIDTH = 800;
 	private static final int FRAME_HEIGHT = 350;
-	private static final Color LIGHT_GRAY = new Color(200,200,200);
 	
 	private static final Color BEST_FITNESS = new Color(0, 255, 0);
 	private static final Color AVERAGE_FITNESS = new Color(0, 0, 255);
 	private static final Color WORST_FITNESS = new Color(255, 0, 0);
 	
-	private final static int LINE_WIDTH = 2;
-	private static final int STATS_HEIGHT = 200;
-	private static final int SIDE_OFFSET = 100;
-	
-	
-	private static final int DELAY = 50;
+	private static final int DELAY = 100;
 	static boolean isRunning = false;
 	
 	public static String saveString = "";
@@ -71,7 +65,6 @@ public class EvolutionViewer extends JComponent {
 	}
 	
 	EvolutionViewer() {
-		
 	}
 	
 	public  void runEvolutionViewer() {
@@ -133,7 +126,12 @@ public class EvolutionViewer extends JComponent {
 		save.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// get the current status of the chromosomes and then save it to the file
-				saveString += Integer.toString(1); 
+				
+				if (bestFitnessLog.size() > 0) {
+					for (int i=0; i<bestFitnessLog.size(); i++) {
+						saveString += bestFitnessLog.get(i) + averageFitnessLog.get(i) + worstFitnessLog.get(i);
+					}
+				}
 			
 				JFileChooser jf = new JFileChooser();
 				jf.setCurrentDirectory(new File("./src/mainApp/EvolutionSaveFile"));
@@ -193,7 +191,7 @@ public class EvolutionViewer extends JComponent {
 		g2.setColor(Color.BLACK);
 		for (int i = 0; i<5; i++) {
 			g2.drawLine(45, 25+i*200/5, 55, 25+i*200/5);
-			String label = Integer.toString(100-20*i);
+			String label = Integer.toString(10-2*i);
 			g2.drawString(label, 25, 25+i*200/5 +5);
 			
 		}
@@ -211,17 +209,18 @@ public class EvolutionViewer extends JComponent {
 		
 		
 		
-		//if (bestFitnessLog.size() > 0) {
-			for (int i=0; i< 2 || ( i<bestFitnessLog.size()); i++) {
+		if (bestFitnessLog.size() > 0) {
+			for (int i=0; i<bestFitnessLog.size(); i++) {
 				g2.setColor(BEST_FITNESS);
-				g2.drawLine(2, 100, 300, 500);
+				g2.drawLine(i*600/bestFitnessLog.size()+25, bestFitnessLog.get(i), i*600/bestFitnessLog.size()+26, bestFitnessLog.get(i));
 				
 				g2.setColor(AVERAGE_FITNESS);
+				g2.drawLine(i*600/bestFitnessLog.size()+25, averageFitnessLog.get(i), i*600/bestFitnessLog.size()+26, averageFitnessLog.get(i));
 				
 				g2.setColor(WORST_FITNESS);
+				g2.drawLine(i*600/bestFitnessLog.size()+25, worstFitnessLog.get(i), i*600/bestFitnessLog.size()+26, worstFitnessLog.get(i));
 				
-				
-				for (int j = 0; j<9; j++) {
+//				for (int j = 0; j<9; j++) {
 //					g2.drawLine(50+i*600/8, 220, 50+i*600/8, 230);
 //					
 //					String label = Integer.toString(100-20*i);
@@ -231,7 +230,7 @@ public class EvolutionViewer extends JComponent {
 				
 			}
 
-		//}
+		}
 		
 	}
 }
