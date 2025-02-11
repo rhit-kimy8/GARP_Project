@@ -75,6 +75,8 @@ public class EvolutionViewer extends JComponent {
 		frame.add(viewer);
 		frame.setVisible(true);
 		Population pop = new Population();
+		pop.generateRandomPopulation(100, 10);
+		for (int i=0; i<pop.population.size();i++) System.out.println(pop.population.get(i).getBitString());
 		
 	    JPanel controls = new JPanel();
 		JButton start = new JButton("Start"); //change to icon later
@@ -112,8 +114,6 @@ public class EvolutionViewer extends JComponent {
 					isRunning = false;
 					viewer.repaint();
 				}
-				pop.generateRandomPopulation(100, 10);
-				for (int i=0; i<pop.population.size();i++) System.out.println(pop.population.get(i).getBitString());
 			}
 			
 		});
@@ -241,6 +241,5 @@ public class EvolutionViewer extends JComponent {
 		}
 		
 	}
-}
 
 	
