@@ -1,9 +1,11 @@
 package mainApp;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class Population {
+	FitnessComparator FC = new FitnessComparator();
 	ArrayList<String> population = new ArrayList<>();
 	ArrayList<String> specialPopulation = new ArrayList<>();
 	Random random = new Random();
@@ -109,6 +111,38 @@ public class Population {
 			}
 		}
 		return maxConsecutiveCount;
+	}
+	
+	public void truncationSelect(ArrayList<String> chromosomes) {
+		for (int j = 0; j < 2; j++) {
+		Collections.sort(chromosomes,FC);
+		Collections.reverse(chromosomes);
+		for (String str :chromosomes) {
+			System.out.println(str);
+		}
+		
+		// this println and below print method are for checking sort is working or not.
+		System.out.println("Remove Half");
+		int selectionSize = chromosomes.size()/2;
+		for (int i=0;i<selectionSize;i++) {
+			chromosomes.removeLast();
+		}
+		
+		for (int i = 0; i < selectionSize;i++) {
+			String str = chromosomes.get(i);
+			chromosomes.add(str);
+		}	
+		System.out.println(maxOnesFitness(chromosomes));
+//		
+		}
+	}
+	
+	// this return crossover child chromosome from selected parents chromosome splited crossOverPoint
+	public String crossOverChromosome(String parent1, String parent2, int crossOverPoint) {
+		String childChromosome = "";
+		childChromosome = childChromosome + parent1.substring(0, crossOverPoint);
+		childChromosome = childChromosome + parent2.substring(crossOverPoint, parent2.length());
+		return childChromosome;
 	}
 	
 	
