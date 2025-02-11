@@ -19,6 +19,7 @@ public class Population {
 			Chromosome chr = new Chromosome();
 			population.add(chr);
 		}
+		Collections.sort(population,FC);
 	}
 	
 	public void generateSpecialPopulation(int populationSize, int chromosomeSize) {
@@ -28,6 +29,7 @@ public class Population {
 			chr.setBitString(chromosome);
 			specialPopulation.add(chr);
 		}
+		
 		// for testing randomness
 //		Chromosome specialchr = new Chromosome();
 //		ArrayList<Integer> speciallist = new ArrayList<>();
@@ -98,6 +100,7 @@ public class Population {
 			chr.setBitString(chromosome);
 			specialPopulation.add(chr);
 		}
+		Collections.sort(population,FC);
 	}
 	
 	public int maxOnesFitness(ArrayList<Chromosome> chromosomes) {
@@ -218,6 +221,18 @@ public class Population {
 			n ++;
 		}
 	}
+	public Chromosome getBest() {
+		Collections.sort(population,FC);
+		return population.get(0);
+	}
+	public Integer getAverage() {
+		return maxOnesFitness(population)/population.size();
+	}
+	public Integer getWorst() {
+		Collections.sort(population,FC);
+		return population.get(population.size()-1).getFitness();
+	}
+	
  
 	public ArrayList<Chromosome> getPopulation() {
 		return population;
