@@ -19,23 +19,23 @@ public class Chromosome {
 	private ArrayList<Color> colors = new ArrayList<>();
 	private int chromosomeSize;
 	private int statusIndex;
-	private String bitString;
+	private ArrayList<Integer> bitString;
 	private ArrayList<Rectangle> rectangles;
 	private int fitness;
 	
 	
 	//Could add bitString in constructor if using files to import chromosomes
 	Chromosome() {
-		this.bitString ="";
+		this.bitString = new ArrayList<>();
 		randomGeneration();
 		fitnessMaxOnesCalculation();
 		this.rectangles = new ArrayList<>();
 		colors.add(Color.black);
 		colors.add(Color.green);
 		//Creates Rectangles to visualize bitString
-		for (int yCord = 0; yCord < 80; yCord += 40) {
-			for (int xCord = 0; xCord < 200; xCord += 40) {
-				rectangles.add(new Rectangle(xCord, yCord, 40, 40));
+		for (int yCord = 0; yCord < 100; yCord += 10) {
+			for (int xCord = 0; xCord < 200; xCord += 10) {
+				rectangles.add(new Rectangle(xCord, yCord, 10, 10));
 			}
 		}
 		
@@ -97,9 +97,9 @@ public class Chromosome {
 		for (int x = 0; x < rectangles.size(); x++) {
 			Rectangle r = rectangles.get(x);
 			String s = "";
-			g2.setColor(getColor(Character.getNumericValue(bitString.charAt(x))));
+			g2.setColor(getColor(bitString.get(x)));
 			g2.fill(r);
-			if (getColor(Character.getNumericValue(bitString.charAt(x))) == Color.black) {
+			if (getColor(bitString.get(x)) == Color.black) {
 				g2.setColor(Color.green);
 			}
 			else {
