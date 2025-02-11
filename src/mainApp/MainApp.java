@@ -25,6 +25,8 @@ public class MainApp {
 	ChromosomeEditor chromosomeEditor = new ChromosomeEditor();
 	Population population = new Population();
 
+	EvolutionViewer evolutionViewer = new EvolutionViewer();
+	
 	private void runApp() {
 		// run chromosomeEditor
 //		chromosomeEditor.runChromosomeEditor();
@@ -48,7 +50,8 @@ public class MainApp {
 //		System.out.println(population.maxConsecutiveOnesFitness(singleChromosome));
 		
 		// This is test for truncationSelect
-		population.truncationSelect(chromosomes);
+//		population.truncationSelect(chromosomes);
+		evolutionViewer.runEvolutionViewer();
 //		population.crossOverSelect();
 	} // runApp
 

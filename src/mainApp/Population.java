@@ -19,6 +19,7 @@ public class Population {
 			Chromosome chr = new Chromosome();
 			population.add(chr);
 		}
+		Collections.sort(population,FC);
 	}
 	
 	public void generateSpecialPopulation(int populationSize, int chromosomeSize) {
@@ -28,6 +29,7 @@ public class Population {
 			chr.setBitString(chromosome);
 			specialPopulation.add(chr);
 		}
+		
 		// for testing randomness
 //		Chromosome specialchr = new Chromosome();
 //		ArrayList<Integer> speciallist = new ArrayList<>();
@@ -98,6 +100,7 @@ public class Population {
 			chr.setBitString(chromosome);
 			specialPopulation.add(chr);
 		}
+		Collections.sort(population,FC);
 	}
 	
 	public int maxOnesFitness(ArrayList<Chromosome> chromosomes) {
@@ -130,14 +133,14 @@ public class Population {
 	
 	public void truncationSelect(ArrayList<Chromosome> chromosomes) {
 		for (int j = 0; j < 2; j++) {
-		for (Chromosome chr :chromosomes) {
-			System.out.println(chr.getBitString());
-		}
-		Collections.sort(chromosomes,FC);
-		System.out.println("Sorting");
-		for (Chromosome chr :chromosomes) {
-			System.out.println(chr.getBitString());
-		}
+//		for (Chromosome chr :chromosomes) {
+//			System.out.println(chr.getBitString());
+//		}
+//		Collections.sort(chromosomes,FC);
+//		System.out.println("Sorting");
+//		for (Chromosome chr :chromosomes) {
+//			System.out.println(chr.getBitString());
+//		}
 		int halfSize = chromosomes.size()/2;
 		for (int i=0;i<halfSize;i++) chromosomes.removeLast();
 		for (int i=0;i<halfSize;i++) {
@@ -145,7 +148,7 @@ public class Population {
 			repeat.setBitString(chromosomes.get(i).getBitString());
 			chromosomes.add(repeat);
 		}
-		System.out.println(maxOnesFitness(chromosomes));
+//		System.out.println(maxOnesFitness(chromosomes));
 		}
 		
 	}
@@ -218,6 +221,18 @@ public class Population {
 			n ++;
 		}
 	}
+	public Chromosome getBest() {
+		Collections.sort(population,FC);
+		return population.get(0);
+	}
+	public Integer getAverage() {
+		return maxOnesFitness(population)/population.size();
+	}
+	public Integer getWorst() {
+		Collections.sort(population,FC);
+		return population.get(population.size()-1).getFitness();
+	}
+	
  
 	public ArrayList<Chromosome> getPopulation() {
 		return population;

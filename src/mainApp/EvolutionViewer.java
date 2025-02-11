@@ -35,20 +35,20 @@ import javax.swing.JPanel;
  * <br>Restrictions: Could be optimized
  */
 public class EvolutionViewer extends JComponent {
-	public static final int FRAME_WIDTH = 800;
-	public static final int FRAME_HEIGHT = 350;
-	public static final Color LIGHT_GRAY = new Color(200,200,200);
+	private static final int FRAME_WIDTH = 800;
+	private static final int FRAME_HEIGHT = 350;
+	private static final Color LIGHT_GRAY = new Color(200,200,200);
 	
-	public static final Color BEST_FITNESS = new Color(0, 255, 0);
-	public static final Color AVERAGE_FITNESS = new Color(0, 0, 255);
-	public static final Color WORST_FITNESS = new Color(255, 0, 0);
+	private static final Color BEST_FITNESS = new Color(0, 255, 0);
+	private static final Color AVERAGE_FITNESS = new Color(0, 0, 255);
+	private static final Color WORST_FITNESS = new Color(255, 0, 0);
 	
-	public final static int LINE_WIDTH = 2;
-	public static final int STATS_HEIGHT = 200;
-	public static final int SIDE_OFFSET = 100;
+	private final static int LINE_WIDTH = 2;
+	private static final int STATS_HEIGHT = 200;
+	private static final int SIDE_OFFSET = 100;
 	
 	
-	public static final int DELAY = 50;
+	private static final int DELAY = 50;
 	static boolean isRunning = false;
 	
 	public static String saveString = "";
@@ -70,13 +70,18 @@ public class EvolutionViewer extends JComponent {
 		this.worstFitnessLog.clear();
 	}
 	
-	public static void main(String[] args) {
+	EvolutionViewer() {
+		
+	}
+	
+	public  void runEvolutionViewer() {
 		JFrame frame = new JFrame("Evolution Viewer");
 		EvolutionViewer viewer = new EvolutionViewer();
 		frame.setSize( new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(viewer);
 		frame.setVisible(true);
+		Population pop = new Population();
 		
 	    JPanel controls = new JPanel();
 		JButton start = new JButton("Start"); //change to icon later
@@ -89,13 +94,18 @@ public class EvolutionViewer extends JComponent {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				viewer.repaint();
-}			
+				pop.truncationSelect(pop.population);
+				addEntry(pop.getBest().getFitness(), pop.getAverage(), pop.getWorst());
+				System.out.println(pop.getBest().getFitness());
+				System.out.println(pop.getAverage());
+				System.out.println(pop.getWorst());
+}				
 			}
 			 //stop automatically at a lot of generations
 				 );
 		 
 		start.addActionListener( new ActionListener() {
-
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!isRunning) {
@@ -109,6 +119,8 @@ public class EvolutionViewer extends JComponent {
 					isRunning = false;
 					viewer.repaint();
 				}
+				pop.generateRandomPopulation(100, 10);
+				for (int i=0; i<pop.population.size();i++) System.out.println(pop.population.get(i).getBitString());
 			}
 			
 		});
@@ -231,5 +243,5 @@ public class EvolutionViewer extends JComponent {
 		
 	}
 }
-	
 
+	
