@@ -17,7 +17,6 @@ import java.util.Random;
  */
 public class Chromosome {
 	private ArrayList<Color> colors = new ArrayList<>();
-	private int chromosomeSize;
 	private int statusIndex;
 	//private ArrayList<Integer> bitString;
 	private String bitString;
@@ -26,10 +25,10 @@ public class Chromosome {
 	
 	
 	//Could add bitString in constructor if using files to import chromosomes
-	Chromosome() {
+	Chromosome(int chromosomeSize) {
 		//this.bitString = new ArrayList<>();
 		this.bitString = "";
-		randomGeneration();
+		randomGeneration(chromosomeSize);
 		fitnessMaxOnesCalculation();
 		this.rectangles = new ArrayList<>();
 		colors.add(Color.black);
@@ -41,6 +40,20 @@ public class Chromosome {
 			}
 		}
 		
+	}
+	
+	Chromosome(){
+		this.bitString = "";
+		fitnessMaxOnesCalculation();
+		this.rectangles = new ArrayList<>();
+		colors.add(Color.black);
+		colors.add(Color.green);
+		//Creates Rectangles to visualize bitString
+		for (int yCord = 0; yCord < 200; yCord += 20) {
+			for (int xCord = 0; xCord < 200; xCord += 20) {
+				rectangles.add(new Rectangle(xCord, yCord, 20, 20));
+			}
+		}
 	}
 	/**
 	 * ensures: return the current color
@@ -114,8 +127,8 @@ public class Chromosome {
 		}
 	}
 	
-	public void randomGeneration() {
-		for (int x = 0; x < 10; x++) {
+	public void randomGeneration(int length) {
+		for (int x = 0; x < length; x++) {
 			if (randomProcess(0.5)) {
 				bitString += Integer.toString(1);
 			}

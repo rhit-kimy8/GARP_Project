@@ -42,10 +42,11 @@ public class EvolutionViewer extends JComponent {
 	private static final Color AVERAGE_FITNESS = new Color(0, 0, 255);
 	private static final Color WORST_FITNESS = new Color(255, 0, 0);
 	
-	private static final int DELAY = 100;
+	private static final int DELAY = 300;
 	static boolean isRunning = false;
 	
 	public static String saveString = "";
+	private FittestIndividualViewer FIV;
 	
 	private Timer timer;
 	private ArrayList<Integer> bestFitnessLog = new ArrayList<Integer>();
@@ -74,8 +75,9 @@ public class EvolutionViewer extends JComponent {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(viewer);
 		frame.setVisible(true);
+		
 		Population pop = new Population();
-		pop.generateRandomPopulation(100, 10);
+		pop.generateRandomPopulation(100, 30);
 		for (int i=0; i<pop.population.size();i++) System.out.println(pop.population.get(i).getBitString());
 		
 	    JPanel controls = new JPanel();
@@ -89,12 +91,18 @@ public class EvolutionViewer extends JComponent {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				viewer.repaint();
-				pop.truncationSelect(pop.population);
-				addEntry(pop.getBest().getFitness(), pop.getAverage(), pop.getWorst());
-				System.out.println(pop.getBest().getFitness());
-				System.out.println(pop.getAverage());
-				System.out.println(pop.getWorst());
-}				
+				int fitness = 20;
+//				while(true) {
+//					pop.truncationSelect(pop.population);
+				    pop.crossOverSelect();
+					FIV.upDate(pop.getBest(pop.population));
+					addEntry(pop.getBest(pop.population).getFitness(), pop.getAverage(pop.population), pop.getWorst(pop.population));
+					System.out.println(pop.getBest(pop.population));
+					System.out.println(pop.getAverage(pop.population));
+					System.out.println(pop.getWorst(pop.population));
+					if (pop.getBest(pop.population).getFitness() == fitness);
+//					}
+				}				
 			}
 			 //stop automatically at a lot of generations
 				 );
@@ -103,6 +111,9 @@ public class EvolutionViewer extends JComponent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				FIV = new FittestIndividualViewer(pop.getBest(pop.population));
+
+				
 				if (!isRunning) {
 					viewer.timer.start();
 					start.setText("Pause");

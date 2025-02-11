@@ -27,6 +27,7 @@ public class FittestIndividualComponent extends JComponent {
 	 */
 	public void setChromosome(Chromosome c) {
 		this.c = c;
+		revalidate();
 		repaint();
 	}
 }

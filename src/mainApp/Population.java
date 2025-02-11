@@ -16,7 +16,7 @@ public class Population {
 	public void generateRandomPopulation(int populationSize, int chromosomeSize) {
 		population.clear();
 		for (int i=0; i<populationSize; i++) {
-			Chromosome chr = new Chromosome();
+			Chromosome chr = new Chromosome(chromosomeSize);
 			population.add(chr);
 		}
 		Collections.sort(population,FC);
@@ -24,7 +24,8 @@ public class Population {
 	
 	public void generateSpecialPopulation(int populationSize, int chromosomeSize) {
 		for (int i=0;i<populationSize/4;i++) { // remember to -1 for test
-			String chromosome = "0000000000";
+			String chromosome = "";
+			for (int j=0;j<chromosomeSize;j++) chromosome = chromosome +"0";
 			Chromosome chr = new Chromosome();
 			chr.setBitString(chromosome);
 			specialPopulation.add(chr);
@@ -51,7 +52,7 @@ public class Population {
 		
 		for (int i=0;i<populationSize/4;i++) {
 			String chromosome = "";
-			int index = random.nextInt(9);
+			int index = random.nextInt(chromosomeSize-1);
 			for (int j=0;j<chromosomeSize;j++) {
 				if(j == index) chromosome = chromosome + "1";
 				else chromosome = chromosome + "0";
@@ -65,7 +66,7 @@ public class Population {
 			ArrayList<Integer> list = new ArrayList<>();
 			int num = 0;
 			while (true) {
-				int index = random.nextInt(9);
+				int index = random.nextInt(chromosomeSize-1);
 				if (list.contains(index)) continue;
 				list.add(index);
 				num++;
@@ -85,7 +86,7 @@ public class Population {
 			ArrayList<Integer> list = new ArrayList<>();
 			int num = 0;
 			while (true) {
-				int index = random.nextInt(9);
+				int index = random.nextInt(chromosomeSize-1);
 				if (list.contains(index)) continue;
 				list.add(index);
 				num++;
@@ -132,7 +133,6 @@ public class Population {
 	}
 	
 	public void truncationSelect(ArrayList<Chromosome> chromosomes) {
-		for (int j = 0; j < 2; j++) {
 //		for (Chromosome chr :chromosomes) {
 //			System.out.println(chr.getBitString());
 //		}
@@ -149,8 +149,8 @@ public class Population {
 			chromosomes.add(repeat);
 		}
 //		System.out.println(maxOnesFitness(chromosomes));
-		}
-		
+		System.out.println("Code works");
+
 	}
 	
 	public void crossOverSelect() {
@@ -221,16 +221,16 @@ public class Population {
 			n ++;
 		}
 	}
-	public Chromosome getBest() {
-		Collections.sort(population,FC);
-		return population.get(0);
+	public Chromosome getBest(ArrayList<Chromosome> chromosomes) {
+		Collections.sort(chromosomes,FC);
+		return chromosomes.get(0);
 	}
-	public Integer getAverage() {
-		return maxOnesFitness(population)/population.size();
+	public Integer getAverage(ArrayList<Chromosome> chromosomes) {
+		return maxOnesFitness(chromosomes)/chromosomes.size();
 	}
-	public Integer getWorst() {
-		Collections.sort(population,FC);
-		return population.get(population.size()-1).getFitness();
+	public Integer getWorst(ArrayList<Chromosome> chromosomes) {
+		Collections.sort(chromosomes,FC);
+		return chromosomes.get(chromosomes.size()-1).getFitness();
 	}
 	
  
