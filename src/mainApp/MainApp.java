@@ -57,12 +57,3 @@ public class MainApp {
 		mainApp.runApp();
 }
 }
-
-//TO DO FOR MILESTONE 1
-//more example files to show that we can handle the required sizes
-//finish JUnit testing
-//**seed the rand, we have to do it for next milestone anyway so lets figure that out now
-//two comments on the garp specification (? one done alr)
-//**fitness calculator (bonus but helps for next milestone) maxOne fitness function
-//finish milestone report
-//let helen finish the uml thing when the coding is all done
