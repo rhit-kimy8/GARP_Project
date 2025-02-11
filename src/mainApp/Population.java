@@ -154,7 +154,6 @@ public class Population {
 	}
 	
 	public void crossOverSelect() {
-		for (int j = 0; j < 2; j++) {
 			Collections.sort(population,FC);
 			System.out.println("Sorting");
 			for (Chromosome chr :population) {
@@ -174,8 +173,8 @@ public class Population {
 				System.out.println(child.getBitString());
 				population.add(child);
 			}
+			Collections.sort(population,FC);
 			System.out.println(maxOnesFitness(population));
-		}
 	}
 	
 	public void ElitismSelect(int numbers,ArrayList<Chromosome> chromosomes) {

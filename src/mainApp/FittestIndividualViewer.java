@@ -44,18 +44,16 @@ public class FittestIndividualViewer {
 	}
 	
 	public void upDate(Chromosome c) {
-		fitViewer.removeAll();
 		this.fittest = c;
 		fitComponent.setChromosome(c);
-		System.out.println("heelllo");
 	}
 	/***
 	 * 
 	 * @param Chromosome c
 	 * <br> Calls an identical method in component to change current chromosome and repaint
 	 */
-	public void setChromosome(Chromosome c) {
-		this.fitComponent.setChromosome(c);
-	}
+//	public void setChromosome(Chromosome c) {
+//		this.fitComponent.setChromosome(c);
+//	}
 	
 }

@@ -42,7 +42,7 @@ public class EvolutionViewer extends JComponent {
 	private static final Color AVERAGE_FITNESS = new Color(0, 0, 255);
 	private static final Color WORST_FITNESS = new Color(255, 0, 0);
 	
-	private static final int DELAY = 300;
+	private static final int DELAY = 1000;
 	static boolean isRunning = false;
 	
 	public static String saveString = "";
@@ -90,7 +90,7 @@ public class EvolutionViewer extends JComponent {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				viewer.repaint();
+//				frame.repaint();
 				int fitness = 20;
 //				while(true) {
 //					pop.truncationSelect(pop.population);
@@ -112,7 +112,6 @@ public class EvolutionViewer extends JComponent {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				FIV = new FittestIndividualViewer(pop.getBest(pop.population));
-
 				
 				if (!isRunning) {
 					viewer.timer.start();
