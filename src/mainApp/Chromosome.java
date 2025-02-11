@@ -17,28 +17,25 @@ import java.util.Random;
  */
 public class Chromosome {
 	private ArrayList<Color> colors = new ArrayList<>();
+	private int chromosomeSize;
 	private int statusIndex;
-	private ArrayList<Integer> bitString;
+	private String bitString;
 	private ArrayList<Rectangle> rectangles;
 	private int fitness;
 	
 	
 	//Could add bitString in constructor if using files to import chromosomes
 	Chromosome() {
-		this.bitString = new ArrayList<>();
+		this.bitString ="";
+		randomGeneration();
+		fitnessMaxOnesCalculation();
 		this.rectangles = new ArrayList<>();
-		for (int x = 0; x < 100; x++) {
-			if (Math.random() > .5) {
-				bitString.add(1);
-			}
-			else {
-				bitString.add(0);
-			}
-		}
+		colors.add(Color.black);
+		colors.add(Color.green);
 		//Creates Rectangles to visualize bitString
-		for (int yCord = 0; yCord < 200; yCord += 20) {
-			for (int xCord = 0; xCord < 200; xCord += 20) {
-				rectangles.add(new Rectangle(xCord, yCord, 20, 20));
+		for (int yCord = 0; yCord < 80; yCord += 40) {
+			for (int xCord = 0; xCord < 200; xCord += 40) {
+				rectangles.add(new Rectangle(xCord, yCord, 40, 40));
 			}
 		}
 		
@@ -100,9 +97,9 @@ public class Chromosome {
 		for (int x = 0; x < rectangles.size(); x++) {
 			Rectangle r = rectangles.get(x);
 			String s = "";
-			g2.setColor(getColor(bitString.get(x)));
+			g2.setColor(getColor(Character.getNumericValue(bitString.charAt(x))));
 			g2.fill(r);
-			if (getColor(bitString.get(x)) == Color.black) {
+			if (getColor(Character.getNumericValue(bitString.charAt(x))) == Color.black) {
 				g2.setColor(Color.green);
 			}
 			else {
@@ -113,6 +110,61 @@ public class Chromosome {
 		}
 	}
 	
+	public void randomGeneration() {
+		for (int x = 0; x < 10; x++) {
+			if (randomProcess(0.5)) {
+				bitString += Integer.toString(1);
+			}
+			else {
+				bitString += Integer.toString(0);
+			}
+		}
+	}
+	
+	public void fitnessMaxOnesCalculation() {
+		int count = 0;
+		for (int i=0; i < this.bitString.length();i++) {
+			if (Character.getNumericValue(bitString.charAt(i)) == 1) {
+				count += 1;
+			}
+		}
+		this.fitness = count;
+	}
+	public int matchFitness(Chromosome chromosome) {
+			if (getBitString().contains(chromosome.getBitString())) return 1;
+			return 0;
+	}
+	public int consecutiveFitness() {
+		int maxConsecutiveCount = 0;
+			int count = 0;
+			for(int j=0;j<getBitString().length();j++) {
+				if(Character.getNumericValue(getBitString().charAt(j)) == 1) count++;
+				else count = 0;
+				if(count > maxConsecutiveCount) {
+					maxConsecutiveCount = count;
+				}
+				
+			}
+			return maxConsecutiveCount;
+	}
+	
+	public boolean randomProcess(double possibility) {
+
+		Random r = new Random();// eg: 3% all the doubles > 0.03 will make true, so we shouldn't do any changes
+		return (r.nextDouble() > 1-possibility);
+	}
+	public void mutationProcess(double possibility) {
+		for (int i = 0; i < this.bitString.length();i++) {
+		if (randomProcess(possibility)) {
+			if (bitString.charAt(i) =='1') {
+				bitString = bitString.substring(0,i)+"0"+bitString.substring(i+1,bitString.length());
+			}
+			else {
+				bitString = bitString.substring(0,i)+"1"+bitString.substring(i+1,bitString.length());
+			}
+		}
+		}
+	}
 	//Getters
 	public Color getColor(int bit) {
 		if (bit == 1) {
@@ -122,11 +174,12 @@ public class Chromosome {
 			return Color.black;
 		}
 	}
-	public ArrayList<Integer> getBitString() {
+	public String getBitString() {
 		return this.bitString;
 	}
 	
 	public int getFitness() {
+		fitnessMaxOnesCalculation();
 		return this.fitness;
 	}
 	
@@ -141,6 +194,10 @@ public class Chromosome {
 	
 	public void setStatusIndex(int statusIndex) {
 		this.statusIndex = statusIndex;
+	}
+	public void setBitString(String bitString) {
+		fitnessMaxOnesCalculation();
+		this.bitString = bitString;
 	}
 
 }
