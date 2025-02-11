@@ -37,7 +37,8 @@ public class MainApp {
 		
 		// Those tree are the test functions to check Fitness of chromosomes
 		population.generateSpecialPopulation(100,10);
-		ArrayList<String> chromosomes = population.getSpecialPopulation();
+		population.generateRandomPopulation(100, 10);
+		ArrayList<Chromosome> chromosomes = population.getSpecialPopulation();
 //		System.out.println(population.maxOnesFitness(chromosomes));
 //		System.out.println(population.matchTargetFitness(chromosomes, "0001000000"));
 //		System.out.println(population.maxConsecutiveOnesFitness(chromosomes));
@@ -50,7 +51,11 @@ public class MainApp {
 		
 		// This is test for truncationSelect
 		population.truncationSelect(chromosomes);
+<<<<<<< HEAD
 		evolutionViewer.runEvolutionViewer();
+=======
+//		population.crossOverSelect();
+>>>>>>> branch 'master' of https://github.com/rhit-csse220/csse220-fall-2024-2025-final-project-w25r101.git
 	} // runApp
 
 	/**
