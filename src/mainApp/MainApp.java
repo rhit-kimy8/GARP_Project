@@ -50,12 +50,9 @@ public class MainApp {
 //		System.out.println(population.maxConsecutiveOnesFitness(singleChromosome));
 		
 		// This is test for truncationSelect
-		population.truncationSelect(chromosomes);
-<<<<<<< HEAD
+//		population.truncationSelect(chromosomes);
 		evolutionViewer.runEvolutionViewer();
-=======
 //		population.crossOverSelect();
->>>>>>> branch 'master' of https://github.com/rhit-csse220/csse220-fall-2024-2025-final-project-w25r101.git
 	} // runApp
 
 	/**

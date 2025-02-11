@@ -74,6 +74,7 @@ public class EvolutionViewer extends JComponent {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(viewer);
 		frame.setVisible(true);
+		Population pop = new Population();
 		
 	    JPanel controls = new JPanel();
 		JButton start = new JButton("Start"); //change to icon later
@@ -86,13 +87,18 @@ public class EvolutionViewer extends JComponent {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				viewer.repaint();
-}			
+				pop.truncationSelect(pop.population);
+				addEntry(pop.getBest().getFitness(), pop.getAverage(), pop.getWorst());
+				System.out.println(pop.getBest().getFitness());
+				System.out.println(pop.getAverage());
+				System.out.println(pop.getWorst());
+}				
 			}
 			 //stop automatically at a lot of generations
 				 );
 		 
 		start.addActionListener( new ActionListener() {
-
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!isRunning) {
@@ -106,6 +112,8 @@ public class EvolutionViewer extends JComponent {
 					isRunning = false;
 					viewer.repaint();
 				}
+				pop.generateRandomPopulation(100, 10);
+				for (int i=0; i<pop.population.size();i++) System.out.println(pop.population.get(i).getBitString());
 			}
 			
 		});
@@ -236,4 +244,3 @@ public class EvolutionViewer extends JComponent {
 }
 
 	
-

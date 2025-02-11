@@ -133,14 +133,14 @@ public class Population {
 	
 	public void truncationSelect(ArrayList<Chromosome> chromosomes) {
 		for (int j = 0; j < 2; j++) {
-		for (Chromosome chr :chromosomes) {
-			System.out.println(chr.getBitString());
-		}
-		Collections.sort(chromosomes,FC);
-		System.out.println("Sorting");
-		for (Chromosome chr :chromosomes) {
-			System.out.println(chr.getBitString());
-		}
+//		for (Chromosome chr :chromosomes) {
+//			System.out.println(chr.getBitString());
+//		}
+//		Collections.sort(chromosomes,FC);
+//		System.out.println("Sorting");
+//		for (Chromosome chr :chromosomes) {
+//			System.out.println(chr.getBitString());
+//		}
 		int halfSize = chromosomes.size()/2;
 		for (int i=0;i<halfSize;i++) chromosomes.removeLast();
 		for (int i=0;i<halfSize;i++) {
@@ -148,7 +148,7 @@ public class Population {
 			repeat.setBitString(chromosomes.get(i).getBitString());
 			chromosomes.add(repeat);
 		}
-		System.out.println(maxOnesFitness(chromosomes));
+//		System.out.println(maxOnesFitness(chromosomes));
 		}
 		
 	}
