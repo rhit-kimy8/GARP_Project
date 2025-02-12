@@ -207,7 +207,6 @@ public class EvolutionViewer extends JComponent {
 	        g2.drawLine(x1, y1, x2, y2);
 	    }
 
-	    // Draw lines for Average Fitness (Blue)
 	    g2.setColor(Color.BLUE);
 	    for (int i = 1; i < numGenerations; i++) {
 	        int x1 = graphX + (int) ((i - 1) * scaleX);
@@ -217,7 +216,6 @@ public class EvolutionViewer extends JComponent {
 	        g2.drawLine(x1, y1, x2, y2);
 	    }
 
-	    // Draw lines for Worst Fitness (Red)
 	    g2.setColor(Color.RED);
 	    for (int i = 1; i < numGenerations; i++) {
 	        int x1 = graphX + (int) ((i - 1) * scaleX);
