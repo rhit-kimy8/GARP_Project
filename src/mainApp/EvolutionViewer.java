@@ -21,11 +21,14 @@ import java.util.Scanner;
 import javax.swing.Timer;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  * Class: EvolutionViewer
@@ -35,7 +38,7 @@ import javax.swing.JPanel;
  * <br>Restrictions: Could be optimized
  */
 public class EvolutionViewer extends JComponent {
-	private static final int FRAME_WIDTH = 800;
+	private static final int FRAME_WIDTH = 930;
 	private static final int FRAME_HEIGHT = 350;
 	
 	private static final Color BEST_FITNESS = new Color(0, 255, 0);
@@ -46,12 +49,14 @@ public class EvolutionViewer extends JComponent {
 	static boolean isRunning = false;
 	
 	public static String saveString = "";
+	private int lengthOfChromosome;
 	private FittestIndividualViewer FIV;
 	
 	private Timer timer;
 	private ArrayList<Integer> bestFitnessLog = new ArrayList<Integer>();
 	private ArrayList<Integer> averageFitnessLog = new ArrayList<Integer>();
 	private ArrayList<Integer> worstFitnessLog = new ArrayList<Integer>();
+	Population pop = new Population();
 	
 	public void addEntry(int best, int average, int worst) {
 		this.bestFitnessLog.add(best);
@@ -76,15 +81,43 @@ public class EvolutionViewer extends JComponent {
 		frame.add(this);
 		frame.setVisible(true);
 		
-		Population pop = new Population();
-		pop.generateRandomPopulation(100, 30);
-		for (int i=0; i<pop.population.size();i++) System.out.println(pop.population.get(i).getBitString());
-		
 	    JPanel controls = new JPanel();
 		JButton start = new JButton("Start"); //change to icon later
+		JLabel populationSize = new JLabel("Population Size");
+		JTextField populationSizeInput = new JTextField();
+		populationSizeInput.setPreferredSize(new Dimension(30,20));
+		JLabel mutationRate = new JLabel("Mutation Rate (N/pop)");
+		JTextField mutationRateInput = new JTextField();
+		mutationRateInput.setPreferredSize(new Dimension(30,20));
+		JLabel chromosomeLength = new JLabel("Chromosome Length");
+		JTextField chromosomeLengthInput = new JTextField();
+		chromosomeLengthInput.setPreferredSize(new Dimension(30,20));
+		JLabel crossover = new JLabel("Crossover?");
+		JCheckBox crossoverCheck = new JCheckBox();
+		crossoverCheck.setForeground(Color.white);
+		JLabel elitism = new JLabel("Elitism %");
+		JTextField elitismInput = new JTextField();
+		elitismInput.setPreferredSize(new Dimension(30,20));
+		JLabel selection = new JLabel("Selection");
+		String[] selectionList = {"Truncation", "Wheel Select", "Ranked Select"};
+		JComboBox selectionInput = new JComboBox(selectionList);
+		selectionInput.setPreferredSize(new Dimension(120,20));
 		
-		frame.add(controls, BorderLayout.SOUTH);
+		
+		controls.add(populationSize);
+		controls.add(populationSizeInput);
+		controls.add(chromosomeLength);
+		controls.add(chromosomeLengthInput);
+		controls.add(mutationRate);
+		controls.add(mutationRateInput);
+		controls.add(selection);
+		controls.add(selectionInput);
+		controls.add(crossover);
+		controls.add(crossoverCheck);
+		controls.add(elitism);
+		controls.add(elitismInput);
 		controls.add(start);
+		frame.add(controls, BorderLayout.SOUTH);
 		 
 		 this.timer = new Timer(DELAY, new ActionListener() {
 
@@ -94,12 +127,9 @@ public class EvolutionViewer extends JComponent {
 				int fitness = 20;
 //				while(true) {
 //					pop.truncationSelect(pop.population);
-				    pop.crossOverSelect();
+				    pop.truncationSelect(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/lengthOfChromosome,(int)Integer.parseInt(elitismInput.getText())*pop.population.size());
 					FIV.upDate(pop.getBest(pop.population));
 					addEntry(pop.getBest(pop.population).getFitness(), pop.getAverage(pop.population), pop.getWorst(pop.population));
-//					System.out.println(pop.getBest(pop.population));
-//					System.out.println(pop.getAverage(pop.population));
-//					System.out.println(pop.getWorst(pop.population));
 					if (pop.getBest(pop.population).getFitness() == fitness);
 //					}
 				}				
@@ -111,6 +141,13 @@ public class EvolutionViewer extends JComponent {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (populationSizeInput.getText().isBlank() || chromosomeLengthInput.getText().isBlank() || mutationRateInput.getText().isBlank() || elitismInput.getText().isBlank()) {	
+					System.err.println("One or more variables is not defined: population size, chromosome length, mutation rate, elitism rate");
+					return;
+				}
+				pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()));
+				lengthOfChromosome = Integer.parseInt(chromosomeLengthInput.getText());
+				for (int i=0; i<pop.population.size();i++) System.out.println(pop.population.get(i).getBitString());
 				FIV = new FittestIndividualViewer(pop.getBest(pop.population));
 				
 				if (!isRunning) {
@@ -189,12 +226,12 @@ public class EvolutionViewer extends JComponent {
 		
 		//timer.start();
 	}
-	private void drawFitnessGraph(Graphics2D g2, int graphX, int graphY, int graphWidth, int graphHeight) {
+	private void drawFitnessGraph(Graphics2D g2, int graphX, int graphY, int graphWidth, int graphHeight, int maxFitness) {
 	    int numGenerations = bestFitnessLog.size();
 	    if (numGenerations < 2){
 	    	return;
 	    }
-	    int maxFitness = 30;  
+	      
 	    double scaleY = (double) graphHeight / maxFitness;  
 	    double scaleX = (double) graphWidth / (numGenerations - 1);
 
@@ -245,7 +282,7 @@ public class EvolutionViewer extends JComponent {
 		g2.setColor(WORST_FITNESS);
 		g2.fillRect(680, 115, 10, 10);
 		g2.drawString("Worst fitness", 700, 125);
-		drawFitnessGraph(g2, 50, 25, 600, 200);
+		drawFitnessGraph(g2, 50, 25, 600, 200,lengthOfChromosome);
 		
 //		g2.setColor(Color.BLACK);
 //		for (int i = 0; i<5; i++) {
