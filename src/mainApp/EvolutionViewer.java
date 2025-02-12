@@ -41,7 +41,7 @@ import javax.swing.JTextField;
  */
 public class EvolutionViewer extends JComponent {
 	private static final int FRAME_WIDTH = 930;
-	private static final int FRAME_HEIGHT = 350;
+	private static final int FRAME_HEIGHT = 360;
 	
 	private static final Color BEST_FITNESS = new Color(0, 255, 0);
 	private static final Color AVERAGE_FITNESS = new Color(0, 0, 255);
@@ -253,13 +253,13 @@ public class EvolutionViewer extends JComponent {
 						+ "What is chromosome length? \n"
 						+ "Chromosome length is the length of the bitstring for each chromosome. \n"
 						+ "What are the selection options? \n" 
-						+ "Truncation truncates. \n"
-						+ "Wheel select selects. \n"
-						+ "Ranked select selects. \n"
+						+ "Truncation cuts out inferior chromosomes and replaces them with new mutated chromosomes the next generation. \n"
+						+ "Wheel select selects one at random, the probability based off the fitness level. \n"
+						+ "Ranked select will be implemented shortly. \n"
 						+ "What does crossover select do? \n"
 						+ "By choosing crossover select, the bitstring will crossover at a specific point. \n"
 						+ "What is elistism? \n"
-						+ "This is the percent that \n"
+						+ "This is the percent of the best that is chosen to be copied into the next generation. \n"
 						+ "NOTE: Avoid selecting truncation and crossover, as both have very similar functions.");
 			        
 			        text.setEditable(false);
@@ -275,8 +275,13 @@ public class EvolutionViewer extends JComponent {
 	}
 	private void drawFitnessGraph(Graphics2D g2, int graphX, int graphY, int graphWidth, int graphHeight, int maxFitness) {
 	    int numGenerations = bestFitnessLog.size();
-	    if (numGenerations < 2){
+	    //System.out.println("bestFitness - 1: " + bestFitnessLog.get(numGenerations - 1));
+	    if (numGenerations < 2) {
 	    	return;
+	    }
+	    	
+	    if (numGenerations > 300) {
+	    	System.exit(0);
 	    }
 	      
 	    double scaleY = (double) graphHeight / maxFitness;  
@@ -308,21 +313,12 @@ public class EvolutionViewer extends JComponent {
 	        int y2 = graphY + graphHeight - (int) (worstFitnessLog.get(i) * scaleY);
 	        g2.drawLine(x1, y1, x2, y2);
 	    }
-//	    
-//	    for (int i = 0; i < numGenerations; i++) {
-//	       
-//	        int xLabelPos = graphX + (int) (i * scaleX);
-//	        String generationLabel = Integer.toString(i + 1);  
-//	        
-//	        g2.setColor(Color.BLACK);
-//	        g2.drawString(generationLabel, xLabelPos, graphY + graphHeight + 15); 
-//	    }
-	    
-//		for (int j = 0; j<9; j++) {					
-//			g2.setColor(Color.BLACK);
-//			String label = Integer.toString(100-20*j);
-//			g2.drawString(label, 25, 25+j*200/5 +5);
-//		}
+
+		g2.setColor(Color.BLACK);
+		for (int i = 0; i<9; i++) {
+			String label = Integer.toString(numGenerations*i);
+			g2.drawString(label, 50+i*600/8-5, 240);
+		}
 		
 	
 	}
