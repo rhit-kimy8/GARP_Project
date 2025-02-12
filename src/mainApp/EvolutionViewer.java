@@ -329,5 +329,3 @@ public class EvolutionViewer extends JComponent {
 		}
 		
 	}
-
-	

@@ -5,15 +5,17 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 public class FittestIndividualViewer {
+	private Chromosome fittest;
+	private JFrame fitViewer;
 
 	FittestIndividualComponent fitComponent;
 	
 	 //* Testing code 
 	public static void main(String args[]) {
-		Chromosome c1 = new Chromosome();
-		Chromosome c2 = new Chromosome();
+		Chromosome c1 = new Chromosome(100);
+//		Chromosome c2 = new Chromosome();
 		FittestIndividualViewer v1 = new FittestIndividualViewer(c1);
-		FittestIndividualViewer v2 = new FittestIndividualViewer(c1);
+//		FittestIndividualViewer v2 = new FittestIndividualViewer(c1);
 		for (int x = 0; x < 100000; x++) {
 			//System.out.println(x);
 		}
@@ -30,7 +32,8 @@ public class FittestIndividualViewer {
 	 *  <br> Creates a viewer to see the fittest chromosome of generation
 	 */
 	public FittestIndividualViewer(Chromosome c) {
-	JFrame fitViewer = new JFrame();
+	this.fittest = c;
+	fitViewer = new JFrame();
 	fitViewer.setSize(212,235);
 	this.fitComponent = new FittestIndividualComponent();
 	this.fitComponent.setChromosome(c);
@@ -40,13 +43,17 @@ public class FittestIndividualViewer {
 	fitViewer.setVisible(true);
 	}
 	
+	public void upDate(Chromosome c) {
+		this.fittest = c;
+		fitComponent.setChromosome(c);
+	}
 	/***
 	 * 
 	 * @param Chromosome c
 	 * <br> Calls an identical method in component to change current chromosome and repaint
 	 */
-	public void setChromosome(Chromosome c) {
-		this.fitComponent.setChromosome(c);
-	}
+//	public void setChromosome(Chromosome c) {
+//		this.fitComponent.setChromosome(c);
+//	}
 	
 }
