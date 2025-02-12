@@ -127,7 +127,7 @@ public class EvolutionViewer extends JComponent {
 				int fitness = 20;
 //				while(true) {
 //					pop.truncationSelect(pop.population);
-				    pop.truncationSelect(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/lengthOfChromosome,(int)Integer.parseInt(elitismInput.getText())*pop.population.size());
+				    pop.truncationSelect(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/lengthOfChromosome,(int)Integer.parseInt(elitismInput.getText())*pop.population.size()/100);
 					FIV.upDate(pop.getBest(pop.population));
 					addEntry(pop.getBest(pop.population).getFitness(), pop.getAverage(pop.population), pop.getWorst(pop.population));
 					if (pop.getBest(pop.population).getFitness() == fitness);
@@ -244,7 +244,6 @@ public class EvolutionViewer extends JComponent {
 	        g2.drawLine(x1, y1, x2, y2);
 	    }
 
-	    // Draw lines for Average Fitness (Blue)
 	    g2.setColor(Color.BLUE);
 	    for (int i = 1; i < numGenerations; i++) {
 	        int x1 = graphX + (int) ((i - 1) * scaleX);
@@ -254,7 +253,6 @@ public class EvolutionViewer extends JComponent {
 	        g2.drawLine(x1, y1, x2, y2);
 	    }
 
-	    // Draw lines for Worst Fitness (Red)
 	    g2.setColor(Color.RED);
 	    for (int i = 1; i < numGenerations; i++) {
 	        int x1 = graphX + (int) ((i - 1) * scaleX);
