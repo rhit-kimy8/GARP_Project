@@ -9,6 +9,7 @@ public class Population {
 	ArrayList<Chromosome> population = new ArrayList<>();
 	ArrayList<Chromosome> specialPopulation = new ArrayList<>();
 	Random random = new Random(250);
+	private int generationCount;
 	
 	Population(){
 	}
@@ -141,6 +142,7 @@ public class Population {
 	}
 	
 	public void truncationSelect(ArrayList<Chromosome> chromosomes, boolean checkCrossOver,double mutationRate,int elitismNumber) {
+		generationCount++;
 		Collections.sort(chromosomes,FC);
 		int halfSize = chromosomes.size()/2;
 		if (elitismNumber != 0) {
@@ -266,7 +268,11 @@ public class Population {
  
 	public ArrayList<Chromosome> getSpecialPopulation() {
 		return specialPopulation;
-	}	
+	}
+
+	public int getGenerationCount() {
+		return generationCount;
+	}
 	
 }
  
