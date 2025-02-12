@@ -132,11 +132,20 @@ public class Population {
 		return maxConsecutiveCount;
 	}
 	
+	public void mutatePopulation(ArrayList<Chromosome> chromosomes, double mutationRate) {
+		if (mutationRate != 0) {
+			for (Chromosome c:chromosomes) {
+				c.mutationProcess(mutationRate);
+			}
+		}
+	}
+	
 	public void truncationSelect(ArrayList<Chromosome> chromosomes, boolean checkCrossOver,double mutationRate,int elitismNumber) {
 		Collections.sort(chromosomes,FC);
 		int halfSize = chromosomes.size()/2;
 		if (elitismNumber != 0) {
 		if (!checkCrossOver){
+			// pure truncation
 		for (int i=0;i<halfSize;i++) chromosomes.removeLast();
 		for (int i=0;i<halfSize;i++) {
 			Chromosome repeat = new Chromosome();
@@ -144,22 +153,24 @@ public class Population {
 			chromosomes.add(repeat);
 		}
 		Collections.sort(chromosomes,FC);
-		System.out.println("Truncation works");
-		System.out.println(maxOnesFitness(chromosomes));
+		mutatePopulation(chromosomes,mutationRate);
 		}
 		else {
-			for (int i=0;i<halfSize;i++) population.removeLast();
+			// elitism + crossover
+			for (int i=0;i<halfSize;i++) chromosomes.removeLast();
 			for (int i=0;i<elitismNumber;i++) {
 				Chromosome repeat = new Chromosome();
 				repeat.setBitString(chromosomes.get(i).getBitString());
 				chromosomes.add(repeat);
 			}
-			crossOverSelect(chromosomes,mutationRate,elitismNumber,halfSize);
+			crossOverSelect(chromosomes,elitismNumber,halfSize);
+			mutatePopulation(chromosomes,mutationRate);
 		}
 		}
-		
+		// no elitism here
 		else {
 			if (!checkCrossOver){
+				// pure truncation
 				for (int i=0;i<halfSize;i++) chromosomes.removeLast();
 				for (int i=0;i<halfSize;i++) {
 					Chromosome repeat = new Chromosome();
@@ -167,19 +178,19 @@ public class Population {
 					chromosomes.add(repeat);
 				}
 				Collections.sort(chromosomes,FC);
-				System.out.println("Truncation works");
-				System.out.println(maxOnesFitness(chromosomes));
+				mutatePopulation(chromosomes,mutationRate);
 				}
 				else {
-					for (int i=0;i<halfSize;i++) population.removeLast();
-					crossOverSelect(chromosomes,mutationRate,0,halfSize);
+					// only crossover
+					for (int i=0;i<halfSize;i++) chromosomes.removeLast();
+					crossOverSelect(chromosomes,0,halfSize);
+					mutatePopulation(chromosomes,mutationRate);
 				}
 		}
 
 	}
 	
-	public void crossOverSelect(ArrayList<Chromosome> population, double mutationRate, int startIndex, int populationHalfSize) {
-			System.out.println("crossOver works");
+	public void crossOverSelect(ArrayList<Chromosome> population, int startIndex, int populationHalfSize) {
 //			for (int i=startIndex;i<populationHalfSize;i++) population.removeLast();
 			for (int i =startIndex; i < populationHalfSize; i++) {
 				int parentIndex1 = random.nextInt(0, populationHalfSize);
@@ -188,16 +199,9 @@ public class Population {
 					parentIndex2 = random.nextInt(0, populationHalfSize);
 				}
 				Chromosome child = crossOverChromosome(population.get(parentIndex1),population.get(parentIndex2),5);
-				System.out.println(child.getBitString());
-				if (mutationRate != 0) {
-					child.mutationProcess(mutationRate);
-				}
-				System.out.println(child.getBitString());
-				System.out.println(population.get(parentIndex1).getBitString()+"///"+population.get(parentIndex2).getBitString()+"///"+child.getBitString());
 				population.add(child);
 			}
 			Collections.sort(population,FC);
-			System.out.println(maxOnesFitness(population));
 	}
 	
 	public void ElitismSelect(int numbers,ArrayList<Chromosome> chromosomes) {

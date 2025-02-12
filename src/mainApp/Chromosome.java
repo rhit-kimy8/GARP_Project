@@ -109,7 +109,6 @@ public class Chromosome {
 	
 	//Draw each Chromosome
 	public void drawOnFitness(Graphics2D g2) {
-		System.out.println("bitString len: " + this.bitString.length());
 		//for (int x = 0; x < rectangles.size(); x++) {
 		for (int x = 0; x < this.bitString.length(); x++) {
 			Rectangle r = rectangles.get(x);

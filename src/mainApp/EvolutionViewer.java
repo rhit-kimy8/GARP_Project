@@ -45,8 +45,10 @@ public class EvolutionViewer extends JComponent {
 	private static final Color AVERAGE_FITNESS = new Color(0, 0, 255);
 	private static final Color WORST_FITNESS = new Color(255, 0, 0);
 	
-	private static final int DELAY = 100;
+	private static final int DELAY = 50;
 	static boolean isRunning = false;
+	private boolean isDone = true;
+	static double fitness = 9.0;
 	
 	public static String saveString = "";
 	private int lengthOfChromosome;
@@ -123,15 +125,18 @@ public class EvolutionViewer extends JComponent {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				frame.repaint();
-				int fitness = 20;
-//				while(true) {
-//					pop.truncationSelect(pop.population);
-				    pop.truncationSelect(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/lengthOfChromosome,(int)Integer.parseInt(elitismInput.getText())*pop.population.size()/100);
-					FIV.upDate(pop.getBest(pop.population));
-					addEntry(pop.getBest(pop.population).getFitness(), pop.getAverage(pop.population), pop.getWorst(pop.population));
-					if (pop.getBest(pop.population).getFitness() == fitness);
-//					}
+				frame.repaint();
+				pop.truncationSelect(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/pop.population.size(),(int)Integer.parseInt(elitismInput.getText())*pop.population.size()/100);
+				FIV.upDate(pop.getBest(pop.population));
+				addEntry(pop.getBest(pop.population).getFitness(), pop.getAverage(pop.population), pop.getWorst(pop.population));
+				isDone = false;
+				if((double)pop.getBest(pop.population).getFitness()/lengthOfChromosome*10.0 == fitness) {
+					isDone = true;
+					isRunning = false;
+					EvolutionViewer.this.timer.stop();
+					System.out.println("Yahpiee");
+					start.setText("Restart");
+				}
 				}				
 			}
 			 //stop automatically at a lot of generations
@@ -145,10 +150,12 @@ public class EvolutionViewer extends JComponent {
 					System.err.println("One or more variables is not defined: population size, chromosome length, mutation rate, elitism rate");
 					return;
 				}
-				pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()));
+				if(isDone) {
+					pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()));
+					FIV = new FittestIndividualViewer(pop.getBest(pop.population));
+					System.out.println("make pop");
+				}
 				lengthOfChromosome = Integer.parseInt(chromosomeLengthInput.getText());
-				for (int i=0; i<pop.population.size();i++) System.out.println(pop.population.get(i).getBitString());
-				FIV = new FittestIndividualViewer(pop.getBest(pop.population));
 				
 				if (!isRunning) {
 					EvolutionViewer.this.timer.start();
@@ -228,8 +235,14 @@ public class EvolutionViewer extends JComponent {
 	}
 	private void drawFitnessGraph(Graphics2D g2, int graphX, int graphY, int graphWidth, int graphHeight, int maxFitness) {
 	    int numGenerations = bestFitnessLog.size();
-	    if (numGenerations < 2){
+	    //System.out.println("bestFitness - 1: " + bestFitnessLog.get(numGenerations - 1));
+	    //check whether we can make a line through points in graph
+	    if (numGenerations < 2) {
 	    	return;
+	    }
+	    	
+	    if (numGenerations > 300) {
+	    	System.exit(0);
 	    }
 	      
 	    double scaleY = (double) graphHeight / maxFitness;  
@@ -261,6 +274,14 @@ public class EvolutionViewer extends JComponent {
 	        int y2 = graphY + graphHeight - (int) (worstFitnessLog.get(i) * scaleY);
 	        g2.drawLine(x1, y1, x2, y2);
 	    }
+
+		g2.setColor(Color.BLACK);
+		for (int i = 0; i<9; i++) {
+			String label = Integer.toString(numGenerations*i);
+			g2.drawString(label, 50+i*850/8-5, 240);
+		}
+		
+	
 	}
 
 
@@ -268,62 +289,39 @@ public class EvolutionViewer extends JComponent {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
 
-		g2.drawRect(50, 25, 600, 200);
+		g2.drawRect(50, 25, 850, 200);
 		
-		g2.drawString("LEGEND", 700, 50);
+		g2.drawString("LEGEND", 800, 50);
 		g2.setColor(BEST_FITNESS);
-		g2.fillRect(680, 65, 10, 10);
-		g2.drawString("Best fitness", 700, 75);
+		g2.fillRect(780, 65, 10, 10);
+		g2.drawString("Best fitness", 800, 75);
 		g2.setColor(AVERAGE_FITNESS);
-		g2.fillRect(680, 90, 10, 10);
-		g2.drawString("Average Fitness", 700, 100);
+		g2.fillRect(780, 90, 10, 10);
+		g2.drawString("Average Fitness", 800, 100);
 		g2.setColor(WORST_FITNESS);
-		g2.fillRect(680, 115, 10, 10);
-		g2.drawString("Worst fitness", 700, 125);
-		drawFitnessGraph(g2, 50, 25, 600, 200,lengthOfChromosome);
+		g2.fillRect(780, 115, 10, 10);
+		g2.drawString("Worst fitness", 800, 125);
+		drawFitnessGraph(g2, 50, 25, 700, 200, lengthOfChromosome);
 		
-//		g2.setColor(Color.BLACK);
-//		for (int i = 0; i<5; i++) {
-//			g2.drawLine(45, 25+i*200/5, 55, 25+i*200/5);
-//			String label = Integer.toString(10-2*i);
-//			g2.drawString(label, 25, 25+i*200/5 +5);
-//			
-//		}
-//		
-//		for (int i = 0; i<9; i++) {
-//			g2.drawLine(50+i*600/8, 220, 50+i*600/8, 230);
-//		}
-//		
-//		g2.drawString("Fitness Over Generations", 275, 20);
-//		g2.drawString("Generations", 300, 250);
-//		
-//		g2.rotate(-Math.toRadians(90));
-//		g2.drawString("Fitness", -140, 15);
-//		g2.rotate(Math.toRadians(90));
-//		
-//		
-//		
-//		if (bestFitnessLog.size() > 0) {
-//			for (int i=0; i<bestFitnessLog.size(); i++) {
-//				g2.setColor(BEST_FITNESS);
-//				g2.drawLine(i*600/bestFitnessLog.size()+25, bestFitnessLog.get(i), i*600/bestFitnessLog.size()+26, bestFitnessLog.get(i));
-//				
-//				g2.setColor(AVERAGE_FITNESS);
-//				g2.drawLine(i*600/bestFitnessLog.size()+25, averageFitnessLog.get(i), i*600/bestFitnessLog.size()+26, averageFitnessLog.get(i));
-//				
-//				g2.setColor(WORST_FITNESS);
-//				g2.drawLine(i*600/bestFitnessLog.size()+25, worstFitnessLog.get(i), i*600/bestFitnessLog.size()+26, worstFitnessLog.get(i));
-//				
-////				for (int j = 0; j<9; j++) {
-////					g2.drawLine(50+i*600/8, 220, 50+i*600/8, 230);
-////					
-////					String label = Integer.toString(100-20*i);
-////					g2.drawString(label, 25, 25+i*200/5 +5);
-//				}
-//				
-//				
-//			}
-
+		g2.setColor(Color.BLACK);
+		for (int i = 0; i<6; i++) {
+			g2.drawLine(45, 25+i*200/5, 55, 25+i*200/5);
+			String label = Double.toString(10-2*i);
+			g2.drawString(label, 25, 25+i*200/5 +5);
+			
+		}
+		
+		for (int i = 0; i<9; i++) {
+			g2.drawLine(50+i*850/8, 220, 50+i*850/8, 230);
+		}
+		
+		g2.drawString("Fitness Over Generations", 410, 20);
+		g2.drawString("Generations", 450, 250);
+		
+		g2.rotate(-Math.toRadians(90));
+		g2.drawString("Fitness", -140, 15);
+		g2.rotate(Math.toRadians(90));
+		
 		}
 		
 	}
