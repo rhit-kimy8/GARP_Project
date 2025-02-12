@@ -28,6 +28,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
@@ -177,6 +179,23 @@ public class EvolutionViewer extends JComponent {
 		menu.add(population);
 		MenuItem newPopulation = new MenuItem("New Population");
 		population.add(newPopulation);
+		newPopulation.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				reset();
+				populationSizeInput.setText("");
+				chromosomeLengthInput.setText("");
+				mutationRateInput.setText("");
+				crossoverCheck.setSelected(false);
+				elitismInput.setText("");
+				//set start button back to beginning
+				frame.repaint();
+				
+			}
+			
+		});
+		
 		
 		Menu file = new Menu("File");
 		menu.add(file);
@@ -222,7 +241,35 @@ public class EvolutionViewer extends JComponent {
 				helpFrame.setSize(400,400);
 				helpFrame.setVisible(true);
 				
-				JLabel helpLabel = new JLabel("This is the help page. ");
+				JLabel helpLabel = new JLabel("Need Help?");
+				helpFrame.add(helpLabel);
+				JTextArea text = new JTextArea(20,30);
+				
+				   text.setLineWrap(true); // Enable line wrapping
+			        text.setWrapStyleWord(true); // Wrap at word boundaries
+			        JScrollPane scrollPane = new JScrollPane(text);
+
+			        helpFrame.getContentPane().add(scrollPane);
+			        helpFrame.pack();
+			        helpFrame.setVisible(true);
+
+			        // Add text to the JTextArea
+			        text.setText("What is population size? \n"
+						+ "Population size is how many chromosomes will be generated. \n"
+						+ "What is chromosome length? \n"
+						+ "Chromosome length is the length of the bitstring for each chromosome. \n"
+						+ "What are the selection options? \n" 
+						+ "Truncation truncates. \n"
+						+ "Wheel select selects. \n"
+						+ "Ranked select selects. \n"
+						+ "What does crossover select do? \n"
+						+ "By choosing crossover select, the bitstring will crossover at a specific point. \n"
+						+ "What is elistism? \n"
+						+ "This is the percent that \n"
+						+ "NOTE: Avoid selecting truncation and crossover, as both have very similar functions.");
+			        
+			        text.setEditable(false);
+			        
 				helpFrame.add(helpLabel, BorderLayout.NORTH);
 				
 			}
@@ -231,7 +278,7 @@ public class EvolutionViewer extends JComponent {
 		frame.setMenuBar(menu);
 		
 		//timer.start();
-	}
+}
 	private void drawFitnessGraph(Graphics2D g2, int graphX, int graphY, int graphWidth, int graphHeight, int maxFitness) {
 	    int numGenerations = bestFitnessLog.size();
 	    //System.out.println("bestFitness - 1: " + bestFitnessLog.get(numGenerations - 1));
