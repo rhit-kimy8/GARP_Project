@@ -27,7 +27,7 @@ public class MainApp {
 
 	//EvolutionComponent evolutionComponent = new EvolutionComponent();
 	EvolutionViewer evolutionViewer = new EvolutionViewer();
-	
+
 	private void runApp() {
 		// run chromosomeEditor
 //		chromosomeEditor.runChromosomeEditor();

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 /**
  * Class: Chromosome
- * @author Haocheng Tang
+ * @author Haocheng Tang, Daniel
  * <br>Purpose: Used to generate chromosomes
  * <br>Restrictions: no
  * <br>For example: 
@@ -25,7 +25,7 @@ public class Chromosome {
 	
 	
 	//Could add bitString in constructor if using files to import chromosomes
-	Chromosome(int chromosomeSize) {
+	public Chromosome(int chromosomeSize) {
 		//this.bitString = new ArrayList<>();
 		this.bitString = "";
 		randomGeneration(chromosomeSize);
@@ -147,8 +147,13 @@ public class Chromosome {
 		this.fitness = count;
 	}
 	public int matchFitness(Chromosome chromosome) {
-			if (getBitString().contains(chromosome.getBitString())) return 1;
-			return 0;
+		int count = 0;
+			for (int i = 0; i < this.getBitString().length(); i++) {
+				if (this.getBitString().charAt(i) == chromosome.getBitString().charAt(i)) {
+					count += 1;
+				}
+			}
+		return count;
 	}
 	public int consecutiveFitness() {
 		int maxConsecutiveCount = 0;

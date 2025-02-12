@@ -11,7 +11,7 @@ public class Population {
 	Random random = new Random(250);
 	private int generationCount;
 	
-	Population(){
+	public Population(){
 	}
 	
 	public void generateRandomPopulation(int populationSize, int chromosomeSize) {
