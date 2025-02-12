@@ -134,7 +134,7 @@ public class EvolutionViewer extends JComponent {
 					isDone = true;
 					isRunning = false;
 					EvolutionViewer.this.timer.stop();
-					System.out.println("Yahpiee");
+					System.out.println("Evolution Terminated");
 					start.setText("Restart");
 				}
 				}				
@@ -153,7 +153,6 @@ public class EvolutionViewer extends JComponent {
 				if(isDone) {
 					pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()));
 					FIV = new FittestIndividualViewer(pop.getBest(pop.population));
-					System.out.println("make pop");
 				}
 				lengthOfChromosome = Integer.parseInt(chromosomeLengthInput.getText());
 				
