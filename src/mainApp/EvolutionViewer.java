@@ -43,6 +43,8 @@ public class EvolutionViewer extends JComponent {
 	private static final int FRAME_WIDTH = 930;
 	private static final int FRAME_HEIGHT = 350;
 	
+	private static final int GRAPH_WIDTH = 850;
+	private static final int GRAPH_HEIGHT = 200;
 	private static final Color BEST_FITNESS = new Color(0, 255, 0);
 	private static final Color AVERAGE_FITNESS = new Color(0, 0, 255);
 	private static final Color WORST_FITNESS = new Color(255, 0, 0);
@@ -335,7 +337,7 @@ public class EvolutionViewer extends JComponent {
 			int count = pop.getGenerationCount();
 			String label = Integer.toString(count-count/8*i);
 			if (i==8) label = "0";
-			g2.drawString(label, 50+(8-i)*850/8-5, 240);
+			g2.drawString(label, 50+(8-i)*GRAPH_WIDTH/8-5, 240);
 		}
 		
 	
@@ -345,8 +347,8 @@ public class EvolutionViewer extends JComponent {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
-
-		g2.drawRect(50, 25, 850, 200);
+		
+		g2.drawRect(50, 25, GRAPH_WIDTH, GRAPH_HEIGHT);
 		
 		g2.drawString("LEGEND", 800, 130);
 		g2.setColor(BEST_FITNESS);
@@ -358,18 +360,18 @@ public class EvolutionViewer extends JComponent {
 		g2.setColor(WORST_FITNESS);
 		g2.fillRect(780, 195, 10, 10);
 		g2.drawString("Worst fitness", 800, 205);
-		drawFitnessGraph(g2, 50, 25, 850, 200, lengthOfChromosome);
+		drawFitnessGraph(g2, 50, 25, GRAPH_WIDTH, GRAPH_HEIGHT, lengthOfChromosome);
 		
 		g2.setColor(Color.BLACK);
 		for (int i = 0; i<6; i++) {
-			g2.drawLine(45, 25+i*200/5, 55, 25+i*200/5);
+			g2.drawLine(45, 25+i*GRAPH_HEIGHT/5, 55, 25+i*GRAPH_HEIGHT/5);
 			String label = Double.toString(10-2*i);
-			g2.drawString(label, 25, 25+i*200/5 +5);
+			g2.drawString(label, 25, 25+i*GRAPH_HEIGHT/5 +5);
 			
 		}
 		
 		for (int i = 0; i<9; i++) {
-			g2.drawLine(50+i*850/8, 220, 50+i*850/8, 230);
+			g2.drawLine(50+i*GRAPH_WIDTH/8, 220, 50+i*GRAPH_WIDTH/8, 230);
 		}
 		
 		g2.drawString("Fitness Over Generations", 410, 20);
