@@ -197,7 +197,7 @@ public class ChromosomeEditor {
 					if (chromosomes.get(i).getStatusIndex() == 2) {
 						continue;
 					}
-					jButtons.get(i).setBackground(chromosomes.get(i).getColor());
+					//jButtons.get(i).setBackground(chromosomes.get(i).getColor());
 					viewerButtons.get(i).setBackground(jButtons.get(i).getBackground());
 			}
 			}

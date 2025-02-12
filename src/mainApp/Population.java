@@ -16,7 +16,7 @@ public class Population {
 	public void generateRandomPopulation(int populationSize, int chromosomeSize) {
 		population.clear();
 		for (int i=0; i<populationSize; i++) {
-			Chromosome chr = new Chromosome();
+			Chromosome chr = new Chromosome(chromosomeSize);
 			population.add(chr);
 		}
 		Collections.sort(population,FC);
@@ -24,7 +24,8 @@ public class Population {
 	
 	public void generateSpecialPopulation(int populationSize, int chromosomeSize) {
 		for (int i=0;i<populationSize/4;i++) { // remember to -1 for test
-			String chromosome = "0000000000";
+			String chromosome = "";
+			for (int j=0;j<chromosomeSize;j++) chromosome = chromosome +"0";
 			Chromosome chr = new Chromosome();
 			chr.setBitString(chromosome);
 			specialPopulation.add(chr);
@@ -51,7 +52,7 @@ public class Population {
 		
 		for (int i=0;i<populationSize/4;i++) {
 			String chromosome = "";
-			int index = random.nextInt(9);
+			int index = random.nextInt(chromosomeSize-1);
 			for (int j=0;j<chromosomeSize;j++) {
 				if(j == index) chromosome = chromosome + "1";
 				else chromosome = chromosome + "0";
@@ -65,7 +66,7 @@ public class Population {
 			ArrayList<Integer> list = new ArrayList<>();
 			int num = 0;
 			while (true) {
-				int index = random.nextInt(9);
+				int index = random.nextInt(chromosomeSize-1);
 				if (list.contains(index)) continue;
 				list.add(index);
 				num++;
@@ -85,7 +86,7 @@ public class Population {
 			ArrayList<Integer> list = new ArrayList<>();
 			int num = 0;
 			while (true) {
-				int index = random.nextInt(9);
+				int index = random.nextInt(chromosomeSize-1);
 				if (list.contains(index)) continue;
 				list.add(index);
 				num++;
@@ -131,51 +132,72 @@ public class Population {
 		return maxConsecutiveCount;
 	}
 	
-	public void truncationSelect(ArrayList<Chromosome> chromosomes) {
-		for (int j = 0; j < 2; j++) {
-//		for (Chromosome chr :chromosomes) {
-//			System.out.println(chr.getBitString());
-//		}
-//		Collections.sort(chromosomes,FC);
-//		System.out.println("Sorting");
-//		for (Chromosome chr :chromosomes) {
-//			System.out.println(chr.getBitString());
-//		}
+	public void truncationSelect(ArrayList<Chromosome> chromosomes, boolean checkCrossOver,double mutationRate,int elitismNumber) {
+		Collections.sort(chromosomes,FC);
 		int halfSize = chromosomes.size()/2;
+		if (elitismNumber != 0) {
+		if (!checkCrossOver){
 		for (int i=0;i<halfSize;i++) chromosomes.removeLast();
 		for (int i=0;i<halfSize;i++) {
 			Chromosome repeat = new Chromosome();
 			repeat.setBitString(chromosomes.get(i).getBitString());
 			chromosomes.add(repeat);
 		}
-//		System.out.println(maxOnesFitness(chromosomes));
+		Collections.sort(chromosomes,FC);
+		System.out.println("Truncation works");
+		System.out.println(maxOnesFitness(chromosomes));
+		}
+		else {
+			for (int i=0;i<halfSize;i++) population.removeLast();
+			for (int i=0;i<elitismNumber;i++) {
+				Chromosome repeat = new Chromosome();
+				repeat.setBitString(chromosomes.get(i).getBitString());
+				chromosomes.add(repeat);
+			}
+			crossOverSelect(chromosomes,mutationRate,elitismNumber,halfSize);
+		}
 		}
 		
+		else {
+			if (!checkCrossOver){
+				for (int i=0;i<halfSize;i++) chromosomes.removeLast();
+				for (int i=0;i<halfSize;i++) {
+					Chromosome repeat = new Chromosome();
+					repeat.setBitString(chromosomes.get(i).getBitString());
+					chromosomes.add(repeat);
+				}
+				Collections.sort(chromosomes,FC);
+				System.out.println("Truncation works");
+				System.out.println(maxOnesFitness(chromosomes));
+				}
+				else {
+					for (int i=0;i<halfSize;i++) population.removeLast();
+					crossOverSelect(chromosomes,mutationRate,0,halfSize);
+				}
+		}
+
 	}
 	
-	public void crossOverSelect() {
-		for (int j = 0; j < 2; j++) {
-			Collections.sort(population,FC);
-			System.out.println("Sorting");
-			for (Chromosome chr :population) {
-				System.out.println(chr.getBitString());
-			}
-			int halfSize = population.size()/2;
-			for (int i=0;i<halfSize;i++) population.removeLast();
-			for (int i =0; i < halfSize; i++) {
-				int parentIndex1 = random.nextInt(0, halfSize);
-				System.out.println("parent1");
-				System.out.println(population.get(parentIndex1).getBitString());
-				int parentIndex2 = random.nextInt(0, halfSize);
-				System.out.println("parent2");
-				System.out.println(population.get(parentIndex2).getBitString());
+	public void crossOverSelect(ArrayList<Chromosome> population, double mutationRate, int startIndex, int populationHalfSize) {
+			System.out.println("crossOver works");
+//			for (int i=startIndex;i<populationHalfSize;i++) population.removeLast();
+			for (int i =startIndex; i < populationHalfSize; i++) {
+				int parentIndex1 = random.nextInt(0, populationHalfSize);
+				int parentIndex2 = random.nextInt(0, populationHalfSize);
+				while(parentIndex2 == parentIndex1) {
+					parentIndex2 = random.nextInt(0, populationHalfSize);
+				}
 				Chromosome child = crossOverChromosome(population.get(parentIndex1),population.get(parentIndex2),5);
-				System.out.println("child");
 				System.out.println(child.getBitString());
+				if (mutationRate != 0) {
+					child.mutationProcess(mutationRate);
+				}
+				System.out.println(child.getBitString());
+				System.out.println(population.get(parentIndex1).getBitString()+"///"+population.get(parentIndex2).getBitString()+"///"+child.getBitString());
 				population.add(child);
 			}
+			Collections.sort(population,FC);
 			System.out.println(maxOnesFitness(population));
-		}
 	}
 	
 	public void ElitismSelect(int numbers,ArrayList<Chromosome> chromosomes) {
@@ -221,16 +243,16 @@ public class Population {
 			n ++;
 		}
 	}
-	public Chromosome getBest() {
-		Collections.sort(population,FC);
-		return population.get(0);
+	public Chromosome getBest(ArrayList<Chromosome> chromosomes) {
+		Collections.sort(chromosomes,FC);
+		return chromosomes.get(0);
 	}
-	public Integer getAverage() {
-		return maxOnesFitness(population)/population.size();
+	public Integer getAverage(ArrayList<Chromosome> chromosomes) {
+		return maxOnesFitness(chromosomes)/chromosomes.size();
 	}
-	public Integer getWorst() {
-		Collections.sort(population,FC);
-		return population.get(population.size()-1).getFitness();
+	public Integer getWorst(ArrayList<Chromosome> chromosomes) {
+		Collections.sort(chromosomes,FC);
+		return chromosomes.get(chromosomes.size()-1).getFitness();
 	}
 	
  
