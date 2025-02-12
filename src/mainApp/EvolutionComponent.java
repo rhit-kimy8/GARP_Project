@@ -35,11 +35,11 @@ public class EvolutionComponent extends JComponent {
 		worstLength = worstFitnessLog.size();
 	}
 	
-//	public void reset() {
-//		this.bestFitnessLog.clear();
-//		this.averageFitnessLog.clear();
-//		this.worstFitnessLog.clear();
-//	}
+	public void reset() {
+		this.bestFitnessLog.clear();
+		this.averageFitnessLog.clear();
+		this.worstFitnessLog.clear();
+	}
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);

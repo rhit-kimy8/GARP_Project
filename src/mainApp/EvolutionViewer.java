@@ -28,6 +28,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
@@ -119,6 +121,8 @@ public class EvolutionViewer extends JComponent {
 		controls.add(start);
 		frame.add(controls, BorderLayout.SOUTH);
 		 
+		//FIV = new FittestIndividualViewer(pop.getBest(pop.population));
+		
 		 this.timer = new Timer(DELAY, new ActionListener() {
 
 			@Override
@@ -170,6 +174,21 @@ public class EvolutionViewer extends JComponent {
 		Menu population = new Menu("Population");
 		menu.add(population);
 		MenuItem newPopulation = new MenuItem("New Population");
+		newPopulation.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				reset();
+				populationSizeInput.setText("");
+				chromosomeLengthInput.setText("");
+				mutationRateInput.setText("");
+				//crossoverCheck;
+				elitismInput.setText("");
+				frame.repaint();
+				
+			}
+			
+		});
 		population.add(newPopulation);
 		
 		Menu file = new Menu("File");
@@ -213,10 +232,38 @@ public class EvolutionViewer extends JComponent {
 		helpPage.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFrame helpFrame = new JFrame("Help");
-				helpFrame.setSize(400,400);
-				helpFrame.setVisible(true);
+				//helpFrame.setSize(400,400);
+				//helpFrame.setVisible(true);
 				
-				JLabel helpLabel = new JLabel("This is the help page. ");
+				JLabel helpLabel = new JLabel("Need Help?");
+				
+				JTextArea text = new JTextArea(20,30);
+				
+				   text.setLineWrap(true); // Enable line wrapping
+			        text.setWrapStyleWord(true); // Wrap at word boundaries
+			        JScrollPane scrollPane = new JScrollPane(text);
+
+			        helpFrame.getContentPane().add(scrollPane);
+			        helpFrame.pack();
+			        helpFrame.setVisible(true);
+
+			        // Add text to the JTextArea
+			        text.setText("What is population size? \n"
+						+ "Population size is how many chromosomes will be generated. \n"
+						+ "What is chromosome length? \n"
+						+ "Chromosome length is the length of the bitstring for each chromosome. \n"
+						+ "What are the selection options? \n" 
+						+ "Truncation truncates. \n"
+						+ "Wheel select selects. \n"
+						+ "Ranked select selects. \n"
+						+ "What does crossover select do? \n"
+						+ "By choosing crossover select, the bitstring will crossover at a specific point. \n"
+						+ "What is elistism? \n"
+						+ "This is the percent that \n"
+						+ "NOTE: Avoid selecting truncation and crossover, as both have very similar functions.");
+			        
+			        text.setEditable(false);
+			        
 				helpFrame.add(helpLabel, BorderLayout.NORTH);
 				
 			}
@@ -261,6 +308,23 @@ public class EvolutionViewer extends JComponent {
 	        int y2 = graphY + graphHeight - (int) (worstFitnessLog.get(i) * scaleY);
 	        g2.drawLine(x1, y1, x2, y2);
 	    }
+//	    
+//	    for (int i = 0; i < numGenerations; i++) {
+//	       
+//	        int xLabelPos = graphX + (int) (i * scaleX);
+//	        String generationLabel = Integer.toString(i + 1);  
+//	        
+//	        g2.setColor(Color.BLACK);
+//	        g2.drawString(generationLabel, xLabelPos, graphY + graphHeight + 15); 
+//	    }
+	    
+//		for (int j = 0; j<9; j++) {					
+//			g2.setColor(Color.BLACK);
+//			String label = Integer.toString(100-20*j);
+//			g2.drawString(label, 25, 25+j*200/5 +5);
+//		}
+		
+	
 	}
 
 
@@ -280,29 +344,29 @@ public class EvolutionViewer extends JComponent {
 		g2.setColor(WORST_FITNESS);
 		g2.fillRect(680, 115, 10, 10);
 		g2.drawString("Worst fitness", 700, 125);
-		drawFitnessGraph(g2, 50, 25, 600, 200,lengthOfChromosome);
+		drawFitnessGraph(g2, 50, 25, 600, 200, lengthOfChromosome);
 		
-//		g2.setColor(Color.BLACK);
-//		for (int i = 0; i<5; i++) {
-//			g2.drawLine(45, 25+i*200/5, 55, 25+i*200/5);
-//			String label = Integer.toString(10-2*i);
-//			g2.drawString(label, 25, 25+i*200/5 +5);
-//			
-//		}
-//		
-//		for (int i = 0; i<9; i++) {
-//			g2.drawLine(50+i*600/8, 220, 50+i*600/8, 230);
-//		}
-//		
-//		g2.drawString("Fitness Over Generations", 275, 20);
-//		g2.drawString("Generations", 300, 250);
-//		
-//		g2.rotate(-Math.toRadians(90));
-//		g2.drawString("Fitness", -140, 15);
-//		g2.rotate(Math.toRadians(90));
-//		
-//		
-//		
+		g2.setColor(Color.BLACK);
+		for (int i = 0; i<5; i++) {
+			g2.drawLine(45, 25+i*200/5, 55, 25+i*200/5);
+			String label = Integer.toString(10-2*i);
+			g2.drawString(label, 25, 25+i*200/5 +5);
+			
+		}
+		
+		for (int i = 0; i<9; i++) {
+			g2.drawLine(50+i*600/8, 220, 50+i*600/8, 230);
+		}
+		
+		g2.drawString("Fitness Over Generations", 275, 20);
+		g2.drawString("Generations", 300, 250);
+		
+		g2.rotate(-Math.toRadians(90));
+		g2.drawString("Fitness", -140, 15);
+		g2.rotate(Math.toRadians(90));
+		
+		
+		
 //		if (bestFitnessLog.size() > 0) {
 //			for (int i=0; i<bestFitnessLog.size(); i++) {
 //				g2.setColor(BEST_FITNESS);
@@ -314,13 +378,13 @@ public class EvolutionViewer extends JComponent {
 //				g2.setColor(WORST_FITNESS);
 //				g2.drawLine(i*600/bestFitnessLog.size()+25, worstFitnessLog.get(i), i*600/bestFitnessLog.size()+26, worstFitnessLog.get(i));
 //				
-////				for (int j = 0; j<9; j++) {
-////					g2.drawLine(50+i*600/8, 220, 50+i*600/8, 230);
-////					
-////					String label = Integer.toString(100-20*i);
-////					g2.drawString(label, 25, 25+i*200/5 +5);
+//				for (int j = 0; j<9; j++) {				
+//					//g2.drawLine(50+i*600/8, 220, 50+i*600/8, 230);	
+//					g2.setColor(Color.BLACK);
+//					String label = Integer.toString(100-20*i);
+//					g2.drawString(label, 25, 25+i*200/5 +5);
 //				}
-//				
+//			}
 //				
 //			}
 

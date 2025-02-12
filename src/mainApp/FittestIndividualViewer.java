@@ -39,7 +39,7 @@ public class FittestIndividualViewer {
 	this.fitComponent.setChromosome(c);
 	fitViewer.add(this.fitComponent);
 	fitViewer.setTitle("Fitness: " + c.getFitness());
-	fitViewer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	//fitViewer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	fitViewer.setVisible(true);
 	}
 	
