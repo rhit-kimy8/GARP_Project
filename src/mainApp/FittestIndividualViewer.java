@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 public class FittestIndividualViewer {
 	private Chromosome fittest;
 	private JFrame fitViewer;
-
 	FittestIndividualComponent fitComponent;
 	
 	 /* Testing code 
@@ -48,6 +47,11 @@ public class FittestIndividualViewer {
 		this.fittest = c;
 		this.fitViewer.setTitle("Fitness: " + this.fittest.getFitness());
 		fitComponent.setChromosome(c);
+	
+	}
+	
+	public void end() {
+		this.fitViewer.dispose();
 	}
 	/***
 	 * 

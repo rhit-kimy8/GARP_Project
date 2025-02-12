@@ -274,5 +274,9 @@ public class Population {
 		return generationCount;
 	}
 	
+	public void setGenerationCount() {
+		generationCount = 0;
+	}
+	
 }
  

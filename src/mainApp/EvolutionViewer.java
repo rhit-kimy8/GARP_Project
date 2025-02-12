@@ -150,7 +150,7 @@ public class EvolutionViewer extends JComponent {
 					System.err.println("One or more variables is not defined: population size, chromosome length, mutation rate, elitism rate");
 					return;
 				}
-				if(isDone) {
+				if(isDone && pop.getGenerationCount() == 0) {
 					pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()));
 					FIV = new FittestIndividualViewer(pop.getBest(pop.population));
 				}
@@ -161,12 +161,20 @@ public class EvolutionViewer extends JComponent {
 					start.setText("Pause");
 					isRunning = true;
 					EvolutionViewer.this.repaint();
+					
+					if(isDone && pop.getGenerationCount()!=0) {
+						FIV.end();
+						reset();
+						pop.setGenerationCount();
+						FIV = new FittestIndividualViewer(pop.getBest(pop.population));
+						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()));
+					}
 				} else {
 					EvolutionViewer.this.timer.stop();
 					start.setText("Continue");
 					isRunning = false;
 					EvolutionViewer.this.repaint();
-				}
+					}
 			}
 			
 		});
@@ -233,40 +241,42 @@ public class EvolutionViewer extends JComponent {
 		//timer.start();
 	}
 	private void drawFitnessGraph(Graphics2D g2, int graphX, int graphY, int graphWidth, int graphHeight, int maxFitness) {
-	    int numGenerations = bestFitnessLog.size();
-	    //System.out.println("bestFitness - 1: " + bestFitnessLog.get(numGenerations - 1));
-	    //check whether we can make a line through points in graph
-	    if (numGenerations < 2) {
+	    int fitnessLogSize = bestFitnessLog.size();
+	    // check whether we can make a line through points in graph
+	    if (fitnessLogSize < 2) {
 	    	return;
 	    }
 	    	
-	    if (numGenerations > 300) {
+	    if (pop.getGenerationCount() > 300) {
 	    	System.exit(0);
 	    }
-	      
+	    
+	    // this will split each scaleX and scaleY for each points. ex) if we have 800, and two points, the scale X will be still 800 and 
+	    // plot function between first to the end
+	    // This scaleY will calculate how the point is located based on its fitness but it will calculate by fitness, percentage
+	    // scaleY = height * (fitness / maxFitness); calculate the portion in column
 	    double scaleY = (double) graphHeight / maxFitness;  
-	    double scaleX = (double) graphWidth / (numGenerations - 1);
-
+	    double scaleX = (double) graphWidth / (fitnessLogSize - 1);
+	    
+	    // from those scaleX and scaleY, we define each size of points, eventually make lines btw them from first to the end
 	    g2.setColor(Color.GREEN);
-	    for (int i = 1; i < numGenerations; i++) {
+	    for (int i = 1; i < fitnessLogSize; i++) {
 	        int x1 = graphX + (int) ((i - 1) * scaleX);
 	        int y1 = graphY + graphHeight - (int) (bestFitnessLog.get(i - 1) * scaleY);
 	        int x2 = graphX + (int) (i * scaleX);
 	        int y2 = graphY + graphHeight - (int) (bestFitnessLog.get(i) * scaleY);
 	        g2.drawLine(x1, y1, x2, y2);
 	    }
-
 	    g2.setColor(Color.BLUE);
-	    for (int i = 1; i < numGenerations; i++) {
+	    for (int i = 1; i < fitnessLogSize; i++) {
 	        int x1 = graphX + (int) ((i - 1) * scaleX);
 	        int y1 = graphY + graphHeight - (int) (averageFitnessLog.get(i - 1) * scaleY);
 	        int x2 = graphX + (int) (i * scaleX);
 	        int y2 = graphY + graphHeight - (int) (averageFitnessLog.get(i) * scaleY);
 	        g2.drawLine(x1, y1, x2, y2);
 	    }
-
 	    g2.setColor(Color.RED);
-	    for (int i = 1; i < numGenerations; i++) {
+	    for (int i = 1; i < fitnessLogSize; i++) {
 	        int x1 = graphX + (int) ((i - 1) * scaleX);
 	        int y1 = graphY + graphHeight - (int) (worstFitnessLog.get(i - 1) * scaleY);
 	        int x2 = graphX + (int) (i * scaleX);
@@ -274,9 +284,10 @@ public class EvolutionViewer extends JComponent {
 	        g2.drawLine(x1, y1, x2, y2);
 	    }
 		g2.setColor(Color.BLACK);
-		for (int i = 7; i>-1; i--) {
+		for (int i = 8;i>-1; i--) {
 			int count = pop.getGenerationCount();
 			String label = Integer.toString(count-count/8*i);
+			if (i==8) label = "0";
 			g2.drawString(label, 50+(8-i)*850/8-5, 240);
 		}
 		
