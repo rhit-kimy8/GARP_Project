@@ -259,13 +259,13 @@ public class EvolutionViewer extends JComponent {
 						+ "What is chromosome length? \n"
 						+ "Chromosome length is the length of the bitstring for each chromosome. \n"
 						+ "What are the selection options? \n" 
-						+ "Truncation truncates. \n"
-						+ "Wheel select selects. \n"
-						+ "Ranked select selects. \n"
+						+ "Truncation cuts out inferior chromosomes and replaces them with new mutated chromosomes the next generation. \n"
+						+ "Wheel select one at random, the probability based off the fitness level. \n"
+						+ "Ranked select will be implemented soon! \n"
 						+ "What does crossover select do? \n"
 						+ "By choosing crossover select, the bitstring will crossover at a specific point. \n"
 						+ "What is elistism? \n"
-						+ "This is the percent that \n"
+						+ "This is the percent of the most 'fit' that will be kept for each generation. \n"
 						+ "NOTE: Avoid selecting truncation and crossover, as both have very similar functions.");
 			        
 			        text.setEditable(false);
