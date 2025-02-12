@@ -16,6 +16,7 @@ public class testForThreeFitnessFunction {
 			str += "1";
 		}
 		chr.setBitString(str);
+		System.out.println("Test for MaxOnes.\n");
 		System.out.println("Current bitString : "+chr.getBitString());
 		System.out.println("MaxOnes fitness for the chromosome with all 1s : "+chr.getFitness());
 		
@@ -50,6 +51,19 @@ public class testForThreeFitnessFunction {
 		chr.setBitString(str);
 		System.out.println("Current bitString : "+chr.getBitString());
 		System.out.println("Consecutive fitness for the chromosome with all 1s : "+chr.consecutiveFitness());
+		
+		Chromosome comparedchr = new Chromosome(10);
+		System.out.println("Test for match function.\n");
+		for (int i = 0; i < 5; i ++) {
+		Chromosome randomchr = new Chromosome(10);
+		System.out.println("match bitstring : "+comparedchr.getBitString());
+		System.out.println("gener bitstring : "+randomchr.getBitString());
+		System.out.println("match fitness: "+ randomchr.matchFitness(comparedchr));
+		System.out.println();
+		}
+		
+		
+		
 		
 	}
 
