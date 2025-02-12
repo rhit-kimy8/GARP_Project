@@ -127,7 +127,7 @@ public class EvolutionViewer extends JComponent {
 				int fitness = 20;
 //				while(true) {
 //					pop.truncationSelect(pop.population);
-				    pop.truncationSelect(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/lengthOfChromosome,(int)Integer.parseInt(elitismInput.getText())*pop.population.size());
+				    pop.truncationSelect(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/lengthOfChromosome,(int)Integer.parseInt(elitismInput.getText())*pop.population.size()/100);
 					FIV.upDate(pop.getBest(pop.population));
 					addEntry(pop.getBest(pop.population).getFitness(), pop.getAverage(pop.population), pop.getWorst(pop.population));
 					if (pop.getBest(pop.population).getFitness() == fitness);
