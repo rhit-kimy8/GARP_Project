@@ -25,6 +25,7 @@ public class MainApp {
 	ChromosomeEditor chromosomeEditor = new ChromosomeEditor();
 	Population population = new Population();
 
+	//EvolutionComponent evolutionComponent = new EvolutionComponent();
 	EvolutionViewer evolutionViewer = new EvolutionViewer();
 	
 	private void runApp() {
@@ -52,6 +53,7 @@ public class MainApp {
 		
 		// This is test for truncationSelect
 //		population.truncationSelect(chromosomes);
+		
 		evolutionViewer.runEvolutionViewer();
 	} // runApp
 

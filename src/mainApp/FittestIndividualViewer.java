@@ -10,7 +10,7 @@ public class FittestIndividualViewer {
 
 	FittestIndividualComponent fitComponent;
 	
-	 //* Testing code 
+	 /* Testing code 
 	public static void main(String args[]) {
 		Chromosome c1 = new Chromosome(100);
 //		Chromosome c2 = new Chromosome();
@@ -25,6 +25,7 @@ public class FittestIndividualViewer {
 		}
 		//v1.setChromosome(c1);
 	}
+	*/
 	
 	/***
 	 * 
@@ -39,12 +40,13 @@ public class FittestIndividualViewer {
 	this.fitComponent.setChromosome(c);
 	fitViewer.add(this.fitComponent);
 	fitViewer.setTitle("Fitness: " + c.getFitness());
-	fitViewer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	//fitViewer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	fitViewer.setVisible(true);
 	}
 	
 	public void upDate(Chromosome c) {
 		this.fittest = c;
+		this.fitViewer.setTitle("Fitness: " + this.fittest.getFitness());
 		fitComponent.setChromosome(c);
 	}
 	/***
