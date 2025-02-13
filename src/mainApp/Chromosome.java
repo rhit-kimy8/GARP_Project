@@ -34,13 +34,6 @@ public class Chromosome {
 		colors.add(Color.black);
 		colors.add(Color.green);
 		colors.add(Color.gray);
-		//Creates Rectangles to visualize bitString
-		for (int yCord = 0; yCord < 200; yCord += 20) {
-			for (int xCord = 0; xCord < 200; xCord += 20) {
-				rectangles.add(new Rectangle(xCord, yCord, 20, 20));
-			}
-		}
-		
 	}
 	
 	Chromosome(){
@@ -50,12 +43,6 @@ public class Chromosome {
 		colors.add(Color.black);
 		colors.add(Color.green);
 		colors.add(Color.gray);
-		//Creates Rectangles to visualize bitString
-		for (int yCord = 0; yCord < 200; yCord += 20) {
-			for (int xCord = 0; xCord < 200; xCord += 20) {
-				rectangles.add(new Rectangle(xCord, yCord, 20, 20));
-			}
-		}
 	}
 	/**
 	 * ensures: return the current color
@@ -112,6 +99,13 @@ public class Chromosome {
 	public void drawOnFitness(Graphics2D g2) {
 		//for (int x = 0; x < rectangles.size(); x++) {
 		for (int x = 0; x < this.bitString.length(); x++) {
+			if (rectangles.size() == 0) {
+				for (int yCord = 0; yCord < 200; yCord += 20) {
+					for (int xCord = 0; xCord < 200; xCord += 20) {
+						rectangles.add(new Rectangle(xCord, yCord, 20, 20));
+					}
+				}
+			}
 			Rectangle r = rectangles.get(x);
 			String s = "";
 			g2.setColor(getColor(bitString.substring(x,x+1)));
@@ -124,6 +118,21 @@ public class Chromosome {
 			}
 			s += x;
 			g2.drawString(s, (int) r.getX(), (int) r.getY() + 10);
+		}
+	}
+	
+	public void drawOnPopulation(Graphics2D g2, int xLen, int yLen) {
+		if (rectangles.size() == 0) {
+			for (int yCord = 0; yCord < yLen * 10; yCord += yLen) {
+				for (int xCord = 0; xCord < xLen * 10; xCord += xLen) {
+					rectangles.add(new Rectangle(xCord, yCord, xLen, yLen));
+				}
+			}
+		}
+		for (int x = 0; x < this.bitString.length(); x++) {
+			Rectangle r = rectangles.get(x);
+			g2.setColor(getColor(bitString.substring(x,x+1)));
+			g2.fill(r);
 		}
 	}
 	
