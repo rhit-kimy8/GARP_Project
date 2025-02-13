@@ -339,8 +339,6 @@ public class EvolutionViewer extends JComponent {
 			if (i==8) label = "0";
 			g2.drawString(label, 50+(8-i)*GRAPH_WIDTH/8-5, 240);
 		}
-		
-	
 	}
 
 

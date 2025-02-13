@@ -33,6 +33,7 @@ public class Chromosome {
 		this.rectangles = new ArrayList<>();
 		colors.add(Color.black);
 		colors.add(Color.green);
+		colors.add(Color.gray);
 		//Creates Rectangles to visualize bitString
 		for (int yCord = 0; yCord < 200; yCord += 20) {
 			for (int xCord = 0; xCord < 200; xCord += 20) {
@@ -48,6 +49,7 @@ public class Chromosome {
 		this.rectangles = new ArrayList<>();
 		colors.add(Color.black);
 		colors.add(Color.green);
+		colors.add(Color.gray);
 		//Creates Rectangles to visualize bitString
 		for (int yCord = 0; yCord < 200; yCord += 20) {
 			for (int xCord = 0; xCord < 200; xCord += 20) {
@@ -87,8 +89,7 @@ public class Chromosome {
 		if (statusIndex == 2) {
 			statusIndex = 0;
 		}
-		return Color.black;
-		//return getColor();
+		return colors.get(statusIndex);
 		
 	}
 	/**
@@ -170,10 +171,10 @@ public class Chromosome {
 	}
 	
 	public boolean randomProcess(double possibility) {
-
 		Random r = new Random();// eg: 3% all the doubles > 0.03 will make true, so we shouldn't do any changes
 		return (r.nextDouble() > 1-possibility);
 	}
+	
 	public void mutationProcess(double possibility) {
 		for (int i = 0; i < this.bitString.length();i++) {
 		if (randomProcess(possibility)) {
@@ -191,8 +192,10 @@ public class Chromosome {
 		if (bit.equals("1")) {
 			return Color.green;
 		}
-		else {
+		else if (bit.equals("0")){
 			return Color.black;
+		}else {
+			return Color.gray;
 		}
 	}
 	public String getBitString() {

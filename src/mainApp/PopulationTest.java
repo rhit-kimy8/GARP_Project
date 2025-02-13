@@ -1,5 +1,6 @@
 package mainApp;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -25,6 +26,7 @@ public class PopulationTest {
 			chromosomeLengthCount = c.getBitString().length();
 		}
 		if (populationSize == populationSizeCount && chromosomeLength == chromosomeLengthCount) assertTrue(true);
+		else fail();
 	}
 	
 	@Test
@@ -46,6 +48,8 @@ public class PopulationTest {
 		}
 		if (100 == populationSizeCount && 10 == chromosomeLengthCount &&  
 			zeroOnesCount == 25 && oneOnesCount == 25 && threeOnesCount == 25 && sixOnesCount == 25) assertTrue(true);
+		else fail();
+
 	}
 	
 	@Test
@@ -85,6 +89,7 @@ public class PopulationTest {
 		ArrayList<Chromosome> list = new ArrayList<>();
 		list.add(chr);
 		if (pop.maxOnesFitness(list) == 100) assertTrue(true);
+		else fail();
 	}
 	
 	@Test
@@ -103,6 +108,7 @@ public class PopulationTest {
 			}
 		}
 		if (maxConsecutiveNum == pop.maxConsecutiveOnesFitness(pop.population)) assertTrue(true);
+		else fail();
 	}
 	
 	@Test
