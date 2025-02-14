@@ -40,7 +40,7 @@ import javax.swing.JTextField;
  * <br>Restrictions: Could be optimized
  */
 public class EvolutionViewer extends JComponent {
-	private static final int FRAME_WIDTH = 930;
+	private static final int FRAME_WIDTH = 1200;
 	private static final int FRAME_HEIGHT = 350;
 	
 	private static final int GRAPH_WIDTH = 850;
@@ -57,6 +57,7 @@ public class EvolutionViewer extends JComponent {
 	public static String saveString = "";
 	private int lengthOfChromosome;
 	private FittestIndividualViewer FIV;
+	
 	
 	private Timer timer;
 	private ArrayList<Integer> bestFitnessLog = new ArrayList<Integer>();
@@ -80,7 +81,7 @@ public class EvolutionViewer extends JComponent {
 	EvolutionViewer() {
 	}
 	
-	public  void runEvolutionViewer() {
+	public void runEvolutionViewer() {
 		JFrame frame = new JFrame("Evolution Viewer");
 		frame.setSize( new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -107,8 +108,20 @@ public class EvolutionViewer extends JComponent {
 		JLabel selection = new JLabel("Selection");
 		String[] selectionList = {"Truncation", "Wheel Select", "Ranked Select"};
 		JComboBox selectionInput = new JComboBox(selectionList);
-		selectionInput.setPreferredSize(new Dimension(120,20));
+		selectionInput.setPreferredSize(new Dimension(100,20));
+		JLabel fitnessFunction = new JLabel("Fitness Function");
+		String[] functionList = {"Max Ones Fitness" , "Match Target Fitness", "Max Consecutive Ones Fitness"};
+		JComboBox functionInput = new JComboBox(functionList);
+		functionInput.setPreferredSize(new Dimension(140,20));
 		
+		functionInput.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (functionInput.getSelectedItem() == "Max Ones Fitness" && !isRunning) System.out.println("maxOnesFitness");
+				if (functionInput.getSelectedItem() == "Match Target Fitness" && !isRunning) System.out.println("matchTargetFitness");
+				if (functionInput.getSelectedItem() == "Max Consecutive Ones Fitness" && !isRunning) System.out.println("maxConsecutiveOnesFitness");
+			}
+		});
 		
 		controls.add(populationSize);
 		controls.add(populationSizeInput);
@@ -118,6 +131,8 @@ public class EvolutionViewer extends JComponent {
 		controls.add(mutationRateInput);
 		controls.add(selection);
 		controls.add(selectionInput);
+		controls.add(fitnessFunction);
+		controls.add(functionInput);
 		controls.add(crossover);
 		controls.add(crossoverCheck);
 		controls.add(elitism);
@@ -139,6 +154,8 @@ public class EvolutionViewer extends JComponent {
 					isRunning = false;
 					EvolutionViewer.this.timer.stop();
 					System.out.println("Evolution Terminated");
+				}
+				if (isDone && !isRunning) {
 					start.setText("Restart");
 				}
 				}				
@@ -296,8 +313,11 @@ public class EvolutionViewer extends JComponent {
 	    	return;
 	    }
 	    	
-	    if (pop.getGenerationCount() > 300) {
-	    	System.exit(0);
+	    if (pop.getGenerationCount() > 100) {
+	    	isDone = true;
+			isRunning = false;
+			EvolutionViewer.this.timer.stop();
+			System.out.println("Maximum Generation Reached");
 	    }
 	    
 	    // this will split each scaleX and scaleY for each points. ex) if we have 800, and two points, the scale X will be still 800 and 
