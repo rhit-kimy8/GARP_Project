@@ -37,7 +37,7 @@ public class MainApp {
 		
 		// Those tree are the test functions to check Fitness of chromosomes
 		population.generateSpecialPopulation(100,10);
-//		population.generateRandomPopulation(100, 10,0);
+		population.generateRandomPopulation(100, 10,0);
 //		for (Chromosome c:population.getSpecialPopulation()) System.out.println(c.getBitString());
 		ArrayList<Chromosome> chromosomes = population.getSpecialPopulation();
 		
