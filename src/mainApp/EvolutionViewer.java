@@ -52,7 +52,7 @@ public class EvolutionViewer extends JComponent {
 	private static final int DELAY = 50;
 	static boolean isRunning = false;
 	private boolean isDone = true;
-	static double fitness = 9.0;
+	static double fitness = 20.0;
 	
 	public static String saveString = "";
 	private int lengthOfChromosome;
@@ -114,14 +114,7 @@ public class EvolutionViewer extends JComponent {
 		JComboBox functionInput = new JComboBox(functionList);
 		functionInput.setPreferredSize(new Dimension(140,20));
 		
-		functionInput.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (functionInput.getSelectedItem() == "Max Ones Fitness" && !isRunning) System.out.println("maxOnesFitness");
-				if (functionInput.getSelectedItem() == "Match Target Fitness" && !isRunning) System.out.println("matchTargetFitness");
-				if (functionInput.getSelectedItem() == "Max Consecutive Ones Fitness" && !isRunning) System.out.println("maxConsecutiveOnesFitness");
-			}
-		});
+
 		
 		controls.add(populationSize);
 		controls.add(populationSizeInput);
@@ -172,7 +165,14 @@ public class EvolutionViewer extends JComponent {
 					return;
 				}
 				if(isDone && pop.getGenerationCount() == 0) {
+					String function = functionInput.getSelectedItem().toString();
+					if (function.equals("Max Ones Fitness")) {
 					pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
+					}else if (function.equals("Match Target Fitness")) {
+						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),1);
+					}else if (function.equals("Max Consecutive Ones Fitness")) {
+						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),2);
+					}
 					FIV = new FittestIndividualViewer(pop.getBest(pop.population));
 				}
 				lengthOfChromosome = Integer.parseInt(chromosomeLengthInput.getText());
@@ -188,7 +188,14 @@ public class EvolutionViewer extends JComponent {
 						reset();
 						pop.setGenerationCount();
 						FIV = new FittestIndividualViewer(pop.getBest(pop.population));
+						String function = functionInput.getSelectedItem().toString();
+						if (function.equals("Max Ones Fitness")) {
 						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
+						}else if (function.equals("Match Target Fitness")) {
+							pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),1);
+						}else if (function.equals("Max Consecutive Ones Fitness")) {
+							pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),2);
+						}
 					}
 				} else {
 					EvolutionViewer.this.timer.stop();

@@ -31,7 +31,7 @@ public class Chromosome {
 		//this.bitString = new ArrayList<>();
 		this.bitString = "";
 		randomGeneration(chromosomeSize);
-		MaxOnesFitness();
+		MaxOnesFitnessCalculation();
 		
 		String str = "";
 		for (int i = 0; i < this.bitString.length()/2; i++) {
@@ -50,7 +50,7 @@ public class Chromosome {
 	Chromosome(String chromosomeBitString){
 		this.bitString = "";
 		setBitString(chromosomeBitString);
-		MaxOnesFitness();
+		MaxOnesFitnessCalculation();
 		
 		String str = "";
 		for (int i = 0; i < this.bitString.length()/2; i++) {
@@ -69,7 +69,7 @@ public class Chromosome {
 	
 	Chromosome(){
 		this.bitString = "";
-		MaxOnesFitness();
+		MaxOnesFitnessCalculation();
 		this.rectangles = new ArrayList<>();
 		colors.add(Color.black);
 		colors.add(Color.green);
@@ -178,7 +178,7 @@ public class Chromosome {
 		}
 	}
 	
-	public int MaxOnesFitness() {
+	public int MaxOnesFitnessCalculation() {
 		int count = 0;
 		for (int i=0; i < this.bitString.length();i++) {
 			if (Character.getNumericValue(bitString.charAt(i)) == 1) {
@@ -264,7 +264,7 @@ public class Chromosome {
 	
 	public int getFitness() {
 		if (this.fitnessFunctionStatus == 0) {
-		MaxOnesFitness();
+		MaxOnesFitnessCalculation();
 		}
 		else if (this.fitnessFunctionStatus == 1) {
 			matchFitness();
@@ -289,6 +289,13 @@ public class Chromosome {
 	}
 	public void setBitString(String bitString) {
 		this.bitString = bitString;
+		getFitness();
+	}
+	public int getFitnessFunctionStatus() {
+		return fitnessFunctionStatus;
+	}
+	public void setFitnessFunctionStatus(int fitnessFunctionStatus) {
+		this.fitnessFunctionStatus = fitnessFunctionStatus;
 		getFitness();
 	}
 

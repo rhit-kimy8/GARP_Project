@@ -19,7 +19,7 @@ public class Population {
 		for (int i=0; i<populationSize; i++) {
 			Chromosome chr = new Chromosome(chromosomeSize);
 			if (functionChoose == 0) {
-				chr.MaxOnesFitness();
+				chr.MaxOnesFitnessCalculation();
 			}else if (functionChoose == 1) {
 				chr.matchFitness();
 			}
@@ -96,7 +96,7 @@ public class Population {
 	public int maxOnesFitness(ArrayList<Chromosome> chromosomes) {
 		int totalMaxOnes = 0;
 		for (Chromosome i: chromosomes) {
-			totalMaxOnes += i.getFitness();
+			totalMaxOnes += i.MaxOnesFitnessCalculation();
 		}
 		return totalMaxOnes;
 	}
@@ -139,6 +139,7 @@ public class Population {
 		for (int i=0;i<halfSize;i++) chromosomes.removeLast();
 		for (int i=0;i<halfSize;i++) {
 			Chromosome repeat = new Chromosome(chromosomes.get(i).getBitString());
+			repeat.setFitnessFunctionStatus(chromosomes.get(i).getFitnessFunctionStatus());
 			chromosomes.add(repeat);
 		}
 		Collections.sort(chromosomes,FC);
@@ -149,6 +150,7 @@ public class Population {
 			for (int i=0;i<halfSize;i++) chromosomes.removeLast();
 			for (int i=0;i<elitismNumber;i++) {
 				Chromosome repeat = new Chromosome(chromosomes.get(i).getBitString());
+				repeat.setFitnessFunctionStatus(chromosomes.get(i).getFitnessFunctionStatus());
 				chromosomes.add(repeat);
 			}
 			crossOverSelect(chromosomes,elitismNumber,halfSize);
@@ -162,6 +164,7 @@ public class Population {
 				for (int i=0;i<halfSize;i++) chromosomes.removeLast();
 				for (int i=0;i<halfSize;i++) {
 					Chromosome repeat = new Chromosome(chromosomes.get(i).getBitString());
+					repeat.setFitnessFunctionStatus(chromosomes.get(i).getFitnessFunctionStatus());
 					chromosomes.add(repeat);
 				}
 				Collections.sort(chromosomes,FC);
@@ -194,6 +197,7 @@ public class Population {
 	public void ElitismSelect(int numbers,ArrayList<Chromosome> chromosomes) {
 		for (int i = 0; i < numbers; i ++) {
 			Chromosome elit = new Chromosome(chromosomes.get(i).getBitString());
+			elit.setFitnessFunctionStatus(chromosomes.get(i).getFitnessFunctionStatus());
 			chromosomes.add(elit);
 		}
 		
@@ -205,6 +209,7 @@ public class Population {
 		childChromosome = childChromosome + parent1.getBitString().substring(0, crossOverPoint);
 		childChromosome = childChromosome + parent2.getBitString().substring(crossOverPoint, parent2.getBitString().length());
 		Chromosome chr = new Chromosome(childChromosome);
+		chr.setFitnessFunctionStatus(parent1.getFitnessFunctionStatus());
 		return chr;
 	}
 	
