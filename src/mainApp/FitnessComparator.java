@@ -14,10 +14,10 @@ public class FitnessComparator implements Comparator<Chromosome>{
 	
 	public static int countFitness(Chromosome c) {
 		int count = 0;
-		for(int i = 0; i < c.getBitString().length(); i++) {
-			if (Character.getNumericValue(c.getBitString().charAt(i)) == 1) count++;
-		}
-		return count;
+//		for(int i = 0; i < c.getBitString().length(); i++) {
+//			if (Character.getNumericValue(c.getBitString().charAt(i)) == 1) count++;
+//		}
+		return c.getFitness();
 	}
 }
  

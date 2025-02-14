@@ -18,7 +18,7 @@ public class PopulationTest {
 	public void testGenerateRandomPopulation() {
 		int populationSize = random.nextInt(0, 100);
 		int chromosomeLength = random.nextInt(0,100);
-		pop.generateRandomPopulation(populationSize, chromosomeLength);
+		pop.generateRandomPopulation(populationSize, chromosomeLength,0);
 		int populationSizeCount = 0;
 		int chromosomeLengthCount = 0;
 		for (Chromosome c:pop.population) {
@@ -67,7 +67,7 @@ public class PopulationTest {
 	public void testCrossover() {
 		int populationSize = random.nextInt(0, 100);
 		int chromosomeLength = random.nextInt(0,100);
-		pop.generateRandomPopulation(populationSize, chromosomeLength);
+		pop.generateRandomPopulation(populationSize, chromosomeLength,0);
 		int parent1Index = random.nextInt(0,populationSize);
 		int parent2Index = random.nextInt(0,populationSize);
 		Chromosome chr = pop.crossOverChromosome(pop.population.get(parent1Index), pop.population.get(parent2Index), pop.population.get(0).getBitString().length()/2);
@@ -96,7 +96,7 @@ public class PopulationTest {
 	public void testMaxConsecutiveOnesFitness() {
 		int populationSize = random.nextInt(0, 100);
 		int chromosomeLength = random.nextInt(0,100);
-		pop.generateRandomPopulation(populationSize, chromosomeLength);
+		pop.generateRandomPopulation(populationSize, chromosomeLength,0);
 		int maxConsecutiveNum = 0;
 		for (Chromosome chr: pop.population) {
 			int count = 0;
@@ -125,7 +125,7 @@ public class PopulationTest {
 	public void testMutate() {
 		int populationSize = 1;
 		int chromosomeLength = 10;
-		pop.generateRandomPopulation(populationSize, chromosomeLength);
+		pop.generateRandomPopulation(populationSize, chromosomeLength,0);
 		ArrayList<Chromosome> list = pop.population;
 		pop.mutatePopulation(pop.population, 1);
 		for (int i = 0; i< pop.population.get(0).getBitString().length(); i++) {

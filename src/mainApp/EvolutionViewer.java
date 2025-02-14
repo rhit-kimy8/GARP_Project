@@ -155,7 +155,7 @@ public class EvolutionViewer extends JComponent {
 					return;
 				}
 				if(isDone && pop.getGenerationCount() == 0) {
-					pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()));
+					pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
 					FIV = new FittestIndividualViewer(pop.getBest(pop.population));
 				}
 				lengthOfChromosome = Integer.parseInt(chromosomeLengthInput.getText());
@@ -171,7 +171,7 @@ public class EvolutionViewer extends JComponent {
 						reset();
 						pop.setGenerationCount();
 						FIV = new FittestIndividualViewer(pop.getBest(pop.population));
-						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()));
+						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
 					}
 				} else {
 					EvolutionViewer.this.timer.stop();

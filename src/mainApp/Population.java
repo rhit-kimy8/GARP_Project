@@ -14,11 +14,20 @@ public class Population {
 	public Population(){
 	}
 	
-	public void generateRandomPopulation(int populationSize, int chromosomeSize) {
+	public void generateRandomPopulation(int populationSize, int chromosomeSize, int functionChoose) {
 		population.clear();
 		for (int i=0; i<populationSize; i++) {
 			Chromosome chr = new Chromosome(chromosomeSize);
+			if (functionChoose == 0) {
+				chr.MaxOnesFitness();
+			}else if (functionChoose == 1) {
+				chr.matchFitness();
+			}
+			else if (functionChoose == 2) {
+				chr.consecutiveFitness();
+			}
 			population.add(chr);
+
 		}
 		Collections.sort(population,FC);
 	}
@@ -27,29 +36,11 @@ public class Population {
 		for (int i=0;i<populationSize/4;i++) { // remember to -1 for test
 			String chromosome = "";
 			for (int j=0;j<chromosomeSize;j++) chromosome = chromosome +"0";
-			Chromosome chr = new Chromosome();
-			chr.setBitString(chromosome);
+			Chromosome chr = new Chromosome(chromosome);
 			specialPopulation.add(chr);
 		}
 		
-		// for testing randomness
-//		Chromosome specialchr = new Chromosome();
-//		ArrayList<Integer> speciallist = new ArrayList<>();
-//		int specialnum = 0;
-//		while (true) {
-//			int index = random.nextInt(9);
-//			if (speciallist.contains(index)) continue;
-//			speciallist.add(index);
-//			specialnum++;
-//			if(specialnum == 7) break;
-//		}
-//		String specialchromosome = "";
-//		for (int j=0;j<chromosomeSize;j++) {
-//			if(speciallist.contains(j)) specialchromosome = specialchromosome + "1";
-//			else specialchromosome = specialchromosome + "0";
-//		}
-//		specialchr.setBitString(specialchromosome);
-//		specialPopulation.add(specialchr);
+
 		
 		for (int i=0;i<populationSize/4;i++) {
 			String chromosome = "";
@@ -58,8 +49,7 @@ public class Population {
 				if(j == index) chromosome = chromosome + "1";
 				else chromosome = chromosome + "0";
 			}
-			Chromosome chr = new Chromosome();
-			chr.setBitString(chromosome);
+			Chromosome chr = new Chromosome(chromosome);
 			specialPopulation.add(chr);
 		}
 		
@@ -78,8 +68,7 @@ public class Population {
 				if(list.contains(j)) chromosome = chromosome + "1";
 				else chromosome = chromosome + "0";
 			}
-			Chromosome chr = new Chromosome();
-			chr.setBitString(chromosome);
+			Chromosome chr = new Chromosome(chromosome);
 			specialPopulation.add(chr);
 		}
 		
@@ -98,8 +87,7 @@ public class Population {
 				if(list.contains(j)) chromosome = chromosome + "1";
 				else chromosome = chromosome + "0";
 			}
-			Chromosome chr = new Chromosome();
-			chr.setBitString(chromosome);
+			Chromosome chr = new Chromosome(chromosome);
 			specialPopulation.add(chr);
 		}
 		Collections.sort(population,FC);
@@ -150,8 +138,7 @@ public class Population {
 			// pure truncation
 		for (int i=0;i<halfSize;i++) chromosomes.removeLast();
 		for (int i=0;i<halfSize;i++) {
-			Chromosome repeat = new Chromosome();
-			repeat.setBitString(chromosomes.get(i).getBitString());
+			Chromosome repeat = new Chromosome(chromosomes.get(i).getBitString());
 			chromosomes.add(repeat);
 		}
 		Collections.sort(chromosomes,FC);
@@ -161,8 +148,7 @@ public class Population {
 			// elitism + crossover
 			for (int i=0;i<halfSize;i++) chromosomes.removeLast();
 			for (int i=0;i<elitismNumber;i++) {
-				Chromosome repeat = new Chromosome();
-				repeat.setBitString(chromosomes.get(i).getBitString());
+				Chromosome repeat = new Chromosome(chromosomes.get(i).getBitString());
 				chromosomes.add(repeat);
 			}
 			crossOverSelect(chromosomes,elitismNumber,halfSize);
@@ -175,8 +161,7 @@ public class Population {
 				// pure truncation
 				for (int i=0;i<halfSize;i++) chromosomes.removeLast();
 				for (int i=0;i<halfSize;i++) {
-					Chromosome repeat = new Chromosome();
-					repeat.setBitString(chromosomes.get(i).getBitString());
+					Chromosome repeat = new Chromosome(chromosomes.get(i).getBitString());
 					chromosomes.add(repeat);
 				}
 				Collections.sort(chromosomes,FC);
@@ -208,8 +193,7 @@ public class Population {
 	
 	public void ElitismSelect(int numbers,ArrayList<Chromosome> chromosomes) {
 		for (int i = 0; i < numbers; i ++) {
-			Chromosome elit = new Chromosome();
-			elit.setBitString(chromosomes.get(i).getBitString());
+			Chromosome elit = new Chromosome(chromosomes.get(i).getBitString());
 			chromosomes.add(elit);
 		}
 		
@@ -220,8 +204,7 @@ public class Population {
 		String childChromosome = "";
 		childChromosome = childChromosome + parent1.getBitString().substring(0, crossOverPoint);
 		childChromosome = childChromosome + parent2.getBitString().substring(crossOverPoint, parent2.getBitString().length());
-		Chromosome chr = new Chromosome();
-		chr.setBitString(childChromosome);
+		Chromosome chr = new Chromosome(childChromosome);
 		return chr;
 	}
 	
@@ -241,7 +224,7 @@ public class Population {
 	}
 	
 	public void testPopulation(int populationSize, int chromosomeLength) {
-		generateRandomPopulation(populationSize, chromosomeLength);
+		generateRandomPopulation(populationSize, chromosomeLength,0);
 		int n = 1;
 		for(Chromosome i:population) {
 			System.out.println(i.getBitString());
@@ -254,7 +237,12 @@ public class Population {
 		return chromosomes.get(0);
 	}
 	public Integer getAverage(ArrayList<Chromosome> chromosomes) {
-		return maxOnesFitness(chromosomes)/chromosomes.size();
+		int average = 0;
+		for (Chromosome i : chromosomes) {
+			average += i.getFitness();
+		}
+		average = average / chromosomes.size();
+		return average;
 	}
 	public Integer getWorst(ArrayList<Chromosome> chromosomes) {
 		Collections.sort(chromosomes,FC);

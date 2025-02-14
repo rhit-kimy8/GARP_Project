@@ -25,7 +25,6 @@ public class MainApp {
 	ChromosomeEditor chromosomeEditor = new ChromosomeEditor();
 	Population population = new Population();
 
-	//EvolutionComponent evolutionComponent = new EvolutionComponent();
 	EvolutionViewer evolutionViewer = new EvolutionViewer();
 
 	private void runApp() {
@@ -38,21 +37,9 @@ public class MainApp {
 		
 		// Those tree are the test functions to check Fitness of chromosomes
 		population.generateSpecialPopulation(100,10);
-		population.generateRandomPopulation(100, 10);
+//		population.generateRandomPopulation(100, 10,0);
 //		for (Chromosome c:population.getSpecialPopulation()) System.out.println(c.getBitString());
 		ArrayList<Chromosome> chromosomes = population.getSpecialPopulation();
-//		System.out.println(population.maxOnesFitness(chromosomes));
-//		System.out.println(population.matchTargetFitness(chromosomes, "0001000000"));
-//		System.out.println(population.maxConsecutiveOnesFitness(chromosomes));
-		
-		// This test shows a single chromosome with 100 ones has fitness value of 100 and consecutive 1 of 100.
-//		ArrayList<String> singleChromosome = new ArrayList<>();
-//		singleChromosome.add("1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
-//		System.out.println(population.maxOnesFitness(singleChromosome));
-//		System.out.println(population.maxConsecutiveOnesFitness(singleChromosome));
-		
-		// This is test for truncationSelect
-//		population.truncationSelect(chromosomes);
 		
 		evolutionViewer.runEvolutionViewer();
 	} // runApp

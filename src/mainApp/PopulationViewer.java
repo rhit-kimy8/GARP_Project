@@ -9,7 +9,7 @@ public class PopulationViewer {
 	
 	public static void main(String[] args) {
 		Population p = new Population();
-		p.generateRandomPopulation(100, 100);
+		p.generateRandomPopulation(100, 100,0);
 		PopulationViewer popView = new PopulationViewer(p);
 		p.mutatePopulation(p.getPopulation(), 100);
 		popView.upDatePopulation(p);
