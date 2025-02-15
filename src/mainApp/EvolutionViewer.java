@@ -52,7 +52,7 @@ public class EvolutionViewer extends JComponent {
 	private static final int DELAY = 50;
 	static boolean isRunning = false;
 	private boolean isDone = true;
-	static double fitness = 20.0;
+	private double fitness;
 	
 	public static String saveString = "";
 	private int lengthOfChromosome;
@@ -101,7 +101,6 @@ public class EvolutionViewer extends JComponent {
 		chromosomeLengthInput.setPreferredSize(new Dimension(30,20));
 		JLabel crossover = new JLabel("Crossover?");
 		JCheckBox crossoverCheck = new JCheckBox();
-		crossoverCheck.setForeground(Color.white);
 		JLabel elitism = new JLabel("Elitism %");
 		JTextField elitismInput = new JTextField();
 		elitismInput.setPreferredSize(new Dimension(30,20));
@@ -133,7 +132,7 @@ public class EvolutionViewer extends JComponent {
 		controls.add(start);
 		frame.add(controls, BorderLayout.SOUTH);
 		 
-		 this.timer = new Timer(DELAY, new ActionListener() {
+		this.timer = new Timer(DELAY, new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -142,13 +141,11 @@ public class EvolutionViewer extends JComponent {
 				FIV.upDate(pop.getBest(pop.population));
 				addEntry(pop.getBest(pop.population).getFitness(), pop.getAverage(pop.population), pop.getWorst(pop.population));
 				isDone = false;
-				if((double)pop.getBest(pop.population).getFitness()/lengthOfChromosome*10.0 == fitness) {
+				if(((double)pop.getBest(pop.population).getFitness()/lengthOfChromosome*10.0 >= fitness) || (pop.getGenerationCount() > 100)) {
 					isDone = true;
 					isRunning = false;
 					EvolutionViewer.this.timer.stop();
 					System.out.println("Evolution Terminated");
-				}
-				if (isDone && !isRunning) {
 					start.setText("Restart");
 				}
 				}				
@@ -157,9 +154,9 @@ public class EvolutionViewer extends JComponent {
 				 );
 		 
 		start.addActionListener( new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				lengthOfChromosome = Integer.parseInt(chromosomeLengthInput.getText());
 				if (populationSizeInput.getText().isBlank() || chromosomeLengthInput.getText().isBlank() || mutationRateInput.getText().isBlank() || elitismInput.getText().isBlank()) {	
 					System.err.println("One or more variables is not defined: population size, chromosome length, mutation rate, elitism rate");
 					return;
@@ -167,7 +164,8 @@ public class EvolutionViewer extends JComponent {
 				if(isDone && pop.getGenerationCount() == 0) {
 					String function = functionInput.getSelectedItem().toString();
 					if (function.equals("Max Ones Fitness")) {
-					pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
+						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
+						fitness = 9.0;
 					}else if (function.equals("Match Target Fitness")) {
 						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),1);
 					}else if (function.equals("Max Consecutive Ones Fitness")) {
@@ -175,7 +173,6 @@ public class EvolutionViewer extends JComponent {
 					}
 					FIV = new FittestIndividualViewer(pop.getBest(pop.population));
 				}
-				lengthOfChromosome = Integer.parseInt(chromosomeLengthInput.getText());
 				
 				if (!isRunning) {
 					EvolutionViewer.this.timer.start();
@@ -183,7 +180,7 @@ public class EvolutionViewer extends JComponent {
 					isRunning = true;
 					EvolutionViewer.this.repaint();
 					
-					if(isDone && pop.getGenerationCount()!=0) {
+					if((isDone && pop.getGenerationCount()!=0)) {
 						FIV.end();
 						reset();
 						pop.setGenerationCount();
@@ -191,6 +188,7 @@ public class EvolutionViewer extends JComponent {
 						String function = functionInput.getSelectedItem().toString();
 						if (function.equals("Max Ones Fitness")) {
 						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
+						fitness = 9.0;
 						}else if (function.equals("Match Target Fitness")) {
 							pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),1);
 						}else if (function.equals("Max Consecutive Ones Fitness")) {
@@ -318,13 +316,6 @@ public class EvolutionViewer extends JComponent {
 	    // check whether we can make a line through points in graph
 	    if (fitnessLogSize < 2) {
 	    	return;
-	    }
-	    	
-	    if (pop.getGenerationCount() > 100) {
-	    	isDone = true;
-			isRunning = false;
-			EvolutionViewer.this.timer.stop();
-			System.out.println("Maximum Generation Reached");
 	    }
 	    
 	    // this will split each scaleX and scaleY for each points. ex) if we have 800, and two points, the scale X will be still 800 and 
