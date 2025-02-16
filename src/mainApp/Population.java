@@ -7,41 +7,41 @@ import java.util.Random;
 public class Population {
 	FitnessComparator FC = new FitnessComparator();
 	ArrayList<Chromosome> population = new ArrayList<>();
-	ArrayList<Chromosome> specialPopulation = new ArrayList<>();
 	Random random = new Random(250);
 	private int generationCount;
 	
 	public Population(){
 	}
 	
+	public void setFitnessFunction(Chromosome chr, int functionChoose) {
+		if (functionChoose == 0) {
+			chr.MaxOnesFitnessCalculation();
+		}else if (functionChoose == 1) {
+			chr.matchFitness();
+		}
+		else if (functionChoose == 2) {
+			chr.consecutiveFitness();
+		}
+	}
+	
 	public void generateRandomPopulation(int populationSize, int chromosomeSize, int functionChoose) {
 		population.clear();
 		for (int i=0; i<populationSize; i++) {
 			Chromosome chr = new Chromosome(chromosomeSize);
-			if (functionChoose == 0) {
-				chr.MaxOnesFitnessCalculation();
-			}else if (functionChoose == 1) {
-				chr.matchFitness();
-			}
-			else if (functionChoose == 2) {
-				chr.consecutiveFitness();
-			}
+			setFitnessFunction(chr, functionChoose);
 			population.add(chr);
-
 		}
 		Collections.sort(population,FC);
 	}
 	
-	public void generateSpecialPopulation(int populationSize, int chromosomeSize) {
+	public void generateSpecialPopulation(int populationSize, int chromosomeSize, int functionChoose) {
 		for (int i=0;i<populationSize/4;i++) { // remember to -1 for test
 			String chromosome = "";
 			for (int j=0;j<chromosomeSize;j++) chromosome = chromosome +"0";
 			Chromosome chr = new Chromosome(chromosome);
-			specialPopulation.add(chr);
+			setFitnessFunction(chr,functionChoose);
+			population.add(chr);
 		}
-		
-
-		
 		for (int i=0;i<populationSize/4;i++) {
 			String chromosome = "";
 			int index = random.nextInt(chromosomeSize-1);
@@ -50,7 +50,8 @@ public class Population {
 				else chromosome = chromosome + "0";
 			}
 			Chromosome chr = new Chromosome(chromosome);
-			specialPopulation.add(chr);
+			setFitnessFunction(chr,functionChoose);
+			population.add(chr);
 		}
 		
 		for (int i=0;i<populationSize/4;i++) {
@@ -69,7 +70,8 @@ public class Population {
 				else chromosome = chromosome + "0";
 			}
 			Chromosome chr = new Chromosome(chromosome);
-			specialPopulation.add(chr);
+			setFitnessFunction(chr,functionChoose);
+			population.add(chr);
 		}
 		
 		for (int i=0;i<populationSize/4;i++) {
@@ -88,7 +90,8 @@ public class Population {
 				else chromosome = chromosome + "0";
 			}
 			Chromosome chr = new Chromosome(chromosome);
-			specialPopulation.add(chr);
+			setFitnessFunction(chr,functionChoose);
+			population.add(chr);
 		}
 		Collections.sort(population,FC);
 	}
@@ -213,12 +216,15 @@ public class Population {
 		return chr;
 	}
 	
+	public void removePopulation() {
+		population.clear();
+	}
 	
 	public void testSpecialPopulation(int populationSize, int chromosomeLength) {
-		generateSpecialPopulation(populationSize, chromosomeLength);
+		generateSpecialPopulation(populationSize, chromosomeLength,0);
 		int totalMaxOnes = 0;
 		int count = 1;
-		for (Chromosome i: specialPopulation) {
+		for (Chromosome i: population) {
 			System.out.println(count +"th chromosome is " + i);
 			count++;
 			for (int k = 0; k < i.getBitString().length(); k++) {
@@ -257,10 +263,6 @@ public class Population {
  
 	public ArrayList<Chromosome> getPopulation() {
 		return population;
-	}
- 
-	public ArrayList<Chromosome> getSpecialPopulation() {
-		return specialPopulation;
 	}
 
 	public int getGenerationCount() {

@@ -51,7 +51,7 @@ public class FittestIndividualViewer {
 	}
 	
 	public void end() {
-		this.fitViewer.dispose();
+		this.fitViewer.setVisible(false);
 	}
 	/***
 	 * 

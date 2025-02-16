@@ -40,7 +40,7 @@ import javax.swing.JTextField;
  * <br>Restrictions: Could be optimized
  */
 public class EvolutionViewer extends JComponent {
-	private static final int FRAME_WIDTH = 1200;
+	private static final int FRAME_WIDTH = 1250;
 	private static final int FRAME_HEIGHT = 350;
 	
 	private static final int GRAPH_WIDTH = 850;
@@ -99,6 +99,8 @@ public class EvolutionViewer extends JComponent {
 		JLabel chromosomeLength = new JLabel("Chromosome Length");
 		JTextField chromosomeLengthInput = new JTextField();
 		chromosomeLengthInput.setPreferredSize(new Dimension(30,20));
+		JLabel speicalPop = new JLabel("Special Pop?");
+		JCheckBox specialCheck = new JCheckBox();
 		JLabel crossover = new JLabel("Crossover?");
 		JCheckBox crossoverCheck = new JCheckBox();
 		JLabel elitism = new JLabel("Elitism %");
@@ -119,6 +121,8 @@ public class EvolutionViewer extends JComponent {
 		controls.add(populationSizeInput);
 		controls.add(chromosomeLength);
 		controls.add(chromosomeLengthInput);
+		controls.add(speicalPop);
+		controls.add(specialCheck);
 		controls.add(mutationRate);
 		controls.add(mutationRateInput);
 		controls.add(selection);
@@ -147,6 +151,8 @@ public class EvolutionViewer extends JComponent {
 					EvolutionViewer.this.timer.stop();
 					System.out.println("Evolution Terminated");
 					start.setText("Restart");
+					FIV.end();
+					pop.removePopulation();
 				}
 				}				
 			}
@@ -161,10 +167,20 @@ public class EvolutionViewer extends JComponent {
 					System.err.println("One or more variables is not defined: population size, chromosome length, mutation rate, elitism rate");
 					return;
 				}
-				if(isDone && pop.getGenerationCount() == 0) {
-					String function = functionInput.getSelectedItem().toString();
+				String function = functionInput.getSelectedItem().toString();
+				if(isDone && pop.getGenerationCount() == 0 && !specialCheck.isSelected()) {
 					if (function.equals("Max Ones Fitness")) {
 						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
+						fitness = 9.0;
+					}else if (function.equals("Match Target Fitness")) {
+						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),1);
+					}else if (function.equals("Max Consecutive Ones Fitness")) {
+						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),2);
+					}
+					FIV = new FittestIndividualViewer(pop.getBest(pop.population));
+				}else {
+					if (function.equals("Max Ones Fitness")) {
+						pop.generateSpecialPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
 						fitness = 9.0;
 					}else if (function.equals("Match Target Fitness")) {
 						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),1);
@@ -180,19 +196,29 @@ public class EvolutionViewer extends JComponent {
 					isRunning = true;
 					EvolutionViewer.this.repaint();
 					
-					if((isDone && pop.getGenerationCount()!=0)) {
-						FIV.end();
+					if((isDone && pop.getGenerationCount()!=0) && !specialCheck.isSelected()) {
 						reset();
 						pop.setGenerationCount();
-						FIV = new FittestIndividualViewer(pop.getBest(pop.population));
-						String function = functionInput.getSelectedItem().toString();
-						if (function.equals("Max Ones Fitness")) {
-						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
-						fitness = 9.0;
-						}else if (function.equals("Match Target Fitness")) {
+						String function1 = functionInput.getSelectedItem().toString();
+						if (function1.equals("Max Ones Fitness")) {
+							pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
+							fitness = 9.0;
+						}else if (function1.equals("Match Target Fitness")) {
 							pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),1);
-						}else if (function.equals("Max Consecutive Ones Fitness")) {
+						}else if (function1.equals("Max Consecutive Ones Fitness")) {
 							pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),2);
+						}
+					}else {
+						reset();
+						pop.setGenerationCount();
+						String function1 = functionInput.getSelectedItem().toString();
+						if (function1.equals("Max Ones Fitness")) {
+							pop.generateSpecialPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
+							fitness = 9.0;
+						}else if (function1.equals("Match Target Fitness")) {
+							pop.generateSpecialPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),1);
+						}else if (function1.equals("Max Consecutive Ones Fitness")) {
+							pop.generateSpecialPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),2);
 						}
 					}
 				} else {
