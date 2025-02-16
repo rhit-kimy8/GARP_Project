@@ -3,6 +3,7 @@ package mainApp;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Random;
 /**
@@ -21,7 +22,7 @@ public class Chromosome {
 	//private ArrayList<Integer> bitString;
 	private String bitString;
 	private String comparedString;
-	private ArrayList<Rectangle> rectangles;
+	private ArrayList<Rectangle2D.Double> rectangles;
 	private int fitness;
 	private int fitnessFunctionStatus;
 	
@@ -133,11 +134,11 @@ public class Chromosome {
 			if (rectangles.size() == 0) {
 				for (int yCord = 0; yCord < 200; yCord += 20) {
 					for (int xCord = 0; xCord < 200; xCord += 20) {
-						rectangles.add(new Rectangle(xCord, yCord, 20, 20));
+						rectangles.add(new Rectangle2D.Double(xCord, yCord, 20, 20));
 					}
 				}
 			}
-			Rectangle r = rectangles.get(x);
+			Rectangle2D r = rectangles.get(x);
 			String s = "";
 			g2.setColor(getColor(bitString.substring(x,x+1)));
 			g2.fill(r);
@@ -152,19 +153,34 @@ public class Chromosome {
 		}
 	}
 	
-	public void drawOnPopulation(Graphics2D g2, int xLen, int yLen) {
+	public void drawOnPopulation(Graphics2D g2, double xLen, double yLen, int popLen) {
 		if (rectangles.size() == 0) {
-			for (int yCord = 0; yCord < yLen * 10; yCord += yLen) {
-				for (int xCord = 0; xCord < xLen * 10; xCord += xLen) {
-					rectangles.add(new Rectangle(xCord, yCord, xLen, yLen));
+			int chromeLen = this.getBitString().length();
+			int xAmount = (int) ((Math.pow(chromeLen, .5) + .99));
+			int yAmount = (int) (Math.pow(chromeLen, .5));
+			//System.out.println("xAmount: " + xAmount + " yAmount: " + yAmount);
+			double xSize = xLen / xAmount;
+			double ySize = yLen / yAmount;
+			//System.out.println("xSize: " + xSize + "\nySize: " + ySize);
+			///*
+			for (double yCord = 0; yCord < yLen; yCord += ySize) {
+				for (double xCord = 0; xCord < xLen; xCord += xSize) {
+					rectangles.add(new Rectangle2D.Double(xCord, yCord, xSize, ySize));
+					//rectangles.add(new Rectangle2D.Double(xCord, yCord, xSize, ySize));
+					
 				}
 			}
+			//*/
+			//System.out.println("rectSize: " + rectangles.size() + " xSize: " + xSize + " ySize: " + ySize + " Chromelen: " + chromeLen);
 		}
 		for (int x = 0; x < this.bitString.length(); x++) {
-			Rectangle r = rectangles.get(x);
+		//for (int x = 0; x < rectangles.size(); x++) {
+			Rectangle2D r = rectangles.get(x);
 			g2.setColor(getColor(bitString.substring(x,x+1)));
 			g2.fill(r);
 		}
+		g2.setColor(Color.black);
+		g2.draw(new Rectangle2D.Double(0, 0, xLen, yLen));
 	}
 	
 	public void randomGeneration(int length) {
