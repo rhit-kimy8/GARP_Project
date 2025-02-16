@@ -220,6 +220,22 @@ public class Population {
 		population.clear();
 	}
 	
+	public int calculateHammingDis() {
+		int avg = 0;
+		int count = 0;
+		for (Chromosome chr: population) {
+			count = 0;
+			for (Chromosome c: population) {
+				for (int i = 0; i < c.getBitString().length(); i++) {
+					if (chr.getBitString().charAt(i) != c.getBitString().charAt(i)) count++;
+				}
+			}
+			avg += count/population.size();
+		}
+		return avg/population.size();
+	}
+	
+	
 	public void testSpecialPopulation(int populationSize, int chromosomeLength) {
 		generateSpecialPopulation(populationSize, chromosomeLength,0);
 		int totalMaxOnes = 0;

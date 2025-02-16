@@ -50,6 +50,7 @@ public class EvolutionViewer extends JComponent {
 	private static final Color BEST_FITNESS = new Color(0, 255, 0);
 	private static final Color AVERAGE_FITNESS = new Color(0, 0, 255);
 	private static final Color WORST_FITNESS = new Color(255, 0, 0);
+	private static final Color HAMMING_DISTANCE = new Color(255,255,0);
 	
 	private static final int DELAY = 50;
 	static boolean isRunning = false;
@@ -65,12 +66,14 @@ public class EvolutionViewer extends JComponent {
 	private ArrayList<Integer> bestFitnessLog = new ArrayList<Integer>();
 	private ArrayList<Integer> averageFitnessLog = new ArrayList<Integer>();
 	private ArrayList<Integer> worstFitnessLog = new ArrayList<Integer>();
+	private ArrayList<Integer> hammingDistanceLog = new ArrayList<Integer>();
 	Population pop = new Population();
 	
-	public void addEntry(int best, int average, int worst) {
+	public void addEntry(int best, int average, int worst, int diff) {
 		this.bestFitnessLog.add(best);
 		this.averageFitnessLog.add(average);
 		this.worstFitnessLog.add(worst);
+		this.hammingDistanceLog.add(diff);
 		repaint();
 	}
 	
@@ -78,6 +81,7 @@ public class EvolutionViewer extends JComponent {
 		this.bestFitnessLog.clear();
 		this.averageFitnessLog.clear();
 		this.worstFitnessLog.clear();
+		this.hammingDistanceLog.clear();
 	}
 	
 	EvolutionViewer() {
@@ -99,6 +103,7 @@ public class EvolutionViewer extends JComponent {
 	    JPanel control1 = new JPanel();
 	    JPanel control2 = new JPanel();
 		JButton start = new JButton("Start"); //change to icon later
+		
 		JLabel populationSize = new JLabel("Population Size");
 		JTextField populationSizeInput = new JTextField();
 		populationSizeInput.setPreferredSize(new Dimension(40,20));
@@ -115,6 +120,9 @@ public class EvolutionViewer extends JComponent {
 		JLabel elitism = new JLabel("Elitism %");
 		JTextField elitismInput = new JTextField();
 		elitismInput.setPreferredSize(new Dimension(40,20));
+		JLabel fitnessScale = new JLabel("Fitness");
+		JTextField fitnessInput = new JTextField();
+		fitnessInput.setPreferredSize(new Dimension(40,20));
 		JLabel generation = new JLabel("Generation Size");
 		JTextField generationInput = new JTextField();
 		generationInput.setPreferredSize(new Dimension(40,20));
@@ -156,6 +164,9 @@ public class EvolutionViewer extends JComponent {
 		control2.add(elitism);
 		control2.add(elitismInput);
 		spacePanel(control2);
+		control2.add(fitnessScale);
+		control2.add(fitnessInput);
+		spacePanel(control2);
 		control2.add(start);
 		controls.add(control1);
 		controls.add(control2);
@@ -169,9 +180,11 @@ public class EvolutionViewer extends JComponent {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				frame.repaint();
+				System.out.println(pop.getBest(pop.population).getFitness());
+				System.out.println(fitness + "fitness");
 				pop.truncationSelect(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/pop.population.size(),(int)Integer.parseInt(elitismInput.getText())*pop.population.size()/100);
 				FIV.upDate(pop.getBest(pop.population));
-				addEntry(pop.getBest(pop.population).getFitness(), pop.getAverage(pop.population), pop.getWorst(pop.population));
+				addEntry(pop.getBest(pop.population).getFitness(), pop.getAverage(pop.population), pop.getWorst(pop.population), pop.calculateHammingDis());
 				isDone = false;
 				if(((double)pop.getBest(pop.population).getFitness()/lengthOfChromosome*10.0 >= fitness) || (pop.getGenerationCount() > Integer.parseInt(generationInput.getText()))) {
 					isDone = true;
@@ -190,6 +203,7 @@ public class EvolutionViewer extends JComponent {
 		start.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				fitness = Integer.parseInt(fitnessInput.getText());
 				if (populationSizeInput.getText().isEmpty() || chromosomeLengthInput.getText().isEmpty() || mutationRateInput.getText().isEmpty() || elitismInput.getText().isEmpty() || generationInput.getText().isEmpty()) {	
 					System.err.println("One or more variables is not defined: population size, chromosome length, mutation rate, elitism rate, generation size");
 					return;
@@ -203,7 +217,6 @@ public class EvolutionViewer extends JComponent {
 				if(isDone && pop.getGenerationCount() == 0 && !specialCheck.isSelected()) {
 					if (function.equals("Max Ones Fitness")) {
 						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
-						fitness = 9.0;
 					}else if (function.equals("Match Target Fitness")) {
 						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),1);
 					}else if (function.equals("Max Consecutive Ones Fitness")) {
@@ -213,7 +226,6 @@ public class EvolutionViewer extends JComponent {
 				}else if(isDone && pop.getGenerationCount() == 0 && specialCheck.isSelected()){
 					if (function.equals("Max Ones Fitness")) {
 						pop.generateSpecialPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
-						fitness = 9.0;
 					}else if (function.equals("Match Target Fitness")) {
 						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),1);
 					}else if (function.equals("Max Consecutive Ones Fitness")) {
@@ -234,7 +246,6 @@ public class EvolutionViewer extends JComponent {
 						String function1 = functionInput.getSelectedItem().toString();
 						if (function1.equals("Max Ones Fitness")) {
 							pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
-							fitness = 9.0;
 						}else if (function1.equals("Match Target Fitness")) {
 							pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),1);
 						}else if (function1.equals("Max Consecutive Ones Fitness")) {
@@ -247,7 +258,6 @@ public class EvolutionViewer extends JComponent {
 						String function1 = functionInput.getSelectedItem().toString();
 						if (function1.equals("Max Ones Fitness")) {
 							pop.generateSpecialPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
-							fitness = 9.0;
 						}else if (function1.equals("Match Target Fitness")) {
 							pop.generateSpecialPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),1);
 						}else if (function1.equals("Max Consecutive Ones Fitness")) {
@@ -386,7 +396,7 @@ public class EvolutionViewer extends JComponent {
 	    double scaleX = (double) graphWidth / (fitnessLogSize - 1);
 	    
 	    // from those scaleX and scaleY, we define each size of points, eventually make lines btw them from first to the end
-	    g2.setColor(Color.GREEN);
+	    g2.setColor(BEST_FITNESS);
 	    for (int i = 1; i < fitnessLogSize; i++) {
 	        int x1 = graphX + (int) ((i - 1) * scaleX);
 	        int y1 = graphY + graphHeight - (int) (bestFitnessLog.get(i - 1) * scaleY);
@@ -394,7 +404,7 @@ public class EvolutionViewer extends JComponent {
 	        int y2 = graphY + graphHeight - (int) (bestFitnessLog.get(i) * scaleY);
 	        g2.drawLine(x1, y1, x2, y2);
 	    }
-	    g2.setColor(Color.BLUE);
+	    g2.setColor(AVERAGE_FITNESS);
 	    for (int i = 1; i < fitnessLogSize; i++) {
 	        int x1 = graphX + (int) ((i - 1) * scaleX);
 	        int y1 = graphY + graphHeight - (int) (averageFitnessLog.get(i - 1) * scaleY);
@@ -402,12 +412,20 @@ public class EvolutionViewer extends JComponent {
 	        int y2 = graphY + graphHeight - (int) (averageFitnessLog.get(i) * scaleY);
 	        g2.drawLine(x1, y1, x2, y2);
 	    }
-	    g2.setColor(Color.RED);
+	    g2.setColor(WORST_FITNESS);
 	    for (int i = 1; i < fitnessLogSize; i++) {
 	        int x1 = graphX + (int) ((i - 1) * scaleX);
 	        int y1 = graphY + graphHeight - (int) (worstFitnessLog.get(i - 1) * scaleY);
 	        int x2 = graphX + (int) (i * scaleX);
 	        int y2 = graphY + graphHeight - (int) (worstFitnessLog.get(i) * scaleY);
+	        g2.drawLine(x1, y1, x2, y2);
+	    }
+	    g2.setColor(HAMMING_DISTANCE);
+	    for (int i = 1; i < fitnessLogSize; i++) {
+	        int x1 = graphX + (int) ((i - 1) * scaleX);
+	        int y1 = graphY + graphHeight - (int) (hammingDistanceLog.get(i - 1) * scaleY);
+	        int x2 = graphX + (int) (i * scaleX);
+	        int y2 = graphY + graphHeight - (int) (hammingDistanceLog.get(i) * scaleY);
 	        g2.drawLine(x1, y1, x2, y2);
 	    }
 		g2.setColor(Color.BLACK);
@@ -426,16 +444,19 @@ public class EvolutionViewer extends JComponent {
 		
 		g2.drawRect(50, 25, GRAPH_WIDTH, GRAPH_HEIGHT);
 		
-		g2.drawString("LEGEND", 800, 130);
+		g2.drawString("LEGEND", 940, 120);
 		g2.setColor(BEST_FITNESS);
-		g2.fillRect(780, 145, 10, 10);
-		g2.drawString("Best fitness", 800, 155);
+		g2.fillRect(920, 135, 10, 10);
+		g2.drawString("Best fitness", 940, 145);
 		g2.setColor(AVERAGE_FITNESS);
-		g2.fillRect(780, 170, 10, 10);
-		g2.drawString("Average Fitness", 800, 180);
+		g2.fillRect(920, 160, 10, 10);
+		g2.drawString("Average Fitness", 940, 170);
 		g2.setColor(WORST_FITNESS);
-		g2.fillRect(780, 195, 10, 10);
-		g2.drawString("Worst fitness", 800, 205);
+		g2.fillRect(920, 185, 10, 10);
+		g2.drawString("Worst fitness", 940, 195);
+		g2.setColor(HAMMING_DISTANCE);
+		g2.fillRect(920, 210, 10, 10);
+		g2.drawString("Hamming Distance", 940, 220);
 		drawFitnessGraph(g2, 50, 25, GRAPH_WIDTH, GRAPH_HEIGHT, lengthOfChromosome);
 		
 		g2.setColor(Color.BLACK);
