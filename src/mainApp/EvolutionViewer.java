@@ -186,6 +186,8 @@ public class EvolutionViewer extends JComponent {
 				}else if (selectionInput.getSelectedItem().toString().equals("Wheel Select")) {
 					pop.RouleteSelection(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/pop.population.size(),(int)Integer.parseInt(elitismInput.getText())*pop.population.size()/100);
 					System.out.println(pop.maxOnesFitness(pop.population));
+				}else {
+					pop.RankSelection(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/pop.population.size(),(int)Integer.parseInt(elitismInput.getText())*pop.population.size()/100);
 				}
 				FIV.upDate(pop.getBest(pop.population));
 				GV.repaint();
