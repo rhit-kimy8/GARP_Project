@@ -7,7 +7,7 @@ public class PopulationViewer {
 	private Population p;
 	private PopulationComponent popComp;
 	/*
-	 * Test code
+	 * Test code for popViewer
 	public static void main(String[] args) {
 		Population p = new Population();
 		//popLen, bitStringLen
