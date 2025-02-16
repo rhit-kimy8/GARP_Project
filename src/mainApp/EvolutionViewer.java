@@ -40,7 +40,7 @@ import javax.swing.JTextField;
  * <br>Restrictions: Could be optimized
  */
 public class EvolutionViewer extends JComponent {
-	private static final int FRAME_WIDTH = 1250;
+	private static final int FRAME_WIDTH = 1300;
 	private static final int FRAME_HEIGHT = 350;
 	
 	private static final int GRAPH_WIDTH = 850;
@@ -178,7 +178,7 @@ public class EvolutionViewer extends JComponent {
 						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),2);
 					}
 					FIV = new FittestIndividualViewer(pop.getBest(pop.population));
-				}else {
+				}else if(isDone && pop.getGenerationCount() == 0 && specialCheck.isSelected()){
 					if (function.equals("Max Ones Fitness")) {
 						pop.generateSpecialPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
 						fitness = 9.0;
@@ -208,7 +208,8 @@ public class EvolutionViewer extends JComponent {
 						}else if (function1.equals("Max Consecutive Ones Fitness")) {
 							pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),2);
 						}
-					}else {
+						FIV = new FittestIndividualViewer(pop.getBest(pop.population));
+					}else if((isDone && pop.getGenerationCount()!=0) && specialCheck.isSelected()){
 						reset();
 						pop.setGenerationCount();
 						String function1 = functionInput.getSelectedItem().toString();
@@ -220,6 +221,7 @@ public class EvolutionViewer extends JComponent {
 						}else if (function1.equals("Max Consecutive Ones Fitness")) {
 							pop.generateSpecialPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),2);
 						}
+						FIV = new FittestIndividualViewer(pop.getBest(pop.population));
 					}
 				} else {
 					EvolutionViewer.this.timer.stop();
