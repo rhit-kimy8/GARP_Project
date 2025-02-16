@@ -170,8 +170,6 @@ public class Chromosome {
 					
 				}
 			}
-			//*/
-			//System.out.println("rectSize: " + rectangles.size() + " xSize: " + xSize + " ySize: " + ySize + " Chromelen: " + chromeLen);
 		}
 		for (int x = 0; x < this.bitString.length(); x++) {
 		//for (int x = 0; x < rectangles.size(); x++) {

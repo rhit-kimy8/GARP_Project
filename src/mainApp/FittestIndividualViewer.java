@@ -40,7 +40,7 @@ public class FittestIndividualViewer {
 	fitViewer.add(this.fitComponent);
 	fitViewer.setTitle("Fitness: " + c.getFitness());
 	fitViewer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	fitViewer.setLocation(1100,0);
+	fitViewer.setLocation(1060,0);
 	fitViewer.setVisible(true);
 	}
 	
