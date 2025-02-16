@@ -4,8 +4,10 @@ import java.awt.BorderLayout;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
@@ -41,7 +43,7 @@ import javax.swing.JTextField;
  */
 public class EvolutionViewer extends JComponent {
 	private static final int FRAME_WIDTH = 1300;
-	private static final int FRAME_HEIGHT = 350;
+	private static final int FRAME_HEIGHT = 380;
 	
 	private static final int GRAPH_WIDTH = 850;
 	private static final int GRAPH_HEIGHT = 200;
@@ -81,6 +83,11 @@ public class EvolutionViewer extends JComponent {
 	EvolutionViewer() {
 	}
 	
+	public void spacePanel(JPanel panel) {
+		JLabel space = new JLabel("    ");
+		panel.add(space);
+	}
+	
 	public void runEvolutionViewer() {
 		JFrame frame = new JFrame("Evolution Viewer");
 		frame.setSize( new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
@@ -88,53 +95,74 @@ public class EvolutionViewer extends JComponent {
 		frame.add(this);
 		frame.setVisible(true);
 		
-	    JPanel controls = new JPanel();
+	    JPanel controls = new JPanel(new GridLayout(2,1));
+	    JPanel control1 = new JPanel();
+	    JPanel control2 = new JPanel();
 		JButton start = new JButton("Start"); //change to icon later
 		JLabel populationSize = new JLabel("Population Size");
 		JTextField populationSizeInput = new JTextField();
-		populationSizeInput.setPreferredSize(new Dimension(30,20));
+		populationSizeInput.setPreferredSize(new Dimension(40,20));
 		JLabel mutationRate = new JLabel("Mutation Rate (N/pop)");
 		JTextField mutationRateInput = new JTextField();
-		mutationRateInput.setPreferredSize(new Dimension(30,20));
+		mutationRateInput.setPreferredSize(new Dimension(40,20));
 		JLabel chromosomeLength = new JLabel("Chromosome Length");
 		JTextField chromosomeLengthInput = new JTextField();
-		chromosomeLengthInput.setPreferredSize(new Dimension(30,20));
+		chromosomeLengthInput.setPreferredSize(new Dimension(40,20));
 		JLabel speicalPop = new JLabel("Special Pop?");
 		JCheckBox specialCheck = new JCheckBox();
 		JLabel crossover = new JLabel("Crossover?");
 		JCheckBox crossoverCheck = new JCheckBox();
 		JLabel elitism = new JLabel("Elitism %");
 		JTextField elitismInput = new JTextField();
-		elitismInput.setPreferredSize(new Dimension(30,20));
+		elitismInput.setPreferredSize(new Dimension(40,20));
+		JLabel generation = new JLabel("Generation Size");
+		JTextField generationInput = new JTextField();
+		generationInput.setPreferredSize(new Dimension(40,20));
 		JLabel selection = new JLabel("Selection");
 		String[] selectionList = {"Truncation", "Wheel Select", "Ranked Select"};
 		JComboBox selectionInput = new JComboBox(selectionList);
-		selectionInput.setPreferredSize(new Dimension(100,20));
+		selectionInput.setPreferredSize(new Dimension(110,20));
 		JLabel fitnessFunction = new JLabel("Fitness Function");
 		String[] functionList = {"Max Ones Fitness" , "Match Target Fitness", "Max Consecutive Ones Fitness"};
 		JComboBox functionInput = new JComboBox(functionList);
 		functionInput.setPreferredSize(new Dimension(140,20));
 		
 
-		
-		controls.add(populationSize);
-		controls.add(populationSizeInput);
-		controls.add(chromosomeLength);
-		controls.add(chromosomeLengthInput);
-		controls.add(speicalPop);
-		controls.add(specialCheck);
-		controls.add(mutationRate);
-		controls.add(mutationRateInput);
-		controls.add(selection);
-		controls.add(selectionInput);
-		controls.add(fitnessFunction);
-		controls.add(functionInput);
-		controls.add(crossover);
-		controls.add(crossoverCheck);
-		controls.add(elitism);
-		controls.add(elitismInput);
-		controls.add(start);
+		spacePanel(control1);
+		control1.add(populationSize);
+		control1.add(populationSizeInput);
+		spacePanel(control1);
+		control1.add(chromosomeLength);
+		control1.add(chromosomeLengthInput);
+		spacePanel(control1);
+		control1.add(speicalPop);
+		control1.add(specialCheck);
+		spacePanel(control1);
+		control1.add(mutationRate);
+		control1.add(mutationRateInput);
+		spacePanel(control1);
+		control1.add(generation);
+		control1.add(generationInput);
+		spacePanel(control2);
+		control2.add(selection);
+		control2.add(selectionInput);
+		spacePanel(control2);
+		control2.add(fitnessFunction);
+		control2.add(functionInput);
+		spacePanel(control2);
+		control2.add(crossover);
+		control2.add(crossoverCheck);
+		spacePanel(control2);
+		control2.add(elitism);
+		control2.add(elitismInput);
+		spacePanel(control2);
+		control2.add(start);
+		controls.add(control1);
+		controls.add(control2);
+		control1.setLayout(new FlowLayout(FlowLayout.LEFT));
+		control2.setLayout(new FlowLayout(FlowLayout.LEFT));
 		frame.add(controls, BorderLayout.SOUTH);
+		
 		 
 		this.timer = new Timer(DELAY, new ActionListener() {
 
@@ -145,7 +173,7 @@ public class EvolutionViewer extends JComponent {
 				FIV.upDate(pop.getBest(pop.population));
 				addEntry(pop.getBest(pop.population).getFitness(), pop.getAverage(pop.population), pop.getWorst(pop.population));
 				isDone = false;
-				if(((double)pop.getBest(pop.population).getFitness()/lengthOfChromosome*10.0 >= fitness) || (pop.getGenerationCount() > 100)) {
+				if(((double)pop.getBest(pop.population).getFitness()/lengthOfChromosome*10.0 >= fitness) || (pop.getGenerationCount() > Integer.parseInt(generationInput.getText()))) {
 					isDone = true;
 					isRunning = false;
 					EvolutionViewer.this.timer.stop();
@@ -162,11 +190,15 @@ public class EvolutionViewer extends JComponent {
 		start.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				lengthOfChromosome = Integer.parseInt(chromosomeLengthInput.getText());
-				if (populationSizeInput.getText().isBlank() || chromosomeLengthInput.getText().isBlank() || mutationRateInput.getText().isBlank() || elitismInput.getText().isBlank()) {	
-					System.err.println("One or more variables is not defined: population size, chromosome length, mutation rate, elitism rate");
+				if (populationSizeInput.getText().isEmpty() || chromosomeLengthInput.getText().isEmpty() || mutationRateInput.getText().isEmpty() || elitismInput.getText().isEmpty() || generationInput.getText().isEmpty()) {	
+					System.err.println("One or more variables is not defined: population size, chromosome length, mutation rate, elitism rate, generation size");
 					return;
 				}
+				if (Integer.parseInt(populationSizeInput.getText()) <= 0  || Integer.parseInt(chromosomeLengthInput.getText()) <= 0 || Integer.parseInt(mutationRateInput.getText()) < 0 || Integer.parseInt(elitismInput.getText()) < 0) {	
+					System.err.println("One or more variables has unvalid variable: population size, chromosome length, mutation rate, elitism rate");
+					return;
+				}
+				lengthOfChromosome = Integer.parseInt(chromosomeLengthInput.getText());
 				String function = functionInput.getSelectedItem().toString();
 				if(isDone && pop.getGenerationCount() == 0 && !specialCheck.isSelected()) {
 					if (function.equals("Max Ones Fitness")) {
