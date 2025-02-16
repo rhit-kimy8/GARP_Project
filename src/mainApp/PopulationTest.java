@@ -31,14 +31,14 @@ public class PopulationTest {
 	
 	@Test
 	public void testGenerateSpecialPopulation() {
-		pop.generateSpecialPopulation(100,10);
+		pop.generateSpecialPopulation(100,10,0);
 		int populationSizeCount = 0;
 		int chromosomeLengthCount = 0;
 		int zeroOnesCount = 0;
 		int oneOnesCount = 0;
 		int threeOnesCount = 0;
 		int sixOnesCount = 0;
-		for (Chromosome c:pop.specialPopulation) {
+		for (Chromosome c:pop.population) {
 			populationSizeCount++;
 			chromosomeLengthCount = c.getBitString().length();
 			if (c.getFitness() == 0) zeroOnesCount ++;
@@ -54,12 +54,12 @@ public class PopulationTest {
 	
 	@Test
 	public void testTruncationSelection() {
-		pop.generateSpecialPopulation(100,10);
+		pop.generateSpecialPopulation(100,10,0);
 		// this for 450 in fitness
-		pop.truncationSelect(pop.specialPopulation, false, 0, 0);
+		pop.truncationSelect(pop.population, false, 0, 0);
 		// this for 600 in fitness
-		pop.truncationSelect(pop.specialPopulation, false, 0, 0);
-		int totalFitness = pop.maxOnesFitness(pop.specialPopulation);
+		pop.truncationSelect(pop.population, false, 0, 0);
+		int totalFitness = pop.maxOnesFitness(pop.population);
 		if (totalFitness == 600) assertTrue(true);
 	}
 	
@@ -113,12 +113,12 @@ public class PopulationTest {
 	
 	@Test
 	public void testMatchTargetFitness() {
-		pop.generateSpecialPopulation(100, 10);
+		pop.generateSpecialPopulation(100, 10,0);
 		// Because in special population, there are 25% of none ones chromosomes
 		int noneOnesChromosomeNum = 25;
 		Chromosome chr = new Chromosome();
 		chr.setBitString("0000000000");
-		if (noneOnesChromosomeNum == pop.matchTargetFitness(pop.getSpecialPopulation(), chr)) assertTrue(true);
+		if (noneOnesChromosomeNum == pop.matchTargetFitness(pop.getPopulation(), chr)) assertTrue(true);
 	}
 	
 	@Test

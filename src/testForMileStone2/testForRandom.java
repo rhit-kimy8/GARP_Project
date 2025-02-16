@@ -12,10 +12,10 @@ public class testForRandom {
 		System.out.println("No."+i+" random generation for 16 chromosomes with length 10 to test seed function.");
 		Population pop = new Population();
 		FitnessComparator FC = new FitnessComparator();
-		pop.generateSpecialPopulation(16, 10);
-		Collections.sort(pop.getSpecialPopulation(),FC);
-		for (int j = 0; j < pop.getSpecialPopulation().size(); j++) {
-			System.out.println(pop.getSpecialPopulation().get(j).getBitString());
+		pop.generateSpecialPopulation(16, 10,0);
+		Collections.sort(pop.getPopulation(),FC);
+		for (int j = 0; j < pop.getPopulation().size(); j++) {
+			System.out.println(pop.getPopulation().get(j).getBitString());
 		}
 	}
 		

@@ -42,7 +42,7 @@ import javax.swing.JTextField;
  * <br>Restrictions: Could be optimized
  */
 public class EvolutionViewer extends JComponent {
-	private static final int FRAME_WIDTH = 1300;
+	private static final int FRAME_WIDTH = 1070;
 	private static final int FRAME_HEIGHT = 380;
 	
 	private static final int GRAPH_WIDTH = 850;
@@ -170,10 +170,9 @@ public class EvolutionViewer extends JComponent {
 		control2.add(start);
 		controls.add(control1);
 		controls.add(control2);
-		control1.setLayout(new FlowLayout(FlowLayout.LEFT));
-		control2.setLayout(new FlowLayout(FlowLayout.LEFT));
-		frame.add(controls, BorderLayout.SOUTH);
-		
+//		control1.setLayout(new FlowLayout(FlowLayout.LEFT));
+//		control2.setLayout(new FlowLayout(FlowLayout.LEFT));
+		frame.add(controls, BorderLayout.SOUTH);	
 		 
 		this.timer = new Timer(DELAY, new ActionListener() {
 
@@ -190,7 +189,6 @@ public class EvolutionViewer extends JComponent {
 					EvolutionViewer.this.timer.stop();
 					System.out.println("Evolution Terminated");
 					start.setText("Restart");
-					FIV.end();
 					pop.removePopulation();
 				}
 				}				
@@ -201,15 +199,19 @@ public class EvolutionViewer extends JComponent {
 		start.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fitness = Integer.parseInt(fitnessInput.getText());
-				if (populationSizeInput.getText().isEmpty() || chromosomeLengthInput.getText().isEmpty() || mutationRateInput.getText().isEmpty() || elitismInput.getText().isEmpty() || generationInput.getText().isEmpty()) {	
+				if (populationSizeInput.getText().isEmpty() || chromosomeLengthInput.getText().isEmpty() || mutationRateInput.getText().isEmpty() || elitismInput.getText().isEmpty() || generationInput.getText().isEmpty() || fitnessInput.getText().isEmpty()) {	
 					System.err.println("One or more variables is not defined: population size, chromosome length, mutation rate, elitism rate, generation size");
 					return;
 				}
-				if (Integer.parseInt(populationSizeInput.getText()) <= 0  || Integer.parseInt(chromosomeLengthInput.getText()) <= 0 || Integer.parseInt(mutationRateInput.getText()) < 0 || Integer.parseInt(elitismInput.getText()) < 0) {	
+				if (!(populationSizeInput.getText() instanceof String) || !(chromosomeLengthInput.getText() instanceof String) || !(mutationRateInput.getText() instanceof String) || !(elitismInput.getText() instanceof String) || !(generationInput.getText() instanceof String) || !(fitnessInput.getText() instanceof String)) {	
+					System.err.println("One or more variables has unvalid variable: population size, chromosome length, mutation rate, elitism rate, generation size");
+					return;
+				}
+				if (Integer.parseInt(populationSizeInput.getText()) <= 0  || Integer.parseInt(chromosomeLengthInput.getText()) <= 0 || Integer.parseInt(mutationRateInput.getText()) < 0 || Integer.parseInt(elitismInput.getText()) < 0 || Integer.parseInt(fitnessInput.getText()) < 0) {	
 					System.err.println("One or more variables has unvalid variable: population size, chromosome length, mutation rate, elitism rate");
 					return;
 				}
+				fitness = Integer.parseInt(fitnessInput.getText());
 				lengthOfChromosome = Integer.parseInt(chromosomeLengthInput.getText());
 				String function = functionInput.getSelectedItem().toString();
 				if(isDone && pop.getGenerationCount() == 0 && !specialCheck.isSelected()) {
@@ -239,6 +241,7 @@ public class EvolutionViewer extends JComponent {
 					EvolutionViewer.this.repaint();
 					
 					if((isDone && pop.getGenerationCount()!=0) && !specialCheck.isSelected()) {
+						FIV.end();
 						reset();
 						pop.setGenerationCount();
 						String function1 = functionInput.getSelectedItem().toString();
@@ -314,7 +317,7 @@ public class EvolutionViewer extends JComponent {
 				}
 			
 				JFileChooser jf = new JFileChooser();
-				jf.setCurrentDirectory(new File("./src/mainApp/EvolutionSaveFile"));
+				jf.setCurrentDirectory(new File("./src/mainApp/ExampleFiles"));
 				int filePath = jf.showSaveDialog(null);
 				if (filePath == JFileChooser.APPROVE_OPTION) {
 					String path = jf.getSelectedFile().getAbsolutePath();
@@ -445,15 +448,16 @@ public class EvolutionViewer extends JComponent {
 		g2.drawString("LEGEND", 940, 120);
 		g2.setColor(BEST_FITNESS);
 		g2.fillRect(920, 135, 10, 10);
-		g2.drawString("Best fitness", 940, 145);
 		g2.setColor(AVERAGE_FITNESS);
 		g2.fillRect(920, 160, 10, 10);
-		g2.drawString("Average Fitness", 940, 170);
 		g2.setColor(WORST_FITNESS);
-		g2.fillRect(920, 185, 10, 10);
-		g2.drawString("Worst fitness", 940, 195);
+		g2.fillRect(920, 185, 10, 10);		
 		g2.setColor(HAMMING_DISTANCE);
 		g2.fillRect(920, 210, 10, 10);
+		g2.setColor(Color.BLACK);
+		g2.drawString("Best fitness", 940, 145);
+		g2.drawString("Average Fitness", 940, 170);
+		g2.drawString("Worst fitness", 940, 195);
 		g2.drawString("Hamming Distance", 940, 220);
 		drawFitnessGraph(g2, 50, 25, GRAPH_WIDTH, GRAPH_HEIGHT, lengthOfChromosome);
 		
