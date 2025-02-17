@@ -22,6 +22,9 @@ public class Population {
 		else if (functionChoose == 2) {
 			chr.consecutiveFitness();
 		}
+		else if (functionChoose == 3) {
+			chr.binaryFitness();
+		}
 	}
 	
 	public void generateRandomPopulation(int populationSize, int chromosomeSize, int functionChoose) {

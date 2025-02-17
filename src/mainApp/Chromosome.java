@@ -169,10 +169,10 @@ public class Chromosome {
 			int chromeLen = this.getBitString().length();
 			int xAmount = (int) ((Math.pow(chromeLen, .5) + .99));
 			int yAmount = (int) (Math.pow(chromeLen, .5));
-			System.out.println("xAmount: " + xAmount + " yAmount: " + yAmount);
+			//System.out.println("xAmount: " + xAmount + " yAmount: " + yAmount);
 			float xSize = 200 / xAmount;
 			float ySize = 200 / yAmount;
-			System.out.println("xSize: " + xSize + "\nySize: " + ySize);
+			//System.out.println("xSize: " + xSize + "\nySize: " + ySize);
 			///*
 			for (float yCord = 0; yCord < 200; yCord += ySize) {
 				for (float xCord = 0; xCord < 200; xCord += xSize) {
@@ -180,7 +180,7 @@ public class Chromosome {
 				}
 			}
 		}
-		System.out.println("Rectangles size: " + rectangles.size());
+		//System.out.println("Rectangles size: " + rectangles.size());
 		for (int x = 0; x < this.bitString.length(); x++) {
 			//for (int x = 0; x < rectangles.size(); x++) {
 				Rectangle2D r = rectangleIndividual.get(x);
@@ -286,6 +286,7 @@ public class Chromosome {
 		for (int x = bits.length() - 1; x >= 0; x--) {
 			num += Integer.parseInt(bits.substring(x, x + 1)) * Math.pow(2, bits.length() - x - 1);
 		}
+		//System.out.println("Num: " + num);
 		return num;
 	}
 	
