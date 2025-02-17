@@ -303,6 +303,8 @@ public class EvolutionViewer extends JComponent {
 				mutationRateInput.setText("");
 				crossoverCheck.setSelected(false);
 				elitismInput.setText("");
+				fitnessInput.setText("");
+				generationInput.setText("");
 				//set start button back to beginning
 				frame.repaint();
 				
