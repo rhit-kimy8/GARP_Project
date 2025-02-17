@@ -124,10 +124,10 @@ public class Population {
 		return maxConsecutiveCount;
 	}
 	
-	public void mutatePopulation(ArrayList<Chromosome> chromosomes, double mutationRate) {
+	public void mutatePopulation(ArrayList<Chromosome> chromosomes, double mutationRate, int startNumber) {
 		if (mutationRate != 0) {
-			for (Chromosome c:chromosomes) {
-				c.mutationProcess(mutationRate);
+			for (int i = startNumber; i < chromosomes.size();i++) {
+				chromosomes.get(i).mutationProcess(mutationRate);
 			}
 		}
 	}
@@ -146,7 +146,7 @@ public class Population {
 			chromosomes.add(repeat);
 		}
 		Collections.sort(chromosomes,FC);
-		mutatePopulation(chromosomes,mutationRate);
+		mutatePopulation(chromosomes,mutationRate,elitismNumber);
 		}
 		else {
 			// elitism + crossover
@@ -157,7 +157,7 @@ public class Population {
 				chromosomes.add(repeat);
 			}
 			crossOverSelect(chromosomes,elitismNumber,halfSize,false,null,false,null);
-			mutatePopulation(chromosomes,mutationRate);
+			mutatePopulation(chromosomes,mutationRate,elitismNumber);
 		}
 		}
 		// no elitism here
@@ -171,13 +171,13 @@ public class Population {
 					chromosomes.add(repeat);
 				}
 				Collections.sort(chromosomes,FC);
-				mutatePopulation(chromosomes,mutationRate);
+				mutatePopulation(chromosomes,mutationRate,0);
 				}
 				else {
 					// only crossover
 					for (int i=0;i<halfSize;i++) chromosomes.removeLast();
 					crossOverSelect(chromosomes,0,halfSize,false,null,false,null);
-					mutatePopulation(chromosomes,mutationRate);
+					mutatePopulation(chromosomes,mutationRate,0);
 				}
 		}
 
@@ -207,7 +207,7 @@ public class Population {
 					chromosomes.add(repeat);
 				}
 				Collections.sort(chromosomes,FC);
-				mutatePopulation(chromosomes,mutationRate);
+				mutatePopulation(chromosomes,mutationRate,elitismNumber);
 				
 			}
 			else {
@@ -219,7 +219,7 @@ public class Population {
 					chromosomes.add(repeat);
 				}
 				crossOverSelect(chromosomes,elitismNumber,newChromosomes.size(),true,newChromosomes,false,null);
-				mutatePopulation(chromosomes,mutationRate);
+				mutatePopulation(chromosomes,mutationRate,elitismNumber);
 			}
 		}else {
 			//
@@ -233,14 +233,14 @@ public class Population {
 					chromosomes.add(repeat);
 				}
 				Collections.sort(chromosomes,FC);
-				mutatePopulation(chromosomes,mutationRate);
+				mutatePopulation(chromosomes,mutationRate,0);
 				
 			}else {
 				//roulete and crossover
 
 				for (int i = 0;i<newChromosomes.size();i++) chromosomes.removeLast();
 				crossOverSelect(chromosomes,0,newChromosomes.size(),true,newChromosomes,false,null);
-				mutatePopulation(chromosomes,mutationRate);
+				mutatePopulation(chromosomes,mutationRate,0);
 				
 			}
 		}
@@ -315,7 +315,7 @@ public class Population {
 					chromosomes.add(repeat);
 				}
 				Collections.sort(chromosomes,FC);
-				mutatePopulation(chromosomes,mutationRate);
+				mutatePopulation(chromosomes,mutationRate,elitismNumber);
 				
 			}
 			else {
@@ -327,7 +327,7 @@ public class Population {
 					chromosomes.add(repeat);
 				}
 				crossOverSelect(chromosomes,elitismNumber,newChromosomes.size(),false,null,true,newChromosomes);
-				mutatePopulation(chromosomes,mutationRate);
+				mutatePopulation(chromosomes,mutationRate,elitismNumber);
 			}
 		}else {
 			//
@@ -341,14 +341,14 @@ public class Population {
 					chromosomes.add(repeat);
 				}
 				Collections.sort(chromosomes,FC);
-				mutatePopulation(chromosomes,mutationRate);
+				mutatePopulation(chromosomes,mutationRate,0);
 				
 			}else {
 				//rank and crossover
 
 				for (int i = 0;i<newChromosomes.size();i++) chromosomes.removeLast();
 				crossOverSelect(chromosomes,0,newChromosomes.size(),false,null,true,newChromosomes);
-				mutatePopulation(chromosomes,mutationRate);
+				mutatePopulation(chromosomes,mutationRate,0);
 				
 			}
 		}

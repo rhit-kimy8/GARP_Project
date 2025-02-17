@@ -127,7 +127,7 @@ public class PopulationTest {
 		int chromosomeLength = 10;
 		pop.generateRandomPopulation(populationSize, chromosomeLength,0);
 		ArrayList<Chromosome> list = pop.population;
-		pop.mutatePopulation(pop.population, 1);
+		pop.mutatePopulation(pop.population, 1,0);
 		for (int i = 0; i< pop.population.get(0).getBitString().length(); i++) {
 			if (pop.population.get(0).getBitString().charAt(i) != list.get(0).getBitString().charAt(i)) assertTrue(true);
 		}
