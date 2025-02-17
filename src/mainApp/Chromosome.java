@@ -280,6 +280,15 @@ public class Chromosome {
 			return maxConsecutiveCount;
 	}
 	
+	public int binaryFitness() {
+		int num = 0;
+		String bits = this.bitString;
+		for (int x = bits.length() - 1; x >= 0; x--) {
+			num += Integer.parseInt(bits.substring(x, x + 1)) * Math.pow(2, bits.length() - x - 1);
+		}
+		return num;
+	}
+	
 	public boolean randomProcess(double possibility) {
 		Random r = new Random();// eg: 3% all the doubles > 0.03 will make true, so we shouldn't do any changes
 		return (r.nextDouble() > 1-possibility);
