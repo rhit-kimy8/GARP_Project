@@ -41,6 +41,10 @@ public class PopulationViewer {
 		this.popFrame.setTitle("Generation: " + p.getGenerationCount());
 		this.popComp.upDatePopulation(p);
 	}
+	
+	public void end() {
+		this.popFrame.dispose();
+	}
 
 	public void repaint() {
 		// TODO Auto-generated method stub
