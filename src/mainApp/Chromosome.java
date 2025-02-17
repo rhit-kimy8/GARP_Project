@@ -23,6 +23,7 @@ public class Chromosome {
 	private String bitString;
 	private String comparedString;
 	private ArrayList<Rectangle2D.Float> rectangles;
+	private ArrayList<Rectangle2D.Float> rectangleIndividual;
 	private int fitness;
 	private int fitnessFunctionStatus;
 	
@@ -44,6 +45,7 @@ public class Chromosome {
 		this.comparedString = str;
 		
 		this.rectangles = new ArrayList<>();
+		this.rectangleIndividual = new ArrayList<>();
 		colors.add(Color.black);
 		colors.add(Color.green);
 		colors.add(Color.gray);
@@ -63,6 +65,7 @@ public class Chromosome {
 		this.comparedString = str;
 		
 		this.rectangles = new ArrayList<>();
+		this.rectangleIndividual = new ArrayList<>();
 		colors.add(Color.black);
 		colors.add(Color.green);
 		colors.add(Color.gray);
@@ -72,6 +75,7 @@ public class Chromosome {
 		this.bitString = "";
 		MaxOnesFitnessCalculation();
 		this.rectangles = new ArrayList<>();
+		this.rectangleIndividual = new ArrayList<>();
 		colors.add(Color.black);
 		colors.add(Color.green);
 		colors.add(Color.gray);
@@ -129,6 +133,7 @@ public class Chromosome {
 	
 	//Draw each Chromosome
 	public void drawOnFitness(Graphics2D g2) {
+		/*
 		//for (int x = 0; x < rectangles.size(); x++) {
 		int bitLen = bitString.length();
 		int xAmount = (int) (Math.pow(bitLen, .5) + .99);
@@ -157,6 +162,31 @@ public class Chromosome {
 			s += x;
 			g2.drawString(s, (int) r.getX(), (int) r.getY() + 10);
 		}
+		*/
+		
+		//Testing
+		if (rectangleIndividual.size() == 0) {
+			int chromeLen = this.getBitString().length();
+			int xAmount = (int) ((Math.pow(chromeLen, .5) + .99));
+			int yAmount = (int) (Math.pow(chromeLen, .5));
+			System.out.println("xAmount: " + xAmount + " yAmount: " + yAmount);
+			float xSize = 200 / xAmount;
+			float ySize = 200 / yAmount;
+			System.out.println("xSize: " + xSize + "\nySize: " + ySize);
+			///*
+			for (float yCord = 0; yCord < 200; yCord += ySize) {
+				for (float xCord = 0; xCord < 200; xCord += xSize) {
+					rectangleIndividual.add(new Rectangle2D.Float(xCord, yCord, xSize, ySize));	
+				}
+			}
+		}
+		System.out.println("Rectangles size: " + rectangles.size());
+		for (int x = 0; x < this.bitString.length(); x++) {
+			//for (int x = 0; x < rectangles.size(); x++) {
+				Rectangle2D r = rectangleIndividual.get(x);
+				g2.setColor(getColor(bitString.substring(x,x+1)));
+				g2.fill(r);
+			}
 	}
 	
 	public void drawOnPopulation(Graphics2D g2, float xLen, float yLen, int popLen) {
