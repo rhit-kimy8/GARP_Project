@@ -182,7 +182,14 @@ public class EvolutionViewer extends JComponent {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				frame.repaint();
+				if (selectionInput.getSelectedItem().toString().equals("Truncation")) {
 				pop.truncationSelect(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/pop.population.size(),(int)Integer.parseInt(elitismInput.getText())*pop.population.size()/100);
+				}else if (selectionInput.getSelectedItem().toString().equals("Wheel Select")) {
+					pop.RouleteSelection(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/pop.population.size(),(int)Integer.parseInt(elitismInput.getText())*pop.population.size()/100);
+					System.out.println(pop.maxOnesFitness(pop.population));
+				}else {
+					pop.RankSelection(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/pop.population.size(),(int)Integer.parseInt(elitismInput.getText())*pop.population.size()/100);
+				}
 				FIV.upDate(pop.getBest(pop.population));
 				PV.repaint();
 				//GV.repaint();
@@ -234,7 +241,7 @@ public class EvolutionViewer extends JComponent {
 					if (function.equals("Max Ones Fitness")) {
 						pop.generateSpecialPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),0);
 					}else if (function.equals("Match Target Fitness")) {
-						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),1);
+						pop.generateSpecialPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),1);
 					}else if (function.equals("Max Consecutive Ones Fitness")) {
 						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),2);
 					}

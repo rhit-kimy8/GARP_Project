@@ -156,7 +156,7 @@ public class Population {
 				repeat.setFitnessFunctionStatus(chromosomes.get(i).getFitnessFunctionStatus());
 				chromosomes.add(repeat);
 			}
-			crossOverSelect(chromosomes,elitismNumber,halfSize);
+			crossOverSelect(chromosomes,elitismNumber,halfSize,false,null,false,null);
 			mutatePopulation(chromosomes,mutationRate);
 		}
 		}
@@ -176,16 +176,232 @@ public class Population {
 				else {
 					// only crossover
 					for (int i=0;i<halfSize;i++) chromosomes.removeLast();
-					crossOverSelect(chromosomes,0,halfSize);
+					crossOverSelect(chromosomes,0,halfSize,false,null,false,null);
 					mutatePopulation(chromosomes,mutationRate);
 				}
 		}
 
 	}
+
+	public void RouleteSelection(ArrayList<Chromosome> chromosomes, boolean checkCrossOver,double mutationRate,int elitismNumber) {
+		generationCount++;
+		Collections.sort(chromosomes,FC);
+		ArrayList<Chromosome> newChromosomes = new ArrayList<>();
+		for (Chromosome chr : chromosomes) {
+			newChromosomes.add(chr);
+		}
+		ArrayList<ArrayList<Chromosome>> classifiedChromosome = sortChromosome(newChromosomes);
+		if (elitismNumber != 0) {
+			if (!checkCrossOver) {
+				//Roulete and elitism
+				for (int i = 0;i<newChromosomes.size();i++) chromosomes.removeLast();
+				for (int i = 0; i <elitismNumber; i++) {
+					Chromosome repeat = new Chromosome(newChromosomes.get(i).getBitString());
+					repeat.setFitnessFunctionStatus(newChromosomes.get(i).getFitnessFunctionStatus());
+					chromosomes.add(repeat);
+				}
+				for (int i = elitismNumber; i < newChromosomes.size(); i++) {
+					Chromosome selected = RouleteHelper(classifiedChromosome);
+					Chromosome repeat = new Chromosome(selected.getBitString());
+					repeat.setFitnessFunctionStatus(selected.getFitnessFunctionStatus());
+					chromosomes.add(repeat);
+				}
+				Collections.sort(chromosomes,FC);
+				mutatePopulation(chromosomes,mutationRate);
+				
+			}
+			else {
+				// roulete, elitism, and crossOver
+				for (int i = 0;i<newChromosomes.size();i++) chromosomes.removeLast();
+				for (int i=0;i<elitismNumber;i++) {
+					Chromosome repeat = new Chromosome(newChromosomes.get(i).getBitString());
+					repeat.setFitnessFunctionStatus(newChromosomes.get(i).getFitnessFunctionStatus());
+					chromosomes.add(repeat);
+				}
+				crossOverSelect(chromosomes,elitismNumber,newChromosomes.size(),true,newChromosomes,false,null);
+				mutatePopulation(chromosomes,mutationRate);
+			}
+		}else {
+			//
+			if (!checkCrossOver) {
+				//pure Roulete
+				for (int i = 0;i<newChromosomes.size();i++) chromosomes.removeLast();
+				for (int i = 0; i < newChromosomes.size(); i++) {
+					Chromosome selected = RouleteHelper(classifiedChromosome);
+					Chromosome repeat = new Chromosome(selected.getBitString());
+					repeat.setFitnessFunctionStatus(selected.getFitnessFunctionStatus());
+					chromosomes.add(repeat);
+				}
+				Collections.sort(chromosomes,FC);
+				mutatePopulation(chromosomes,mutationRate);
+				
+			}else {
+				//roulete and crossover
+
+				for (int i = 0;i<newChromosomes.size();i++) chromosomes.removeLast();
+				crossOverSelect(chromosomes,0,newChromosomes.size(),true,newChromosomes,false,null);
+				mutatePopulation(chromosomes,mutationRate);
+				
+			}
+		}
+	}
 	
-	public void crossOverSelect(ArrayList<Chromosome> population, int startIndex, int populationHalfSize) {
-//			for (int i=startIndex;i<populationHalfSize;i++) population.removeLast();
+	public ArrayList<ArrayList<Chromosome>> sortChromosome(ArrayList<Chromosome> chromosomes){
+		int chromosomeLength = chromosomes.get(0).getBitString().length();
+		ArrayList<ArrayList<Chromosome>> sortedChromosome = new ArrayList<ArrayList<Chromosome>>();
+		for (int i = 0; i <= chromosomeLength; i++) {
+			sortedChromosome.add(new ArrayList<Chromosome>());
+		}
+		for (Chromosome chr : chromosomes) {
+			sortedChromosome.get(chr.getFitness()).add(chr);
+		}
+		return sortedChromosome;
+	}
+	
+	public Chromosome RouleteHelper(ArrayList<ArrayList<Chromosome>> chromosomes) {
+        Random random = new Random();
+        int fitnessSize = 0;
+        ArrayList<Integer> fitnessSet = new ArrayList<>();
+        for (ArrayList<Chromosome> chromosomeFitnessSet : chromosomes) {
+        	if (chromosomeFitnessSet.size() == 0) {
+        		fitnessSet.add(0);
+        		continue;
+        	}
+            fitnessSet.add(chromosomeFitnessSet.size() * chromosomeFitnessSet.get(0).getFitness());
+            fitnessSize += chromosomeFitnessSet.size() * chromosomeFitnessSet.get(0).getFitness();
+        }
+//        System.out.println("fitness Number is "+fitnessSize);
+        int fitnessSelected = random.nextInt(1, fitnessSize + 1);
+//        System.out.println("Number is "+fitnessSelected);
+        int fitnessCompared = fitnessSet.get(0);
+        int fitnessComparedIndex = 0;
+        while (fitnessSelected > fitnessCompared) {
+            fitnessComparedIndex += 1;
+            fitnessCompared += fitnessSet.get(fitnessComparedIndex);
+        }
+//        System.out.println("fitness ComparedIndex is "+fitnessComparedIndex);
+        int chromosomeIndexSelected = random.nextInt(0, chromosomes.get(fitnessComparedIndex).size());
+//        System.out.println("fitnessIndex is " +chromosomeIndexSelected);
+        return chromosomes.get(fitnessComparedIndex).get(chromosomeIndexSelected);
+
+		
+	}
+	
+	
+	
+	
+	
+	public void RankSelection(ArrayList<Chromosome> chromosomes, boolean checkCrossOver,double mutationRate,int elitismNumber) {
+		generationCount++;
+		Collections.sort(chromosomes,FC);
+		ArrayList<Chromosome> newChromosomes = new ArrayList<>();
+		for (Chromosome chr : chromosomes) {
+			newChromosomes.add(chr);
+		}
+//		ArrayList<ArrayList<Chromosome>> classifiedChromosome = sortChromosome(newChromosomes);
+		if (elitismNumber != 0) {
+			if (!checkCrossOver) {
+				// Rank and elitism
+				for (int i = 0;i<newChromosomes.size();i++) chromosomes.removeLast();
+				for (int i=0;i<elitismNumber;i++) {
+					Chromosome repeat = new Chromosome(newChromosomes.get(i).getBitString());
+					repeat.setFitnessFunctionStatus(newChromosomes.get(i).getFitnessFunctionStatus());
+					chromosomes.add(repeat);
+				}
+				for (int i = elitismNumber; i < newChromosomes.size(); i++) {
+					Chromosome selected = RankHelper(newChromosomes);
+					Chromosome repeat = new Chromosome(selected.getBitString());
+					repeat.setFitnessFunctionStatus(selected.getFitnessFunctionStatus());
+					chromosomes.add(repeat);
+				}
+				Collections.sort(chromosomes,FC);
+				mutatePopulation(chromosomes,mutationRate);
+				
+			}
+			else {
+				// rank, elitism, and crossOver
+				for (int i = 0;i<newChromosomes.size();i++) chromosomes.removeLast();
+				for (int i=0;i<elitismNumber;i++) {
+					Chromosome repeat = new Chromosome(newChromosomes.get(i).getBitString());
+					repeat.setFitnessFunctionStatus(newChromosomes.get(i).getFitnessFunctionStatus());
+					chromosomes.add(repeat);
+				}
+				crossOverSelect(chromosomes,elitismNumber,newChromosomes.size(),false,null,true,newChromosomes);
+				mutatePopulation(chromosomes,mutationRate);
+			}
+		}else {
+			//
+			if (!checkCrossOver) {
+				//pure rank
+				for (int i = 0;i<newChromosomes.size();i++) chromosomes.removeLast();
+				for (int i = 0; i < newChromosomes.size(); i++) {
+					Chromosome selected = RankHelper(newChromosomes);
+					Chromosome repeat = new Chromosome(selected.getBitString());
+					repeat.setFitnessFunctionStatus(selected.getFitnessFunctionStatus());
+					chromosomes.add(repeat);
+				}
+				Collections.sort(chromosomes,FC);
+				mutatePopulation(chromosomes,mutationRate);
+				
+			}else {
+				//rank and crossover
+
+				for (int i = 0;i<newChromosomes.size();i++) chromosomes.removeLast();
+				crossOverSelect(chromosomes,0,newChromosomes.size(),false,null,true,newChromosomes);
+				mutatePopulation(chromosomes,mutationRate);
+				
+			}
+		}
+	}
+	
+	public Chromosome RankHelper(ArrayList<Chromosome> chromosomes) {
+        Random random = new Random();
+        int fitnessSize = 0;
+        ArrayList<Integer> fitnessSet = new ArrayList<>();
+        for (int i = chromosomes.size()-1; i >= 0; i--) {
+            fitnessSet.add(i+1);
+            fitnessSize += i+1;
+        }
+//        System.out.println("fitness Number is "+fitnessSize);
+        int fitnessSelected = random.nextInt(1, fitnessSize + 1);
+//        System.out.println("Number is "+fitnessSelected);
+        int fitnessCompared = fitnessSet.get(0);
+        int fitnessComparedIndex = 0;
+        while (fitnessSelected > fitnessCompared) {
+            fitnessComparedIndex += 1;
+            fitnessCompared += fitnessSet.get(fitnessComparedIndex);
+        }
+//        System.out.println("fitness ComparedIndex is "+fitnessComparedIndex);
+//        int chromosomeIndexSelected = random.nextInt(0, chromosomes.get(fitnessComparedIndex).size());
+//        System.out.println("fitnessIndex is " +chromosomeIndexSelected);
+//        return chromosomes.get(fitnessComparedIndex).get(chromosomeIndexSelected);
+        return chromosomes.get(fitnessComparedIndex);
+
+		
+	}
+	
+	public void crossOverSelect(ArrayList<Chromosome> population, int startIndex, int populationHalfSize,boolean roulete, ArrayList<Chromosome> rouleteChromosomes, boolean rank, ArrayList<Chromosome> rankChromosomes) {
+	
 			for (int i =startIndex; i < populationHalfSize; i++) {
+				if (roulete) {
+					ArrayList<ArrayList<Chromosome>> classifiedChromosome = sortChromosome(rouleteChromosomes);
+					Chromosome parent1 = RouleteHelper(classifiedChromosome);
+					Chromosome parent2 = RouleteHelper(classifiedChromosome);
+					while (parent1 == parent2) {
+						parent2 = RouleteHelper(classifiedChromosome);
+					}
+					Chromosome child = crossOverChromosome(parent1,parent2,5);
+					population.add(child);
+				}else if(rank){
+					Chromosome parent1 = RankHelper(rankChromosomes);
+					Chromosome parent2 = RankHelper(rankChromosomes);
+					while (parent1 == parent2) {
+						parent2 = RankHelper(rankChromosomes);
+					}
+					Chromosome child = crossOverChromosome(parent1,parent2,5);
+					population.add(child);
+				}
+				else {
 				int parentIndex1 = random.nextInt(0, populationHalfSize);
 				int parentIndex2 = random.nextInt(0, populationHalfSize);
 				while(parentIndex2 == parentIndex1) {
@@ -193,6 +409,7 @@ public class Population {
 				}
 				Chromosome child = crossOverChromosome(population.get(parentIndex1),population.get(parentIndex2),5);
 				population.add(child);
+				}
 			}
 			Collections.sort(population,FC);
 	}
