@@ -321,6 +321,40 @@ public class EvolutionViewer extends JComponent {
 		
 		Menu file = new Menu("File");
 		menu.add(file);
+		MenuItem openFile = new MenuItem("Open File");
+		file.add(openFile);
+		
+		openFile.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				while(true) {
+					try {
+						JFileChooser jf = new JFileChooser();
+						jf.setCurrentDirectory(new File("./src/mainApp/ExampleFiles"));
+						int checkFile = jf.showOpenDialog(null);
+						if (checkFile != JFileChooser.APPROVE_OPTION) {
+							return;  
+						}
+						// whenever we load a file, we should clean the past datas, and load new datas
+						if (checkFile == JFileChooser.APPROVE_OPTION) {
+							String path = jf.getSelectedFile().getAbsolutePath();
+//							loadString = readFile(path);
+//							panel.removeAll();
+//							viewerPanel.removeAll();
+//							jButtons.clear();
+//							chromosomes.clear();
+//							viewerButtons.clear();
+							break;
+							}
+					}catch (NoSuchElementException e1) {
+						continue;
+					}
+				}
+			}
+		}
+			);
 		
 		MenuItem save = new MenuItem("Save");
 		file.add(save);
