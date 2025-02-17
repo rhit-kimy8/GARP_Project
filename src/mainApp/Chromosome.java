@@ -22,7 +22,7 @@ public class Chromosome {
 	//private ArrayList<Integer> bitString;
 	private String bitString;
 	private String comparedString;
-	private ArrayList<Rectangle2D.Double> rectangles;
+	private ArrayList<Rectangle2D.Float> rectangles;
 	private int fitness;
 	private int fitnessFunctionStatus;
 	
@@ -130,11 +130,17 @@ public class Chromosome {
 	//Draw each Chromosome
 	public void drawOnFitness(Graphics2D g2) {
 		//for (int x = 0; x < rectangles.size(); x++) {
+		int bitLen = bitString.length();
+		int xAmount = (int) (Math.pow(bitLen, .5) + .99);
+		int yAmount = (int) (Math.pow(bitLen, .5));
+		float xSize = 200 / xAmount;
+		float ySize = 200 / yAmount;
+		System.out.println("xAmount: " + xAmount + " yAmount: " + yAmount + " xSize: " + xSize + " ySize: " + ySize);
 		for (int x = 0; x < this.bitString.length(); x++) {
 			if (rectangles.size() == 0) {
-				for (int yCord = 0; yCord < 200; yCord += 20) {
-					for (int xCord = 0; xCord < 200; xCord += 20) {
-						rectangles.add(new Rectangle2D.Double(xCord, yCord, 20, 20));
+				for (int yCord = 0; yCord < 200; yCord += ySize) {
+					for (int xCord = 0; xCord < 200; xCord += xSize) {
+						rectangles.add(new Rectangle2D.Float(xCord, yCord, xSize, ySize));
 					}
 				}
 			}
@@ -153,19 +159,19 @@ public class Chromosome {
 		}
 	}
 	
-	public void drawOnPopulation(Graphics2D g2, double xLen, double yLen, int popLen) {
+	public void drawOnPopulation(Graphics2D g2, float xLen, float yLen, int popLen) {
 		if (rectangles.size() == 0) {
 			int chromeLen = this.getBitString().length();
 			int xAmount = (int) ((Math.pow(chromeLen, .5) + .99));
 			int yAmount = (int) (Math.pow(chromeLen, .5));
 			//System.out.println("xAmount: " + xAmount + " yAmount: " + yAmount);
-			double xSize = xLen / xAmount;
-			double ySize = yLen / yAmount;
+			float xSize = xLen / xAmount;
+			float ySize = yLen / yAmount;
 			//System.out.println("xSize: " + xSize + "\nySize: " + ySize);
 			///*
-			for (double yCord = 0; yCord < yLen; yCord += ySize) {
-				for (double xCord = 0; xCord < xLen; xCord += xSize) {
-					rectangles.add(new Rectangle2D.Double(xCord, yCord, xSize, ySize));
+			for (float yCord = 0; yCord < yLen; yCord += ySize) {
+				for (float xCord = 0; xCord < xLen; xCord += xSize) {
+					rectangles.add(new Rectangle2D.Float(xCord, yCord, xSize, ySize));
 					//rectangles.add(new Rectangle2D.Double(xCord, yCord, xSize, ySize));
 					
 				}
@@ -178,7 +184,7 @@ public class Chromosome {
 			g2.fill(r);
 		}
 		g2.setColor(Color.black);
-		g2.draw(new Rectangle2D.Double(0, 0, xLen, yLen));
+		g2.draw(new Rectangle2D.Float(0, 0, xLen, yLen));
 	}
 	
 	public void randomGeneration(int length) {

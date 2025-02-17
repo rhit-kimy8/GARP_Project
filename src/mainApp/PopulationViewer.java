@@ -6,6 +6,7 @@ public class PopulationViewer {
 	
 	private Population p;
 	private PopulationComponent popComp;
+	private JFrame popFrame;
 	/*
 	 * Test code for popViewer
 	public static void main(String[] args) {
@@ -24,19 +25,25 @@ public class PopulationViewer {
 	 * <br> Visualizes the given population
 	 */
 	public PopulationViewer(Population p) {
-	JFrame popFrame = new JFrame();
-	popFrame.setSize(350, 350);
+	this.popFrame = new JFrame();
+	this.popFrame.setSize(320, 345);
 	this.p = p;
 	this.popComp = new PopulationComponent();
 	upDatePopulation(this.p);
-	popFrame.add(popComp);
-	popFrame.setTitle("Generation: ");
-	popFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	popFrame.setVisible(true);
+	this.popFrame.add(popComp);
+	this.popFrame.setTitle("Generation: " + p.getGenerationCount());
+	this.popFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	this.popFrame.setVisible(true);
 	//popFrame.dispose();
 	}
 	
 	public void upDatePopulation(Population p) {
+		this.popFrame.setTitle("Generation: 12 " + p.getGenerationCount());
 		this.popComp.upDatePopulation(p);
+	}
+
+	public void repaint() {
+		// TODO Auto-generated method stub
+		popComp.repaint();
 	}
 }

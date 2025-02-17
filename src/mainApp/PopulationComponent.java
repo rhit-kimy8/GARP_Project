@@ -15,8 +15,8 @@ public class PopulationComponent extends JComponent {
 		int xAmount = ((int) ((Math.pow(popLen, .5)) + .99));
 		int yAmount = ((int) ((Math.pow(popLen, .5))));
 		//System.out.println("xAmount: " + xAmount + " yAmount: " + yAmount);
-		double xLen = 300 / xAmount;
-		int yLen = 300 / yAmount;
+		float xLen = 300 / xAmount;
+		float yLen = 300 / yAmount;
 		//System.out.println("xLen: " + xLen + " yLen: " + yLen + "\npopLen: " + popLen);
 		if (this.p == null) {
 			return;
