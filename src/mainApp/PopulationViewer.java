@@ -31,14 +31,14 @@ public class PopulationViewer {
 	this.popComp = new PopulationComponent();
 	upDatePopulation(this.p);
 	this.popFrame.add(popComp);
-	this.popFrame.setTitle("Generation: " + p.getGenerationCount());
+	this.popFrame.setLocation(1060, 230);
 	this.popFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.popFrame.setVisible(true);
 	//popFrame.dispose();
 	}
 	
 	public void upDatePopulation(Population p) {
-		this.popFrame.setTitle("Generation: 12 " + p.getGenerationCount());
+		this.popFrame.setTitle("Generation: " + p.getGenerationCount());
 		this.popComp.upDatePopulation(p);
 	}
 

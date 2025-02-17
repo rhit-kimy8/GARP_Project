@@ -60,7 +60,6 @@ public class EvolutionViewer extends JComponent {
 	public static String saveString = "";
 	private int lengthOfChromosome;
 	private FittestIndividualViewer FIV;
-	private GenerationViewer GV;
 	private PopulationViewer PV;
 	
 	
@@ -191,12 +190,10 @@ public class EvolutionViewer extends JComponent {
 					pop.RankSelection(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/pop.population.size(),(int)Integer.parseInt(elitismInput.getText())*pop.population.size()/100);
 				}
 				FIV.upDate(pop.getBest(pop.population));
-				PV.repaint();
-				//GV.repaint();
-				//GV.frame.setTitle("Generation: " + pop.getGenerationCount());
+				PV.upDatePopulation(pop);
 				addEntry(pop.getBest(pop.population).getFitness(), pop.getAverage(pop.population), pop.getWorst(pop.population), pop.calculateHammingDis());
 				isDone = false;
-				if(((double)pop.getBest(pop.population).getFitness()/lengthOfChromosome*10.0 >= fitness) || (pop.getGenerationCount() > Integer.parseInt(generationInput.getText()))) {
+				if(((double)pop.getBest(pop.population).getFitness()/lengthOfChromosome*10.0 >= fitness) || (pop.getGenerationCount() > Integer.parseInt(generationInput.getText())-1)) {
 					isDone = true;
 					isRunning = false;
 					EvolutionViewer.this.timer.stop();
@@ -235,7 +232,6 @@ public class EvolutionViewer extends JComponent {
 						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),2);
 					}
 					FIV = new FittestIndividualViewer(pop.getBest(pop.population));
-					//GV = new GenerationViewer(pop.population);
 					PV = new PopulationViewer(pop);
 				}else if(isDone && pop.getGenerationCount() == 0 && specialCheck.isSelected()){
 					if (function.equals("Max Ones Fitness")) {
@@ -246,7 +242,6 @@ public class EvolutionViewer extends JComponent {
 						pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),2);
 					}
 					FIV = new FittestIndividualViewer(pop.getBest(pop.population));
-					//GV = new GenerationViewer(pop.population);
 					PV = new PopulationViewer(pop);
 				}
 				
@@ -257,7 +252,6 @@ public class EvolutionViewer extends JComponent {
 					EvolutionViewer.this.repaint();
 					if((isDone && pop.getGenerationCount()!=0) && !specialCheck.isSelected()) {
 						FIV.end();
-						//GV.end();
 						reset();
 						pop.setGenerationCount();
 						pop.removePopulation();
@@ -270,7 +264,6 @@ public class EvolutionViewer extends JComponent {
 							pop.generateRandomPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),2);
 						}
 						FIV = new FittestIndividualViewer(pop.getBest(pop.population));
-						//GV = new GenerationViewer(pop.population);
 					}else if((isDone && pop.getGenerationCount()!=0) && specialCheck.isSelected()){
 						reset();
 						pop.setGenerationCount();
@@ -283,7 +276,6 @@ public class EvolutionViewer extends JComponent {
 							pop.generateSpecialPopulation(Integer.parseInt(populationSizeInput.getText()), Integer.parseInt(chromosomeLengthInput.getText()),2);
 						}
 						FIV = new FittestIndividualViewer(pop.getBest(pop.population));
-						//GV = new GenerationViewer(pop.population);
 					}
 				} else {
 					EvolutionViewer.this.timer.stop();
