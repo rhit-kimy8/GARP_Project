@@ -29,18 +29,7 @@ public class MainApp {
 
 	private void runApp() {
 		// run chromosomeEditor
-//		chromosomeEditor.runChromosomeEditor();
-		
-		// Those two are the test functions to check generating population
-//		population.testPopulation(10,10);
-//		population.testSpecialPopulation(100,10);
-		
-		// Those tree are the test functions to check Fitness of chromosomes
-//		population.generateSpecialPopulation(100,10);
-//		population.generateRandomPopulation(100, 10,0);
-//		for (Chromosome c:population.getSpecialPopulation()) System.out.println(c.getBitString());
-//		ArrayList<Chromosome> chromosomes = population.getSpecialPopulation();
-		
+//		chromosomeEditor.runChromosomeEditor();	
 		evolutionViewer.runEvolutionViewer();
 	} // runApp
 

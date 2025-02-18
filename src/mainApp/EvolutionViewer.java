@@ -115,7 +115,7 @@ public class EvolutionViewer extends JComponent {
 		JLabel chromosomeLength = new JLabel("Chromosome Length");
 		JTextField chromosomeLengthInput = new JTextField();
 		chromosomeLengthInput.setPreferredSize(new Dimension(40,20));
-		JLabel speicalPop = new JLabel("Special Pop?");
+		JLabel speicalPop = new JLabel("Special Population?");
 		JCheckBox specialCheck = new JCheckBox();
 		JLabel crossover = new JLabel("Crossover?");
 		JCheckBox crossoverCheck = new JCheckBox();
@@ -129,9 +129,9 @@ public class EvolutionViewer extends JComponent {
 		JTextField generationInput = new JTextField();
 		generationInput.setPreferredSize(new Dimension(40,20));
 		JLabel selection = new JLabel("Selection");
-		String[] selectionList = {"Truncation", "Wheel Select", "Ranked Select"};
+		String[] selectionList = {"Truncation Selection", "Wheel Selection", "Ranked Selection"};
 		JComboBox selectionInput = new JComboBox(selectionList);
-		selectionInput.setPreferredSize(new Dimension(110,20));
+		selectionInput.setPreferredSize(new Dimension(150,20));
 		JLabel fitnessFunction = new JLabel("Fitness Function");
 		String[] functionList = {"Max Ones Fitness" , "Match Target Fitness", "Max Consecutive Ones Fitness", "Binary Number Fitness"};
 		JComboBox functionInput = new JComboBox(functionList);
@@ -179,11 +179,10 @@ public class EvolutionViewer extends JComponent {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				frame.repaint();
-				if (selectionInput.getSelectedItem().toString().equals("Truncation")) {
+				if (selectionInput.getSelectedItem().toString().equals("Truncation Selection")) {
 				pop.truncationSelect(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/pop.population.size(),(int)Integer.parseInt(elitismInput.getText())*pop.population.size()/100);
-				}else if (selectionInput.getSelectedItem().toString().equals("Wheel Select")) {
-					pop.RouleteSelection(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/pop.population.size(),(int)Integer.parseInt(elitismInput.getText())*pop.population.size()/100);
-					System.out.println(pop.maxOnesFitness(pop.population));
+				}else if (selectionInput.getSelectedItem().toString().equals("Wheel Selection")) {
+					pop.RouletteSelection(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/pop.population.size(),(int)Integer.parseInt(elitismInput.getText())*pop.population.size()/100);
 				}else {
 					pop.RankSelection(pop.population, crossoverCheck.isSelected(),(double)Integer.parseInt(mutationRateInput.getText())/pop.population.size(),(int)Integer.parseInt(elitismInput.getText())*pop.population.size()/100);
 				}

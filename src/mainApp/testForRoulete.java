@@ -15,7 +15,7 @@ public class testForRoulete {
 		for (int i = 0; i < 3; i++) {
 			
 //			System.out.println(pop.maxOnesFitness(pop.population));
-			pop.RouleteSelection(pop.population, false, 0, 0);
+			pop.RouletteSelection(pop.population, false, 0, 0);
 			if (i == 0) {
 				firstGeneration += pop.maxOnesFitness(pop.population);
 			}else if (i == 1){

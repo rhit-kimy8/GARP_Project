@@ -3,7 +3,13 @@ package mainApp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
- 
+/**
+ * Class: Population
+ * @author Eden Kim, Haocheng Tom, Daniel
+ * <br> Purpose: This class manages all population method, it operates generation, selection, calculation of population from ArrayList of Chromosome 
+ * and handle with population loss and growth.
+ * <br> Restrictions: None.
+ */
 public class Population {
 	FitnessComparator FC = new FitnessComparator();
 	ArrayList<Chromosome> population = new ArrayList<>();
@@ -13,6 +19,11 @@ public class Population {
 	public Population(){
 	}
 	
+	/**
+	 * ensures: set the fitness function of each chromosome
+	 * @param Chromosome type of chromosome, index of the function to choose
+	 * <br>requires: Chromosome, Integer
+	 **/
 	public void setFitnessFunction(Chromosome chr, int functionChoose) {
 		if (functionChoose == 0) {
 			chr.MaxOnesFitnessCalculation();
@@ -27,6 +38,11 @@ public class Population {
 		}
 	}
 	
+	/**
+	 * ensures: generate randomized population according to given parameters
+	 * @param population size, chromosome size, index of function to choose
+	 * <br>requires: Integer
+	 **/
 	public void generateRandomPopulation(int populationSize, int chromosomeSize, int functionChoose) {
 		population.clear();
 		for (int i=0; i<populationSize; i++) {
@@ -37,6 +53,11 @@ public class Population {
 		Collections.sort(population,FC);
 	}
 	
+	/**
+	 * ensures: generate edited special population according to given parameters
+	 * @param population size, chromosome size, index of function to choose
+	 * <br>requires: Integer
+	 **/
 	public void generateSpecialPopulation(int populationSize, int chromosomeSize, int functionChoose) {
 		for (int i=0;i<populationSize/4;i++) { // remember to -1 for test
 			String chromosome = "";
@@ -99,6 +120,11 @@ public class Population {
 		Collections.sort(population,FC);
 	}
 	
+	/**
+	 * ensures: count total numbers of one from population
+	 * @param population of chromosome
+	 * <br>requires: ArrayList<Chromosome>
+	 **/
 	public int maxOnesFitness(ArrayList<Chromosome> chromosomes) {
 		int totalMaxOnes = 0;
 		for (Chromosome i: chromosomes) {
@@ -106,7 +132,11 @@ public class Population {
 		}
 		return totalMaxOnes;
 	}
-	
+	/**
+	 * ensures: count total numbers of chromosomes in popultion which are exactly same with given chromosome
+	 * @param population of chromosome, single chromosome
+	 * <br>requires: ArrayList<Chromosome>, Chromosome
+	 **/
 	public int matchTargetFitness(ArrayList<Chromosome> chromosomes, Chromosome chromosome) {
 		int matchingChromosomes = 0;
 		for (Chromosome i: chromosomes) {
@@ -115,6 +145,11 @@ public class Population {
 		return matchingChromosomes;
 	}
 	
+	/**
+	 * ensures: count maximum count of consecutive 1 in a bitsring of each chromosome from given population
+	 * @param population of chromosome
+	 * <br>requires: ArrayList<Chromosome>
+	 **/
 	public int maxConsecutiveOnesFitness(ArrayList<Chromosome> chromosomes) {
 		int maxConsecutiveCount = 0;
 		for (Chromosome i: chromosomes) {
@@ -127,6 +162,11 @@ public class Population {
 		return maxConsecutiveCount;
 	}
 	
+	/**
+	 * ensures: mutate generation from given mutation rate
+	 * @param population of chromosome, mutation rate, start number to check where should mutation begin after population.
+	 * <br>requires: ArrayList<Chromosome>, Integer, Double
+	 **/
 	public void mutatePopulation(ArrayList<Chromosome> chromosomes, double mutationRate, int startNumber) {
 		if (mutationRate != 0) {
 			for (int i = startNumber; i < chromosomes.size();i++) {
@@ -135,6 +175,11 @@ public class Population {
 		}
 	}
 	
+	/**
+	 * ensures: execute selection between chromosomes in population based on truncation selection
+	 * @param population of chromosome, mutation rate, boolean to check whether it has crossover or not, number of elitism
+	 * <br>requires: ArrayList<Chromosome>, Integer, Double, Boolean
+	 **/
 	public void truncationSelect(ArrayList<Chromosome> chromosomes, boolean checkCrossOver,double mutationRate,int elitismNumber) {
 		generationCount++;
 		Collections.sort(chromosomes,FC);
@@ -186,7 +231,12 @@ public class Population {
 
 	}
 
-	public void RouleteSelection(ArrayList<Chromosome> chromosomes, boolean checkCrossOver,double mutationRate,int elitismNumber) {
+	/**
+	 * ensures: execute selection between chromosomes in population based on roulette selection
+	 * @param population of chromosome, mutation rate, boolean to check whether it has crossover or not, number of elitism
+	 * <br>requires: ArrayList<Chromosome>, Integer, Double, Boolean
+	 **/
+	public void RouletteSelection(ArrayList<Chromosome> chromosomes, boolean checkCrossOver,double mutationRate,int elitismNumber) {
 		generationCount++;
 		Collections.sort(chromosomes,FC);
 		ArrayList<Chromosome> newChromosomes = new ArrayList<>();
@@ -290,10 +340,11 @@ public class Population {
 		
 	}
 	
-	
-	
-	
-	
+	/**
+	 * ensures: execute selection between chromosomes in population based on rank selection
+	 * @param population of chromosome, mutation rate, boolean to check whether it has crossover or not, number of elitism
+	 * <br>requires: ArrayList<Chromosome>, Integer, Double, Boolean
+	 **/
 	public void RankSelection(ArrayList<Chromosome> chromosomes, boolean checkCrossOver,double mutationRate,int elitismNumber) {
 		generationCount++;
 		Collections.sort(chromosomes,FC);
@@ -417,6 +468,11 @@ public class Population {
 			Collections.sort(population,FC);
 	}
 	
+	/**
+	 * ensures: execute elitism before selection happens
+	 * @param population of chromosome, number of elitism
+	 * <br>requires: ArrayList<Chromosome>, Integer
+	 **/
 	public void ElitismSelect(int numbers,ArrayList<Chromosome> chromosomes) {
 		for (int i = 0; i < numbers; i ++) {
 			Chromosome elit = new Chromosome(chromosomes.get(i).getBitString());
@@ -426,6 +482,11 @@ public class Population {
 		
 		
 	}
+	/**
+	 * ensures: execute crossover from selected two parents in given crossover point
+	 * @param two parents chromosome, crossover point to implement their genes.
+	 * <br>requires: Chromosome, Integer
+	 **/
 	// this return crossover child chromosome from selected parents chromosome splited crossOverPoint
 	public Chromosome crossOverChromosome(Chromosome parent1, Chromosome parent2, int crossOverPoint) {
 		String childChromosome = "";
@@ -436,10 +497,16 @@ public class Population {
 		return chr;
 	}
 	
+	/**
+	 * ensures: remove all chromosomes in population
+	 **/
 	public void removePopulation() {
 		population.clear();
 	}
 	
+	/**
+	 * ensures: calculate hamming distance of each chromosomes and get average of it
+	 **/
 	public int calculateHammingDis() {
 		int avg = 0;
 		int count = 0;
@@ -457,8 +524,9 @@ public class Population {
 		return avg/population.size();
 	}
 
-	
-	
+	/**
+	 * ensures: test generation of special population for milestone 2 work
+	 **/
 	public void testSpecialPopulation(int populationSize, int chromosomeLength) {
 		generateSpecialPopulation(populationSize, chromosomeLength,0);
 		int totalMaxOnes = 0;
@@ -473,6 +541,9 @@ public class Population {
 		System.out.println("Total MaxOnes fitness is " + totalMaxOnes);
 	}
 	
+	/**
+	 * ensures: test generation of random population for milestone 2 work
+	 **/
 	public void testPopulation(int populationSize, int chromosomeLength) {
 		generateRandomPopulation(populationSize, chromosomeLength,0);
 		int n = 1;
@@ -482,10 +553,22 @@ public class Population {
 			n ++;
 		}
 	}
+	
+	/**
+	 * ensures: get best chromosome from given population
+	 * @param population of chromosome
+	 * <br>requires: ArrayList<Chromosome>
+	 **/
 	public Chromosome getBest(ArrayList<Chromosome> chromosomes) {
 		Collections.sort(chromosomes,FC);
 		return chromosomes.get(0);
 	}
+	
+	/**
+	 * ensures: get average fitness of chromosome from given population
+	 * @param population of chromosome
+	 * <br>requires: ArrayList<Chromosome>
+	 **/
 	public Integer getAverage(ArrayList<Chromosome> chromosomes) {
 		int average = 0;
 		for (Chromosome i : chromosomes) {
@@ -494,12 +577,18 @@ public class Population {
 		average = average / chromosomes.size();
 		return average;
 	}
+	
+	/**
+	 * ensures: get worst fitness of chromosome from given population
+	 * @param population of chromosome
+	 * <br>requires: ArrayList<Chromosome>
+	 **/
 	public Integer getWorst(ArrayList<Chromosome> chromosomes) {
 		Collections.sort(chromosomes,FC);
 		return chromosomes.get(chromosomes.size()-1).getFitness();
 	}
 	
- 
+	// getters and setters
 	public ArrayList<Chromosome> getPopulation() {
 		return population;
 	}
