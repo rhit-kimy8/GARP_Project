@@ -50,6 +50,10 @@ public class Chromosome {
 		colors.add(Color.green);
 		colors.add(Color.gray);
 	}
+	/**
+	 * @param chromosomeBitString
+	 * <br> Creates a chromosome with bitString chromosomeBitString
+	 */
 	Chromosome(String chromosomeBitString){
 		this.bitString = "";
 		setBitString(chromosomeBitString);
@@ -131,84 +135,62 @@ public class Chromosome {
 		}
 	}
 	
-	//Draw each Chromosome
+	/**
+	 * @param g2
+	 * <br> Draws the fittest individual chromosome with each bit of the bitString labeled with a number
+	 */
 	public void drawOnFitness(Graphics2D g2) {
-		/*
-		//for (int x = 0; x < rectangles.size(); x++) {
-		int bitLen = bitString.length();
-		int xAmount = (int) (Math.pow(bitLen, .5) + .99);
-		int yAmount = (int) (Math.pow(bitLen, .5));
-		float xSize = 200 / xAmount;
-		float ySize = 200 / yAmount;
-		System.out.println("xAmount: " + xAmount + " yAmount: " + yAmount + " xSize: " + xSize + " ySize: " + ySize);
-		for (int x = 0; x < this.bitString.length(); x++) {
-			if (rectangles.size() == 0) {
-				for (int yCord = 0; yCord < 200; yCord += ySize) {
-					for (int xCord = 0; xCord < 200; xCord += xSize) {
-						rectangles.add(new Rectangle2D.Float(xCord, yCord, xSize, ySize));
-					}
-				}
-			}
-			Rectangle2D r = rectangles.get(x);
-			String s = "";
-			g2.setColor(getColor(bitString.substring(x,x+1)));
-			g2.fill(r);
-			if (getColor(bitString.substring(x,x+1)) == Color.black) {
-				g2.setColor(Color.green);
-			}
-			else {
-				g2.setColor(Color.black);
-			}
-			s += x;
-			g2.drawString(s, (int) r.getX(), (int) r.getY() + 10);
-		}
-		*/
-		
-		//Testing
 		if (rectangleIndividual.size() == 0) {
 			int chromeLen = this.getBitString().length();
 			int xAmount = (int) ((Math.pow(chromeLen, .5) + .99));
 			int yAmount = (int) (Math.pow(chromeLen, .5));
-			//System.out.println("xAmount: " + xAmount + " yAmount: " + yAmount);
 			float xSize = 200 / xAmount;
 			float ySize = 200 / yAmount;
-			//System.out.println("xSize: " + xSize + "\nySize: " + ySize);
-			///*
 			for (float yCord = 0; yCord < 200; yCord += ySize) {
 				for (float xCord = 0; xCord < 200; xCord += xSize) {
 					rectangleIndividual.add(new Rectangle2D.Float(xCord, yCord, xSize, ySize));	
 				}
 			}
 		}
-		//System.out.println("Rectangles size: " + rectangles.size());
 		for (int x = 0; x < this.bitString.length(); x++) {
-			//for (int x = 0; x < rectangles.size(); x++) {
 				Rectangle2D r = rectangleIndividual.get(x);
 				g2.setColor(getColor(bitString.substring(x,x+1)));
 				g2.fill(r);
+				String s = "";
+				g2.setColor(getColor(bitString.substring(x,x+1)));
+				g2.fill(r);
+				if (getColor(bitString.substring(x,x+1)) == Color.black) {
+					g2.setColor(Color.green);
+				}
+				else {
+					g2.setColor(Color.black);
+				}
+				s += x;
+				g2.drawString(s, (int) r.getX(), (int) r.getY() + 10);
 			}
 	}
-	
+	/**
+	 * 
+	 * @param g2
+	 * @param xLen
+	 * @param yLen
+	 * @param popLen
+	 * <br> Draws the entire population with size based upon the size of the population
+	 */
 	public void drawOnPopulation(Graphics2D g2, float xLen, float yLen, int popLen) {
 		if (rectangles.size() == 0) {
 			int chromeLen = this.getBitString().length();
 			int xAmount = (int) ((Math.pow(chromeLen, .5) + .99));
 			int yAmount = (int) (Math.pow(chromeLen, .5));
-			//System.out.println("xAmount: " + xAmount + " yAmount: " + yAmount);
 			float xSize = xLen / xAmount;
 			float ySize = yLen / yAmount;
-			//System.out.println("xSize: " + xSize + "\nySize: " + ySize);
-			///*
 			for (float yCord = 0; yCord < yLen; yCord += ySize) {
 				for (float xCord = 0; xCord < xLen; xCord += xSize) {
 					rectangles.add(new Rectangle2D.Float(xCord, yCord, xSize, ySize));
-					//rectangles.add(new Rectangle2D.Double(xCord, yCord, xSize, ySize));
-					
 				}
 			}
 		}
 		for (int x = 0; x < this.bitString.length(); x++) {
-		//for (int x = 0; x < rectangles.size(); x++) {
 			Rectangle2D r = rectangles.get(x);
 			g2.setColor(getColor(bitString.substring(x,x+1)));
 			g2.fill(r);
@@ -217,6 +199,10 @@ public class Chromosome {
 		g2.draw(new Rectangle2D.Float(0, 0, xLen, yLen));
 	}
 	
+	/**
+	 * @param length
+	 * <br> Creates a random bitString of size length
+	 */
 	public void randomGeneration(int length) {
 		for (int x = 0; x < length; x++) {
 			if (randomProcess(0.5)) {
@@ -252,6 +238,13 @@ public class Chromosome {
 		return count;
 	}
 	
+	/**
+	 * 
+	 * @param chromosome
+	 * <br> compares the bitString of a chromosome to the bitString of another chromosome.
+	 * <br> The fitness is calculated based on the amount of matching bits of the bitString.
+	 * @return fitness as a number of mathcing bits when comparing two chromosomes
+	 */
 	public int matchFitness(Chromosome chromosome) {
 		int count = 0;
 			for (int i = 0; i < this.getBitString().length(); i++) {
@@ -264,6 +257,12 @@ public class Chromosome {
 			this.fitnessFunctionStatus = 1;
 		return count;
 	}
+	
+	/**
+	 * <br> Gets the bitString of a chromosome and counts the max amount of consecutive 1s.
+	 * <br> The max amount is then set as the fitness for the chromosome.
+	 * @return fitness as a count of consecutive ones
+	 */
 	public int consecutiveFitness() {
 		int maxConsecutiveCount = 0;
 			int count = 0;
@@ -280,6 +279,11 @@ public class Chromosome {
 			return maxConsecutiveCount;
 	}
 	
+	/**
+	 * <br> Gets the bitString of a chromosome and turns it into a binary number.
+	 * <br> The fitness is then set as the binary number.
+	 * @return fitness as a binary number
+	 */
 	public int binaryFitness() {
 		int num = 0;
 		String bits = this.bitString;
