@@ -49,7 +49,6 @@ public class MainApp {
 	 * @param args unused
 	 */
 	public static void main(String[] args) {
-		System.out.println("GARP - MileStone 2");
 		MainApp mainApp = new MainApp();
 		mainApp.runApp();
 		
