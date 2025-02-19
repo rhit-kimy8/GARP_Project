@@ -36,10 +36,10 @@ import javax.swing.JTextField;
 
 /**
  * Class: EvolutionViewer
- * @author Helen Xu
+ * @author Helen Xu, Haocheng Tang
  * <br>Purpose: create a window for the evolution viewer. it draws a graph, tracks time with 
  *      a timer, and has function buttons for control
- * <br>Restrictions: Could be optimized
+ * <br>Restrictions: ????????
  */
 public class EvolutionViewer extends JComponent {
 	private static final int FRAME_WIDTH = 1070;
@@ -104,7 +104,7 @@ public class EvolutionViewer extends JComponent {
 	    JPanel controls = new JPanel(new GridLayout(2,1));
 	    JPanel control1 = new JPanel();
 	    JPanel control2 = new JPanel();
-		JButton start = new JButton("Start"); //change to icon later
+		JButton start = new JButton("Start"); 
 		
 		JLabel populationSize = new JLabel("Population Size");
 		JTextField populationSizeInput = new JTextField();
@@ -313,10 +313,13 @@ public class EvolutionViewer extends JComponent {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				reset();
+				PV.end();
+				FIV.end();
 				populationSizeInput.setText("");
 				chromosomeLengthInput.setText("");
 				mutationRateInput.setText("");
 				crossoverCheck.setSelected(false);
+				specialCheck.setSelected(false);
 				elitismInput.setText("");
 				fitnessInput.setText("");
 				generationInput.setText("");
