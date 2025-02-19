@@ -24,7 +24,6 @@ import javax.swing.JFrame;
 public class MainApp {
 	ChromosomeEditor chromosomeEditor = new ChromosomeEditor();
 	Population population = new Population();
-
 	EvolutionViewer evolutionViewer = new EvolutionViewer();
 
 	private void runApp() {
