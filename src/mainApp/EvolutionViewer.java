@@ -313,6 +313,8 @@ public class EvolutionViewer extends JComponent {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				reset();
+				PV.end();
+				FIV.end();
 				populationSizeInput.setText("");
 				chromosomeLengthInput.setText("");
 				mutationRateInput.setText("");
