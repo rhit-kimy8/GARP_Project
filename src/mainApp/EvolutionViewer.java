@@ -190,7 +190,7 @@ public class EvolutionViewer extends JComponent {
 				PV.upDatePopulation(pop);
 				addEntry(pop.getBest(pop.population).getFitness(), pop.getAverage(pop.population), pop.getWorst(pop.population), pop.calculateHammingDis());
 				isDone = false;
-				if(((double)pop.getBest(pop.population).getFitness()/lengthOfChromosome*10.0 >= fitness) || (pop.getGenerationCount() > Integer.parseInt(generationInput.getText())-1)) {
+				if(((double)pop.getBest(pop.population).getFitness() >= fitness) || (pop.getGenerationCount() > Integer.parseInt(generationInput.getText())-1)) {
 					isDone = true;
 					isRunning = false;
 					EvolutionViewer.this.timer.stop();
@@ -530,8 +530,9 @@ public class EvolutionViewer extends JComponent {
 		g2.setColor(Color.BLACK);
 		for (int i = 0; i<6; i++) {
 			g2.drawLine(45, 25+i*GRAPH_HEIGHT/5, 55, 25+i*GRAPH_HEIGHT/5);
-			String label = Double.toString(10-2*i);
-			g2.drawString(label, 25, 25+i*GRAPH_HEIGHT/5 +5);
+			String label = Integer.toString(lengthOfChromosome-lengthOfChromosome/6*i);
+			if (i == 5) label = "0";
+			g2.drawString(label, 20, 25+i*GRAPH_HEIGHT/5 +5);
 			
 		}
 		
