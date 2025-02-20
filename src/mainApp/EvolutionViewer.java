@@ -532,7 +532,7 @@ public class EvolutionViewer extends JComponent {
 			g2.drawLine(45, 25+i*GRAPH_HEIGHT/5, 55, 25+i*GRAPH_HEIGHT/5);
 			String label = Integer.toString(lengthOfChromosome-lengthOfChromosome/6*i);
 			if (i == 5) label = "0";
-			g2.drawString(label, 20, 25+i*GRAPH_HEIGHT/5 +5);
+			g2.drawString(label, 25, 25+i*GRAPH_HEIGHT/5 +5);
 			
 		}
 		
