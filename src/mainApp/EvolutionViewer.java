@@ -36,10 +36,9 @@ import javax.swing.JTextField;
 
 /**
  * Class: EvolutionViewer
- * @author Helen Xu, Haocheng Tang
- * <br>Purpose: create a window for the evolution viewer. it draws a graph, tracks time with 
- *      a timer, and has function buttons for control
- * <br>Restrictions: ????????
+ * @author Helen Xu, Haocheng Tang, Youngrak Kim, Daniel Jones
+ * <br>Purpose: create a window for the evolution viewer. it draws a graph, tracks time with a timer, and has function buttons for control
+ * <br>Restrictions: None
  */
 public class EvolutionViewer extends JComponent {
 	private static final int FRAME_WIDTH = 1070;
@@ -74,6 +73,11 @@ public class EvolutionViewer extends JComponent {
 	EvolutionViewer() {
 	}
 	
+	/**
+	 * ensures: add each points of chromosomes' data into their Integer ArrayList 
+	 * @param numbers of fitness of best, average, worst chromosome, and difference for hamming distance
+	 * <br>requires: Integer
+	 **/
 	public void addEntry(int best, int average, int worst, int diff) {
 		this.bestFitnessLog.add(best);
 		this.averageFitnessLog.add(average);
@@ -82,6 +86,9 @@ public class EvolutionViewer extends JComponent {
 		repaint();
 	}
 	
+	/**
+	 * ensures: remove every data inside of each chromosome's point ArrayList
+	 **/
 	public void reset() {
 		this.bestFitnessLog.clear();
 		this.averageFitnessLog.clear();
@@ -89,11 +96,19 @@ public class EvolutionViewer extends JComponent {
 		this.hammingDistanceLog.clear();
 	}
 	
+	/**
+	 * ensures: make space for user interface
+	 * @param panel to make a space as String
+	 * <br>requires: JPanel
+	 **/
 	public void spacePanel(JPanel panel) {
 		JLabel space = new JLabel("    ");
 		panel.add(space);
 	}
 	
+	/**
+	 * ensures: run the evolution viewer
+	 **/
 	public void runEvolutionViewer() {
 		JFrame frame = new JFrame("Evolution Viewer");
 		frame.setSize( new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
@@ -323,7 +338,6 @@ public class EvolutionViewer extends JComponent {
 				elitismInput.setText("");
 				fitnessInput.setText("");
 				generationInput.setText("");
-				//set start button back to beginning
 				frame.repaint();
 				
 			}
@@ -340,7 +354,6 @@ public class EvolutionViewer extends JComponent {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				while(true) {
 					try {
 						JFileChooser jf = new JFileChooser();
@@ -349,16 +362,8 @@ public class EvolutionViewer extends JComponent {
 						if (checkFile != JFileChooser.APPROVE_OPTION) {
 							return;  
 						}
-						// whenever we load a file, we should clean the past datas, and load new datas
 						if (checkFile == JFileChooser.APPROVE_OPTION) {
 							String path = jf.getSelectedFile().getAbsolutePath();
-//							loadString = readFile(path);
-//							panel.removeAll();
-//							viewerPanel.removeAll();
-//							jButtons.clear();
-//							chromosomes.clear();
-//							viewerButtons.clear();
-							break;
 							}
 					}catch (NoSuchElementException e1) {
 						continue;
@@ -373,7 +378,6 @@ public class EvolutionViewer extends JComponent {
 		
 		save.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// get the current status of the chromosomes and then save it to the file
 				
 				if (bestFitnessLog.size() > 0) {
 					for (int i=0; i<bestFitnessLog.size(); i++) {
@@ -445,24 +449,22 @@ public class EvolutionViewer extends JComponent {
 		});
 		frame.setMenuBar(menu);
 		
-		//timer.start();
 }
 	
+	/**
+	 * ensures: draw fitness graph for every chromosome's fitness data into evolution viewer
+	 * @param paintcomponent, location data as x, y points, graph width and height, and maximum fitness to visualize graph scale
+	 * <br>requires: Graphics2D, Integer
+	 **/
 	private void drawFitnessGraph(Graphics2D g2, int graphX, int graphY, int graphWidth, int graphHeight, int maxFitness) {
 	    int fitnessLogSize = bestFitnessLog.size();
-	    // check whether we can make a line through points in graph
 	    if (fitnessLogSize < 2) {
 	    	return;
 	    }
 	    
-	    // this will split each scaleX and scaleY for each points. ex) if we have 800, and two points, the scale X will be still 800 and 
-	    // plot function between first to the end
-	    // This scaleY will calculate how the point is located based on its fitness but it will calculate by fitness, percentage
-	    // scaleY = height * (fitness / maxFitness); calculate the portion in column
 	    double scaleY = (double) graphHeight / maxFitness;  
 	    double scaleX = (double) graphWidth / (fitnessLogSize - 1);
 	    
-	    // from those scaleX and scaleY, we define each size of points, eventually make lines btw them from first to the end
 	    g2.setColor(BEST_FITNESS);
 	    for (int i = 1; i < fitnessLogSize; i++) {
 	        int x1 = graphX + (int) ((i - 1) * scaleX);

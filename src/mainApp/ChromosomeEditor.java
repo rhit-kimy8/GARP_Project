@@ -26,9 +26,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 /**
  * Class: ChromosomeEditor
- * @author Haocheng Tang,Eden
+ * @author Haocheng Tang, Youngrak Kim
  * <br>Purpose: create a window for the simulation. It contains a few functional buttons and editor and viewer
- * <br>Restrictions: Maybe not so functional for future purposes
+ * <br>Restrictions: None
  */
 public class ChromosomeEditor {
 	
@@ -41,7 +41,6 @@ public class ChromosomeEditor {
 	private int chromosomeNumber;
 	private String saveString="";
 	private double mutationRate;
-	//right now not be used, probably will be used in the future
 	private String changingBits;
 	
 	
@@ -211,7 +210,6 @@ public class ChromosomeEditor {
 		evaluateFitness.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				for (int i = 0; i < chromosomeNumber; i++) {
 					if (chromosomes.get(i).getStatusIndex() == 2) {
 						if(randomProcess(0.5)) {

@@ -9,23 +9,6 @@ public class FittestIndividualViewer {
 	private JFrame fitViewer;
 	FittestIndividualComponent fitComponent;
 	
-	 /* Testing code 
-	public static void main(String args[]) {
-		Chromosome c1 = new Chromosome(100);
-//		Chromosome c2 = new Chromosome();
-		FittestIndividualViewer v1 = new FittestIndividualViewer(c1);
-//		FittestIndividualViewer v2 = new FittestIndividualViewer(c1);
-		for (int x = 0; x < 100000; x++) {
-			//System.out.println(x);
-		}
-		//v1.setChromosome(c2);
-		for (int x = 0; x < 100000; x++) {
-			
-		}
-		//v1.setChromosome(c1);
-	}
-	*/
-	
 	/***
 	 * 
 	 * @param Chromosome
@@ -59,8 +42,4 @@ public class FittestIndividualViewer {
 	 * @param Chromosome c
 	 * <br> Calls an identical method in component to change current chromosome and repaint
 	 */
-//	public void setChromosome(Chromosome c) {
-//		this.fitComponent.setChromosome(c);
-//	}
-	
 }

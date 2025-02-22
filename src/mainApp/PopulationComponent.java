@@ -14,10 +14,8 @@ public class PopulationComponent extends JComponent {
 		int popLen = p.getPopulation().size();
 		int xAmount = ((int) ((Math.pow(popLen, .5)) + .99));
 		int yAmount = ((int) ((Math.pow(popLen, .5))));
-		//System.out.println("xAmount: " + xAmount + " yAmount: " + yAmount);
 		float xLen = 300 / xAmount;
 		float yLen = 300 / yAmount;
-		//System.out.println("xLen: " + xLen + " yLen: " + yLen + "\npopLen: " + popLen);
 		if (this.p == null) {
 			return;
 		}
@@ -33,7 +31,6 @@ public class PopulationComponent extends JComponent {
 				if (index >= popLen) {
 					break;
 				}
-				//System.out.println("index: " + index + " xCord: " + xCord + " yCord: " + yCord);
 				p.getPopulation().get(index).drawOnPopulation(g2, xLen, yLen, popLen);
 				g2.translate(-xCord, 0);
 			}

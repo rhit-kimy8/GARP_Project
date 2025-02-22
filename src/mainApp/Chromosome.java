@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Random;
 /**
  * Class: Chromosome
- * @author Haocheng Tang, Daniel
+ * @author Haocheng Tang, Daniel Jones
  * <br>Purpose: Used to generate chromosomes
  * <br>Restrictions: no
  * <br>For example: 
@@ -26,11 +26,8 @@ public class Chromosome {
 	private ArrayList<Rectangle2D.Float> rectangleIndividual;
 	private int fitness;
 	private int fitnessFunctionStatus;
-	
-	
-	//Could add bitString in constructor if using files to import chromosomes
+		
 	public Chromosome(int chromosomeSize) {
-		//this.bitString = new ArrayList<>();
 		this.bitString = "";
 		randomGeneration(chromosomeSize);
 		MaxOnesFitnessCalculation();
@@ -84,12 +81,7 @@ public class Chromosome {
 		colors.add(Color.green);
 		colors.add(Color.gray);
 	}
-	/**
-	 * ensures: return the current color
-	 */
-	//public Color getColor() {
-		//return colors.get(statusIndex);
-	//}
+
 	/**
 	 * ensures: return the color according to the bit(1 return green)
 	 * @param the index of the color
@@ -290,7 +282,6 @@ public class Chromosome {
 		for (int x = bits.length() - 1; x >= 0; x--) {
 			num += Integer.parseInt(bits.substring(x, x + 1)) * Math.pow(2, bits.length() - x - 1);
 		}
-		//System.out.println("Num: " + num);
 		return num;
 	}
 	
@@ -311,6 +302,7 @@ public class Chromosome {
 		}
 		}
 	}
+	
 	//Getters
 	public Color getColor(String bit) {
 		if (bit.equals("1")) {

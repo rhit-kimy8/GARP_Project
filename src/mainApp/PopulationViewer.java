@@ -7,17 +7,6 @@ public class PopulationViewer {
 	private Population p;
 	private PopulationComponent popComp;
 	private JFrame popFrame;
-	/*
-	 * Test code for popViewer
-	public static void main(String[] args) {
-		Population p = new Population();
-		//popLen, bitStringLen
-		p.generateRandomPopulation(1000, 20, 0);
-		PopulationViewer popView = new PopulationViewer(p);
-		p.mutatePopulation(p.getPopulation(), 100);
-		popView.upDatePopulation(p);
-	}
-	*/
 	
 	/***
 	 * 
@@ -34,7 +23,6 @@ public class PopulationViewer {
 	this.popFrame.setLocation(1060, 230);
 	this.popFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.popFrame.setVisible(true);
-	//popFrame.dispose();
 	}
 	
 	public void upDatePopulation(Population p) {

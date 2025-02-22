@@ -8,7 +8,7 @@ import javax.swing.JButton;
  * Class: ChromosomeButton
  * @author Haocheng Tang
  * <br>Purpose: Used to deal with the flipcoin painting requirement
- *  * <br>Restrictions: no
+ * <br>Restrictions: no
  * <br>For example: 
  * <pre>
  *    ChromosomeButton chromosomeButton = new ChromosomeButton(1);
@@ -63,6 +63,8 @@ public class ChromosomeButton extends JButton{
          
     }
 
+    
+    // getters
 	public Color getSquareColor() {
 		return squareColor;
 	}

@@ -1,20 +1,5 @@
 package mainApp;
 
-import java.awt.BorderLayout;
-import java.awt.Panel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-
 /**
  * Class: MainApp
  * @author W25R101
@@ -28,10 +13,10 @@ public class MainApp {
 
 	private void runApp() {
 		evolutionViewer.runEvolutionViewer();
-	} // runApp
+	} 
 
 	/**
-	 * ensures: runs the application
+	 * ensures: runs the application    
 	 * @param args unused
 	 */
 	public static void main(String[] args) {

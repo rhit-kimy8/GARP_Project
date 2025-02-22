@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Random;
 /**
  * Class: Population
- * @author Eden Kim, Haocheng Tom, Daniel
+ * @author Youngrak Kim, Haocheng Tom, Daniel Jones
  * <br> Purpose: This class manages all population method, it operates generation, selection, calculation of population from ArrayList of Chromosome 
  * and handle with population loss and growth.
  * <br> Restrictions: None.
@@ -323,18 +323,14 @@ public class Population {
             fitnessSet.add(chromosomeFitnessSet.size() * chromosomeFitnessSet.get(0).getFitness());
             fitnessSize += chromosomeFitnessSet.size() * chromosomeFitnessSet.get(0).getFitness();
         }
-//        System.out.println("fitness Number is "+fitnessSize);
         int fitnessSelected = random.nextInt(1, fitnessSize + 1);
-//        System.out.println("Number is "+fitnessSelected);
         int fitnessCompared = fitnessSet.get(0);
         int fitnessComparedIndex = 0;
         while (fitnessSelected > fitnessCompared) {
             fitnessComparedIndex += 1;
             fitnessCompared += fitnessSet.get(fitnessComparedIndex);
         }
-//        System.out.println("fitness ComparedIndex is "+fitnessComparedIndex);
         int chromosomeIndexSelected = random.nextInt(0, chromosomes.get(fitnessComparedIndex).size());
-//        System.out.println("fitnessIndex is " +chromosomeIndexSelected);
         return chromosomes.get(fitnessComparedIndex).get(chromosomeIndexSelected);
 
 		
@@ -352,7 +348,6 @@ public class Population {
 		for (Chromosome chr : chromosomes) {
 			newChromosomes.add(chr);
 		}
-//		ArrayList<ArrayList<Chromosome>> classifiedChromosome = sortChromosome(newChromosomes);
 		if (elitismNumber != 0) {
 			if (!checkCrossOver) {
 				// Rank and elitism
@@ -416,19 +411,13 @@ public class Population {
             fitnessSet.add(i+1);
             fitnessSize += i+1;
         }
-//        System.out.println("fitness Number is "+fitnessSize);
         int fitnessSelected = random.nextInt(1, fitnessSize + 1);
-//        System.out.println("Number is "+fitnessSelected);
         int fitnessCompared = fitnessSet.get(0);
         int fitnessComparedIndex = 0;
         while (fitnessSelected > fitnessCompared) {
             fitnessComparedIndex += 1;
             fitnessCompared += fitnessSet.get(fitnessComparedIndex);
         }
-//        System.out.println("fitness ComparedIndex is "+fitnessComparedIndex);
-//        int chromosomeIndexSelected = random.nextInt(0, chromosomes.get(fitnessComparedIndex).size());
-//        System.out.println("fitnessIndex is " +chromosomeIndexSelected);
-//        return chromosomes.get(fitnessComparedIndex).get(chromosomeIndexSelected);
         return chromosomes.get(fitnessComparedIndex);
 
 		
