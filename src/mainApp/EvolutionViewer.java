@@ -190,7 +190,8 @@ public class EvolutionViewer extends JComponent {
 				PV.upDatePopulation(pop);
 				addEntry(pop.getBest(pop.population).getFitness(), pop.getAverage(pop.population), pop.getWorst(pop.population), pop.calculateHammingDis());
 				isDone = false;
-				if(((double)pop.getBest(pop.population).getFitness() >= fitness) || (pop.getGenerationCount() > Integer.parseInt(generationInput.getText())-1)) {
+				//if(((double)pop.getBest(pop.population).getFitness() >= fitness) || (pop.getGenerationCount() > Integer.parseInt(generationInput.getText())-1)) {
+				if(((double)pop.getBest(pop.population).getFitness() >= pop.getBest(pop.population).getBitString().length()) || (pop.getGenerationCount() > Integer.parseInt(generationInput.getText())-1)) {
 					isDone = true;
 					isRunning = false;
 					EvolutionViewer.this.timer.stop();
