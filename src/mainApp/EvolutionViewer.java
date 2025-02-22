@@ -430,12 +430,11 @@ public class EvolutionViewer extends JComponent {
 						+ "What are the selection options? \n" 
 						+ "Truncation cuts out inferior chromosomes and replaces them with new mutated chromosomes the next generation. \n"
 						+ "Wheel select one at random, the probability based off the fitness level. \n"
-						+ "Ranked select will be implemented soon! \n"
+						+ "Ranked select factors in the fitness level of the current bitstring into the probablity of it being selected. \n"
 						+ "What does crossover select do? \n"
 						+ "By choosing crossover select, the bitstring will crossover at a specific point. \n"
 						+ "What is elistism? \n"
-						+ "This is the percent of the most 'fit' that will be kept for each generation. \n"
-						+ "NOTE: Avoid selecting truncation and crossover, as both have very similar functions.");
+						+ "This is the percent of the most 'fit' that will be kept for each generation. \n");
 			        
 			        text.setEditable(false);
 			        
