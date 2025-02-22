@@ -205,7 +205,8 @@ public class EvolutionViewer extends JComponent {
 				PV.upDatePopulation(pop);
 				addEntry(pop.getBest(pop.population).getFitness(), pop.getAverage(pop.population), pop.getWorst(pop.population), pop.calculateHammingDis());
 				isDone = false;
-				if(((double)pop.getBest(pop.population).getFitness() >= fitness) || (pop.getGenerationCount() > Integer.parseInt(generationInput.getText())-1)) {
+				//if(((double)pop.getBest(pop.population).getFitness() >= fitness) || (pop.getGenerationCount() > Integer.parseInt(generationInput.getText())-1)) {
+				if(((double)pop.getBest(pop.population).getFitness() >= pop.getBest(pop.population).getBitString().length()) || (pop.getGenerationCount() > Integer.parseInt(generationInput.getText())-1)) {
 					isDone = true;
 					isRunning = false;
 					EvolutionViewer.this.timer.stop();
@@ -433,12 +434,11 @@ public class EvolutionViewer extends JComponent {
 						+ "What are the selection options? \n" 
 						+ "Truncation cuts out inferior chromosomes and replaces them with new mutated chromosomes the next generation. \n"
 						+ "Wheel select one at random, the probability based off the fitness level. \n"
-						+ "Ranked select will be implemented soon! \n"
+						+ "Ranked select factors in the fitness level of the current bitstring into the probablity of it being selected. \n"
 						+ "What does crossover select do? \n"
 						+ "By choosing crossover select, the bitstring will crossover at a specific point. \n"
 						+ "What is elistism? \n"
-						+ "This is the percent of the most 'fit' that will be kept for each generation. \n"
-						+ "NOTE: Avoid selecting truncation and crossover, as both have very similar functions.");
+						+ "This is the percent of the most 'fit' that will be kept for each generation. \n");
 			        
 			        text.setEditable(false);
 			        
